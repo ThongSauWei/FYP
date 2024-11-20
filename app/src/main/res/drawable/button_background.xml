@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer Shadow Layer for Extreme Blur -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <solid android:color="#22FFFFFF" /> <!-- 13% opacity white for outermost blur -->
+        </shape>
+    </item>
+
+    <!-- Mid-Outer Shadow Layer -->
+    <item android:top="6dp" android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <solid android:color="#33FFFFFF" /> <!-- 20% opacity white -->
+        </shape>
+    </item>
+
+    <!-- Mid-Inner Shadow Layer -->
+    <item android:top="4dp" android:bottom="6dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <solid android:color="#44FFFFFF" /> <!-- 27% opacity white -->
+        </shape>
+    </item>
+
+    <!-- Main Shadow Layer -->
+    <item android:top="2dp" android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <solid android:color="#59FFFFFF" /> <!-- 35% opacity white -->
+        </shape>
+    </item>
+
+    <!-- Main Button Layer -->
+    <item android:top="0dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <solid android:color="#8B8B8B" /> <!-- Button color -->
+        </shape>
+    </item>
+
+</layer-list>

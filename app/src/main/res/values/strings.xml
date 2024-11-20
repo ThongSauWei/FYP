@@ -1,3 +1,164 @@
 <resources>
-    <string name="app_name">FYP</string>
+    <string name="app_name">FinalYearProject</string>
+    <string name="underlined_sign_up"><u>Sign Up</u></string>
+    <string name="underlined_forget_password"><u>Forget Password?</u></string>
+    <string name="underlined_sign_in"><u>Sign In</u></string>
+    <string name="underlined_contact_us"><u>Contact Us</u></string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="confirm_delete_haha">Confirm Delete Haha?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_will_be_permanently">Delete will be permanently</string>
+    <string name="sign_out">Sign Out</string>
+
+    <string name="about_us">About Us</string>
+    <string name="about_us_title">TARUMT Campus Hub</string>
+    <string name="welcome_to_tarumt_campus_hub">Welcome to the free and innovative TARUMT Campus Hub. We are the TARUMT Campus Hub, a "learning interaction" platform that connects TARUMT students or Staff.</string>
+    <string name="our_mission">Our Mission:</string>
+    <string name="mission_description">At TARUMT Campus Hub, our mission is to empower students. We provide a dedicated platform for students to find, collect and exchange learning materials and share interesting things. We believe in breaking down barriers so that everyone can get more cohesive information and unified campus information on the platform. No one outside the campus will use the platform, avoiding information clutter.</string>
+    <string name="why_tarumt_campus_hub">Why TARUMT Campus Hub?</string>
+    <string name="why_description">TARUMT Campus Hub is the preferred learning interaction platform for students and Staff, as we provide practical features and friendly experiences to build a tight-knit community of learning and shared entertainment. Choosing TARUMT Campus Hub means choosing a learning platform that travels with you and grows with you, injecting vitality and possibility into your academic journey.</string>
+
+    <string name="contact_us">Contact Us</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="mobile_phone">Mobile Phone</string>
+    <string name="problem_type">Problem Type</string>
+    <string name="description">Description</string>
+    <string name="submit">Submit</string>
+
+    <string name="add_a_title">Add a Title...</string>
+    <string name="type_something_to_describe">Type something to describe...</string>
+    <string name="select_a_category">Select a Category</string>
+    <string name="select_a_learning_style">Select a Learning Style</string>
+    <string name="next">Next</string>
+    <string name="profileName">Name</string>
+    <string name="profileLanguages">Language</string>
+    <string name="profileMobile_phone">Mobile Phone</string>
+    <string name="profilrBirthday">Birthday</string>
+    <string name="profileDescription">Description</string>
+    <string name="profileSave">Save</string>
+    <string name="filter">Filter</string>
+    <string name="category">Category</string>
+    <string name="learning_style">Learning Style</string>
+
+    <string name="add_friend">Add Friend</string>
+    <string name="message">Message</string>
+    <string name="friends">Friends</string>
+    <string name="all_friends">All Friends</string>
+    <string name="_20_friends">20 Friends</string>
+    <string name="typing">Typing...</string>
+    <string name="all">ALL</string>
+    <string name="InnerChatTyping">Typing...</string>
+
+    <string name="view_post">View Post</string>
+    <string name="invite_friends_to_join">Invite Friends to Join</string>
+    <string name="invite_more_friends_to_join_the_discussion_now">Invite more friends to join the discussion now!!</string>
+    <string name="done">Done</string>
+
+    <string name="search_by_name">search by name</string>
+    <string name="assignment">Assignment</string>
+    <string name="visual_learning">Visual Learning</string>
+    <string name="join">Join</string>
+    <string name="write_a_comment">Write a comment...</string>
+    <string name="_4_comments">4 comments</string>
+
+    <string name="new_password">New Password</string>
+    <string name="new_password_title">New Password</string>
+    <string name="confirm_password_title">Confirm Password</string>
+    <string name="submit_passRecover">Submit</string>
+    <string name="chat_with_friends">Chat with Friends</string>
+    <string name="search_your_friends">search your friends</string>
+
+    <string name="chat">Chat</string>
+    <string name="password_recovery">Password Recovery</string>
+    <string name="prc_email">Email</string>
+    <string name="security_question">What is your favorite movie?</string>
+    <string name="prc_submit">Submit</string>
+    <string name="need_help">Need help?</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile_groups">Groups</string>
+    <string name="profile_friends">Friends</string>
+    <string name="create_post">New Post</string>
+    <string name="sign_up">Sign UP</string>
+    <string name="signUpName">Name</string>
+    <string name="signUpMobile_number">Mobile Number</string>
+    <string name="signUpBirthday">Birthday</string>
+    <string name="signUpPassword">Password</string>
+    <string name="signUp_security_question">What is your favorite movie?</string>
+
+    <string name="signUp_sign_up_btn">Sign Up</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="SignUpEmail">Email</string>
+    <string name="find_friends">Find Friends</string>
+    <string name="study_with_other_study_partner">Find more friends !!</string>
+    <string name="search_by_name_category_or_learning_styles">search by name, category or learning styles</string>
+    <string name="add_friends">Add Friends</string>
+
+    <string name="suggest_friends">Suggest Friends</string>
+    <string name="search_a_post">Search a Post</string>
+    <string name="explore_something_special">Explore something special...</string>
+    <string name="type_something_to_search">type something to search</string>
+    <string name="search">Search</string>
+    <string name="suggest_post">Suggest Post</string>
+
+    <string name="settings">Settings</string>
+    <string name="setting_about_us">About Us</string>
+    <string name="setting_contact_us">Contact Us</string>
+    <string name="setting_language">Language</string>
+    <string name="sign_in">Sign IN</string>
+    <string name="signIn_email">Email</string>
+    <string name="signIn_password">Password</string>
+    <string name="sigIn_btn_sign_in">Sign In</string>
+    <string name="sign_in_with">Sign in with</string>
+    <string name="home">Home</string>
+    <string name="settings_menu">Settings</string>
+    <string name="chat_menu">Chat</string>
+    <string name="profile_menu">Profile</string>
+    <string name="sign_out_menu">Sign Out</string>
+    <string name="menu_open" translatable="false">Open</string>
+    <string name="menu_close" translatable="false">Close</string>
+    <string name="course_profile">Course</string>
+
+
+    <array name="language_array">
+        <item>English</item>
+        <item>中文</item>
+    </array>
+    <array name="problem_type">
+        <item>Can\'t Add Friends</item>
+        <item>Can\'t Join Group</item>
+        <item>Can\'t Upload Post</item>
+        <item>Can\'t Login</item>
+        <item>Others</item>
+    </array>
+    <array name="category">
+        <item>Assignment</item>
+        <item>Business</item>
+        <item>Computer Science</item>
+        <item>Account</item>
+        <item>Graphic Design</item>
+        <item>Degree</item>
+        <item>Finance</item>
+        <item>Medicine</item>
+    </array>
+    <array name="course">
+        <item>Business</item>
+        <item>Computer Science</item>
+        <item>Account</item>
+        <item>Graphic Design</item>
+        <item>Media</item>
+        <item>Finance</item>
+        <item>Medicine</item>
+        <item>Others</item>
+    </array>
+    <array name="learning_style">
+        <item>Visual Learning</item>
+        <item>Auditory Learning</item>
+        <item>Kinesthetic Learning</item>
+        <item>Reading / Writing Learning</item>
+        <item>Social Learning</item>
+        <item>Solitary / Individual Learning</item>
+    </array>
 </resources>
