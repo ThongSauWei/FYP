@@ -126,7 +126,7 @@
 <!--    category-->
     <string name="business">Business</string>
     <string name="sci">Science</string>
-    <string name="art">Art & Design</string>
+    <string name="art">Art / Design</string>
     <string name="it">IT</string>
     <string name="sport">Sport</string>
     <string name="lang">Language</string>
