@@ -123,7 +123,7 @@
 
     <string name="time_ago">10 mins ago</string>
 
-<!--    category-->
+<!--    category type-->
     <string name="business">Business</string>
     <string name="sci">Science</string>
     <string name="art">Art / Design</string>
