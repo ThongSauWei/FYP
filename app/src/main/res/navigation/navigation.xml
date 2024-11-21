@@ -18,4 +18,9 @@
         android:name="com.example.fyp.Detail"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.fyp.CreatePost"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" />
 </navigation>

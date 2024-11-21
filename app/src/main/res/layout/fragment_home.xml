@@ -8,7 +8,6 @@
     android:background="@color/background"
     tools:context=".Home">
 
-    <!-- Scrollable Content -->
     <ScrollView
         android:id="@+id/scrollableContent"
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Search Icon -->
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="41dp"
@@ -32,10 +30,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_search_24" />
-
-            <!-- Filter Icon -->
-
-            <!-- RecyclerView -->
 
             <ImageView
                 android:id="@+id/imageView7"
@@ -61,6 +55,7 @@
     </ScrollView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/floatingCardView"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_marginEnd="24dp"

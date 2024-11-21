@@ -280,7 +280,7 @@
                     android:id="@+id/imageView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/bab9f3773776ee546a5a189cb3069065" />
+                    app:srcCompat="@drawable/post_image" />
             </androidx.cardview.widget.CardView>
 
 

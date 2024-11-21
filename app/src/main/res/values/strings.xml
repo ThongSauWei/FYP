@@ -28,9 +28,9 @@
     <string name="description">Description</string>
     <string name="submit">Submit</string>
 
-    <string name="add_a_title">Add a Title...</string>
-    <string name="type_something_to_describe">Type something to describe...</string>
-    <string name="select_a_category">Select a Category</string>
+    <string name="add_a_title">Enter a Title...</string>
+    <string name="type_something_to_describe">Enter Description here ....</string>
+    <string name="select_a_category">Category</string>
     <string name="select_a_learning_style">Select a Learning Style</string>
     <string name="next">Next</string>
     <string name="profileName">Name</string>
@@ -122,6 +122,18 @@
     <string name="course_profile">Course</string>
 
     <string name="time_ago">10 mins ago</string>
+
+<!--    category-->
+    <string name="business">Business</string>
+    <string name="sci">Science</string>
+    <string name="art">Art & Design</string>
+    <string name="it">IT</string>
+    <string name="sport">Sport</string>
+    <string name="lang">Language</string>
+    <string name="revision">Revision</string>
+    <string name="studyBuddy">Find Study Buddies</string>
+    <string name="helper">Find Helper</string>
+    <string name="other">Other</string>
 
 
     <array name="language_array">

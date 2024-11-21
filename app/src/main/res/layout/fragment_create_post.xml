@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".CreatePost">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewCreatePost"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="@color/post"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2CreatePost"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="24dp"
+        app:cardBackgroundColor="@color/post"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardViewCreatePost"
+        app:layout_constraintStart_toEndOf="@+id/cardViewCreatePost"
+        app:layout_constraintTop_toTopOf="@+id/cardViewCreatePost">
+
+        <ImageView
+            android:id="@+id/btnAddCreatePost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_add_24" />
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/txtTitleCreatePost"
+        android:layout_width="330dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:gravity="start|top"
+        android:hint="@string/add_a_title"
+        android:inputType="text|textMultiLine"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCreatePost" />
+
+    <View
+        android:id="@+id/separatorCreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitleCreatePost" />
+
+    <EditText
+        android:id="@+id/txtDescriptionCreatePost"
+        android:layout_width="330dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:gravity="start|top"
+        android:hint="@string/type_something_to_describe"
+        android:inputType="text|textMultiLine"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitleCreatePost"
+        app:layout_constraintStart_toStartOf="@+id/txtTitleCreatePost"
+        app:layout_constraintTop_toBottomOf="@+id/separatorCreatePost" />
+
+    <View
+        android:id="@+id/separator2CreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescriptionCreatePost" />
+
+    <TextView
+        android:id="@+id/lblLinkCreatePost"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/select_a_category"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/txtDescriptionCreatePost"
+        app:layout_constraintTop_toBottomOf="@+id/separator2CreatePost" />
+
+    <View
+        android:id="@+id/separator4CreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="493dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/assBuss"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="271dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toTopOf="@+id/separator4CreatePost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblLinkCreatePost"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvBuss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/business"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sciCard"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/assBuss"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/assBuss"
+        app:layout_constraintTop_toTopOf="@+id/assBuss"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvSci"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/sci"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/artCard"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="11dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sciCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/sciCard"
+        app:layout_constraintTop_toTopOf="@+id/sciCard"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvArt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/art"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itCard"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/artCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/artCard"
+        app:layout_constraintTop_toTopOf="@+id/artCard"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvIT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/it"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
