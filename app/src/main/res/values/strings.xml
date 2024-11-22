@@ -121,9 +121,10 @@
     <string name="menu_close" translatable="false">Close</string>
     <string name="course_profile">Course</string>
 
+    <!--   post time-->
     <string name="time_ago">10 mins ago</string>
 
-<!--    category type-->
+    <!--    category type-->
     <string name="business">Business</string>
     <string name="sci">Science</string>
     <string name="art">Art / Design</string>
@@ -134,6 +135,15 @@
     <string name="studyBuddy">Find Study Buddies</string>
     <string name="helper">Find Helper</string>
     <string name="other">Other</string>
+
+    <!--    privacy-->
+    <string name="privacy">Privacy</string>
+    <string name="publicPrivacy">Public</string>
+    <string name="privatePrivacy">Private</string>
+    <string name="resPrivacy">Restricted</string>
+
+<!--    restricted user-->
+    <string name="chooseRestricted">Choose restricted user :</string>
 
 
     <array name="language_array">
@@ -147,16 +157,16 @@
         <item>Can\'t Login</item>
         <item>Others</item>
     </array>
-    <array name="category">
-        <item>Assignment</item>
-        <item>Business</item>
-        <item>Computer Science</item>
-        <item>Account</item>
-        <item>Graphic Design</item>
-        <item>Degree</item>
-        <item>Finance</item>
-        <item>Medicine</item>
-    </array>
+    <!--    <array name="category">-->
+    <!--        <item>Assignment</item>-->
+    <!--        <item>Business</item>-->
+    <!--        <item>Computer Science</item>-->
+    <!--        <item>Account</item>-->
+    <!--        <item>Graphic Design</item>-->
+    <!--        <item>Degree</item>-->
+    <!--        <item>Finance</item>-->
+    <!--        <item>Medicine</item>-->
+    <!--    </array>-->
     <array name="course">
         <item>Business</item>
         <item>Computer Science</item>

@@ -23,4 +23,9 @@
         android:name="com.example.fyp.CreatePost"
         android:label="fragment_create_post"
         tools:layout="@layout/fragment_create_post" />
+    <fragment
+        android:id="@+id/restrictedFragment"
+        android:name="com.example.fyp.RestrictedUser"
+        android:label="fragment_restricted"
+        tools:layout="@layout/fragment_restricted" />
 </navigation>
