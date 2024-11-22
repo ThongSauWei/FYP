@@ -162,6 +162,16 @@
     <!--    restricted user-->
     <string name="chooseRestricted">Choose restricted user :</string>
 
+    <!--    Friend Request-->
+    <string name="friend_request">Friend Request</string>
+    <string name="approve_or_ignore">Approve or Ignore Friend Requests</string>
+    <string name="today">Today</string>
+    <string name="confirm_btn">Confirm</string>
+    <string name="del_btn">Delete</string>
+
+    <!--    map-->
+    <string name="tar_map">TARUMT Map</string>
+
 
     <array name="language_array">
         <item>English</item>
