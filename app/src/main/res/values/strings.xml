@@ -107,10 +107,12 @@
     <string name="search_a_post">Search a Post</string>
     <string name="explore_something_special">Explore something special...</string>
     <string name="search_for_post">Search for any post ...</string>
+    <string name="type_something_to_search">Type something to search</string>
     <string name="search">Search</string>
     <string name="suggest_post">Suggested Post :</string>
 
     <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
     <string name="setting_about_us">About Us</string>
     <string name="setting_contact_us">Contact Us</string>
     <string name="setting_language">Language</string>

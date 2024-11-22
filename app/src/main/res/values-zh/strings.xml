@@ -95,11 +95,13 @@
     <string name="suggest_friends">推荐朋友</string>
     <string name="search_a_post">搜索帖子</string>
     <string name="explore_something_special">探索特别内容…</string>
+    <string name="search_for_post">寻找任何帖子…</string>
     <string name="type_something_to_search">输入内容以搜索</string>
     <string name="search">搜索</string>
     <string name="suggest_post">推荐帖子</string>
     <string name="settings">设置</string>
     <string name="setting_about_us">关于我们</string>
+    <string name="feedback">反馈</string>
     <string name="setting_contact_us">联系我们</string>
     <string name="setting_language">语言</string>
     <string name="sign_in">登录</string>
@@ -146,9 +148,17 @@
     </array>
 
     <!--   post time-->
+    <!--   post time-->
+    <string name="select_date">日期</string>
     <string name="time_ago">10分钟前</string>
-
+    <string name="few_ago">几天前</string>
+    <string name="week_ago">1个星期前</string>
+    <string name="month_ago">1个月前</string>
+    <string name="custom_date">自定义日期</string>
+    <string name="from_date">从 :</string>
+    <string name="until_date">直到 :</string>
     <!--    category type-->
+    <string name="all_category">全部</string>
     <string name="business">商业</string>
     <string name="sci">科学</string>
     <string name="art">艺术 / 设计</string>

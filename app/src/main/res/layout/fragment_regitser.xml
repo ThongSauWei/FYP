@@ -20,6 +20,11 @@
             android:padding="16dp">
 
             <!-- Back Button -->
+
+            <!-- Title -->
+
+            <!-- Logo -->
+
             <ImageView
                 android:id="@+id/btnExitRegister"
                 android:layout_width="28dp"
@@ -28,18 +33,20 @@
                 android:contentDescription="@string/go_back"
                 android:src="@drawable/arrow_back" />
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tvTitleRegister"
                 android:layout_width="121dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-56dp"
+                android:layout_marginStart="30dp"
+                android:layout_alignBaseline="@id/btnExitRegister"
+                android:layout_alignParentTop="true"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/caveat"
                 android:text="@string/sign_up"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="32sp" />
 
-            <!-- Logo -->
             <ImageView
                 android:id="@+id/imgLogoRegister"
                 android:layout_width="match_parent"
@@ -55,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpName"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -63,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginStart="2dp"
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpName"
@@ -76,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/SignUpEmail"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -87,6 +97,7 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/SignUpEmail"
+                android:layout_marginStart="2dp"
                 android:inputType="textEmailAddress"
                 android:padding="10dp" />
 
@@ -97,6 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpMobile_number"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -108,6 +120,7 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpMobile_number"
+                android:layout_marginStart="2dp"
                 android:inputType="phone"
                 android:padding="10dp" />
 
@@ -118,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpBirthday"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -135,6 +149,7 @@
                     android:hint="@string/signUpBirthday"
                     android:inputType="date"
                     android:padding="10dp"
+                    android:layout_marginStart="2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnCalendarRegister"
                     app:layout_constraintStart_toStartOf="parent"
@@ -160,6 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpPassword"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -171,6 +187,7 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpPassword"
+                android:layout_marginStart="2dp"
                 android:inputType="textPassword"
                 android:padding="10dp" />
 
@@ -181,6 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/confirm_password_title"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -192,6 +210,7 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/confirm_password_title"
+                android:layout_marginStart="2dp"
                 android:inputType="textPassword"
                 android:padding="10dp" />
 
@@ -202,6 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUp_security_question"
+                android:layout_marginStart="2dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -213,6 +233,7 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUp_security_question"
+                android:layout_marginStart="2dp"
                 android:inputType="text"
                 android:padding="10dp" />
 
@@ -222,6 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginTop="20dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -230,11 +252,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@drawable/button_bg"
-                    android:fontFamily="@font/caveat"
+                    android:fontFamily="@font/abhayalibre_semibold"
                     android:text="@string/signUp_sign_up_btn"
                     android:textAllCaps="false"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </androidx.cardview.widget.CardView>
 
             <!-- Already Have Account -->
@@ -250,6 +273,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/abhayalibre_semibold"
                     android:text="@string/already_have_an_account"
+                    android:layout_marginStart="-80dp"
                     android:textColor="@color/grey"
                     android:textSize="18sp" />
 
@@ -260,6 +284,7 @@
                     android:backgroundTint="@android:color/transparent"
                     android:fontFamily="@font/abhayalibre_semibold"
                     android:text="@string/underlined_sign_in"
+                    android:layout_marginStart="-20dp"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
             </LinearLayout>

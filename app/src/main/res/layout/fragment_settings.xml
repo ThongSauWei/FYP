@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Settings">
+
+    <!-- Back Button Icon -->
+
+    <!-- Title -->
+
+    <!-- Save/Confirm Button -->
+
+    <!-- About Us Button -->
+
+    <TextView
+        android:id="@+id/tvTitleSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/caveat"
+        android:text="@string/settings"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/btnBackSettings"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnBackSettings"
+        android:layout_width="28dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:contentDescription="@string/go_back"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnSaveSettings"
+        android:layout_width="39dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@string/yes"
+        android:src="@drawable/tick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/separatorSettings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitleSettings" />
+
+    <LinearLayout
+        android:id="@+id/btnAboutUsSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleSettings">
+
+        <ImageView
+            android:id="@+id/iconAboutUs"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/setting_about_us"
+            android:src="@drawable/aboutus_icon" />
+
+        <TextView
+            android:id="@+id/tvAboutUsSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="@string/setting_about_us"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2Settings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAboutUsSettings" />
+
+    <!-- Contact Us Button -->
+    <LinearLayout
+        android:id="@+id/btnContactUsSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAboutUsSettings">
+
+        <ImageView
+            android:id="@+id/iconContactUs"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/setting_contact_us"
+            android:src="@drawable/contactus_icon" />
+
+        <TextView
+            android:id="@+id/tvContactUsSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="@string/setting_contact_us"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator3Settings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnContactUsSettings" />
+
+    <!-- Feedback Button -->
+    <LinearLayout
+        android:id="@+id/btnFeedbackSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnContactUsSettings">
+
+        <ImageView
+            android:id="@+id/iconFeedback"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/feedback"
+            android:src="@drawable/feedback_icon" />
+
+        <TextView
+            android:id="@+id/tvFeedbackSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="@string/feedback"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator4Settings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFeedbackSettings" />
+
+    <!-- Language Selector -->
+    <LinearLayout
+        android:id="@+id/btnLanguageSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFeedbackSettings">
+
+        <ImageView
+            android:id="@+id/iconLanguage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/setting_language"
+            android:src="@drawable/language_icon" />
+
+        <TextView
+            android:id="@+id/tvLanguageSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="@string/setting_language"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <Spinner
+            android:id="@+id/spinnerLanguageSettings"
+            android:layout_width="140dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/spinner_bg"
+            android:entries="@array/language_array"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:popupBackground="@drawable/spinner_dropdown_bg"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator5Settings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnLanguageSettings" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
