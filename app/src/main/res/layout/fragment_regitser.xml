@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Register">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Back Button -->
+            <ImageView
+                android:id="@+id/btnExitRegister"
+                android:layout_width="28dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/go_back"
+                android:src="@drawable/arrow_back" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitleRegister"
+                android:layout_width="121dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/caveat"
+                android:text="@string/sign_up"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/imgLogoRegister"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tarumt_logo" />
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/lblNameRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/signUpName"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtNameRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/signUpName"
+                android:inputType="textPersonName"
+                android:padding="10dp" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/lblEmailRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/SignUpEmail"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtEmailRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/SignUpEmail"
+                android:inputType="textEmailAddress"
+                android:padding="10dp" />
+
+            <!-- Mobile Number -->
+            <TextView
+                android:id="@+id/lblPhoneNoRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/signUpMobile_number"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtPhoneNoRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/signUpMobile_number"
+                android:inputType="phone"
+                android:padding="10dp" />
+
+            <!-- Birthday -->
+            <TextView
+                android:id="@+id/lblBirthdayRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/signUpBirthday"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/txtBirthdayRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/edittext_background"
+                    android:hint="@string/signUpBirthday"
+                    android:inputType="date"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnCalendarRegister"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btnCalendarRegister"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="28dp"
+                    android:contentDescription="@string/calendar"
+                    android:src="@drawable/cld"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Password -->
+            <TextView
+                android:id="@+id/lblPasswordRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/signUpPassword"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtPasswordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/signUpPassword"
+                android:inputType="textPassword"
+                android:padding="10dp" />
+
+            <!-- Confirm Password -->
+            <TextView
+                android:id="@+id/lblConfirmPasswordRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/confirm_password_title"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtConfirmPasswordRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/confirm_password_title"
+                android:inputType="textPassword"
+                android:padding="10dp" />
+
+            <!-- Security Question -->
+            <TextView
+                android:id="@+id/lblSecurityQuestionRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/signUp_security_question"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtSecurityQuestionRegister"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:hint="@string/signUp_security_question"
+                android:inputType="text"
+                android:padding="10dp" />
+
+            <!-- Sign Up Button -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewBtnSignUpRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSignUpRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/button_bg"
+                    android:fontFamily="@font/caveat"
+                    android:text="@string/signUp_sign_up_btn"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Already Have Account -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvNoteRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abhayalibre_semibold"
+                    android:text="@string/already_have_an_account"
+                    android:textColor="@color/grey"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/btnSignInRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:fontFamily="@font/abhayalibre_semibold"
+                    android:text="@string/underlined_sign_in"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,4 @@
-package com.mainapp.finalyearproject.data
-
+package com.example.fyp.data
 data class Chat(
     val chatID: String,
     val initiatorLastSeen: String,

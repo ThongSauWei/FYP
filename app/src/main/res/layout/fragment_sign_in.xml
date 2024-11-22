@@ -1,0 +1,162 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signInPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".SignIn">
+
+    <!-- Back Button Icon -->
+    <ImageView
+        android:id="@+id/backIcon"
+        android:layout_width="28dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/arrow_back"
+        android:contentDescription="@string/go_back" />
+
+    <!-- Sign IN Title -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/backIcon"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@id/backIcon"
+        android:fontFamily="@font/caveat"
+        android:text="@string/sign_in"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <!-- Logo Image -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/backIcon"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tarumt_logo" />
+
+    <!-- Email Label -->
+    <TextView
+        android:id="@+id/emailLabel"
+        android:layout_width="86dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logoImage"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/signIn_email"
+        android:textColor="@color/white"
+        android:textSize="19sp" />
+
+    <!-- Email Input Field -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/emailLabel"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/edittext_background"
+        android:hint="@string/signIn_email"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey" />
+
+    <!-- Password Label -->
+    <TextView
+        android:id="@+id/passwordLabel"
+        android:layout_width="108dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailEditText"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/signIn_password"
+        android:textColor="@color/white"
+        android:textSize="19sp" />
+
+    <!-- Password Input Field -->
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/passwordLabel"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/edittext_background"
+        android:hint="@string/signIn_password"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey" />
+
+    <!-- Sign In Button -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewSignInButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="30dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@color/button_grey">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signInButton"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/button_bg"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:padding="10dp"
+            android:text="@string/sigIn_btn_sign_in"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Sign Up Link -->
+    <TextView
+        android:id="@+id/signUpLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardViewSignInButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/underlined_sign_up"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <!-- Forgot Password Link -->
+    <TextView
+        android:id="@+id/forgotPasswordLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/cardViewSignInButton"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/underlined_forget_password"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:textColor="@color/dark_yellow"
+        android:textSize="18sp" />
+
+</RelativeLayout>

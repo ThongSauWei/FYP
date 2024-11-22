@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FinalYearProject</string>
+    <string name="go_back">返回</string>
+    <string name="calendar">日历</string>
+    <string name="underlined_sign_up"><u>注册</u></string>
+    <string name="underlined_forget_password"><u>忘记密码？</u></string>
+    <string name="underlined_sign_in"><u>登录</u></string>
+    <string name="underlined_contact_us"><u>联系我们</u></string>
+    <string name="hello_blank_fragment">你好空白片段</string>
+    <string name="confirm_delete_haha">确认删除 Haha？</string>
+    <string name="yes">是的</string>
+    <string name="no">否</string>
+    <string name="delete_will_be_permanently">删除将是永久性的</string>
+    <string name="sign_out">登出</string>
+    <string name="about_us">关于我们</string>
+    <string name="about_us_title">TARUMT 校园中心</string>
+    <string name="welcome_to_tarumt_campus_hub">欢迎来到创新的 TARUMT 校园中心。我们是 TARUMT 校园中心，一个连接 TARUMT 学生和职员的“学习互动”平台。</string>
+    <string name="our_mission">我们的使命:</string>
+    <string name="mission_description">在 TARUMT 校园中心，我们的使命是赋予学生权力。我们为学生提供一个查找、收集和分享学习资料以及有趣内容的平台。我们相信打破障碍，让每个人都能在平台上获取更全面的信息和统一的校园资讯。平台仅限校园内部使用，避免信息混乱。</string>
+    <string name="why_tarumt_campus_hub">为什么选择 TARUMT 校园中心？</string>
+    <string name="why_description">TARUMT 校园中心是学生和职员首选的学习互动平台，因为我们提供实用功能和友好体验，构建紧密的学习与娱乐共享社区。选择 TARUMT 校园中心，意味着选择一个与你同行、共同成长的学习平台，为你的学术旅程注入活力和可能性。</string>
+    <string name="contact_us">联系我们</string>
+    <string name="name">名字</string>
+    <string name="email">电子邮件</string>
+    <string name="mobile_phone">手机号码</string>
+    <string name="problem_type">问题类型</string>
+    <string name="description">描述</string>
+    <string name="submit">提交</string>
+    <string name="add_a_title">添加标题…</string>
+    <string name="type_something_to_describe">输入一些内容进行描述…</string>
+    <string name="select_a_category">选择类别</string>
+    <string name="select_a_learning_style">选择一种学习风格</string>
+    <string name="next">下一步</string>
+    <string name="profileName">名字</string>
+    <string name="profileLanguages">语言</string>
+    <string name="profileMobile_phone">手机号码</string>
+    <string name="profilrBirthday">生日</string>
+    <string name="profileDescription">描述</string>
+    <string name="profileSave">保存</string>
+    <string name="filter">筛选</string>
+    <string name="category">类别</string>
+    <string name="learning_style">学习风格</string>
+    <string name="add_friend">添加朋友</string>
+    <string name="message">消息</string>
+    <string name="friends">朋友</string>
+    <string name="all_friends">所有朋友</string>
+    <string name="_20_friends">20 朋友</string>
+    <string name="typing">输入中…</string>
+    <string name="all">所有</string>
+    <string name="InnerChatTyping">输入中…</string>
+    <string name="view_post">查看帖子</string>
+    <string name="invite_friends_to_join">邀请朋友加入</string>
+    <string name="invite_more_friends_to_join_the_discussion_now">立即邀请更多朋友加入讨论！</string>
+    <string name="done">完成</string>
+    <string name="search_by_name">按名字搜索</string>
+    <string name="assignment">作业</string>
+    <string name="visual_learning">视觉学习</string>
+    <string name="join">加入</string>
+    <string name="write_a_comment">写评论…</string>
+    <string name="_4_comments">4 条评论</string>
+    <string name="new_password">新密码</string>
+    <string name="new_password_title">新密码</string>
+    <string name="confirm_password_title">确认密码</string>
+    <string name="submit_passRecover">提交</string>
+    <string name="chat_with_friends">和朋友聊天</string>
+    <string name="search_your_friends">搜索你的朋友</string>
+    <string name="chat">聊天</string>
+    <string name="password_recovery">密码恢复</string>
+    <string name="prc_email">电子邮件</string>
+    <string name="security_question">你最喜欢的电影是什么？</string>
+    <string name="prc_submit">提交</string>
+    <string name="need_help">需要帮助吗？</string>
+    <string name="edit_profile">编辑个人资料</string>
+    <string name="profile_groups">群组</string>
+    <string name="profile_friends">朋友</string>
+    <string name="create_post">创建帖子</string>
+    <string name="sign_up">注册</string>
+    <string name="signUpName">名字</string>
+    <string name="signUpMobile_number">手机号码</string>
+    <string name="signUpBirthday">生日</string>
+    <string name="signUpPassword">密码</string>
+    <string name="signUp_security_question">你最喜欢的电影是什么？</string>
+    <string name="signUp_sign_up_btn">注册</string>
+    <string name="already_have_an_account">已有账户？</string>
+    <string name="SignUpEmail">电子邮件</string>
+    <string name="find_friends">寻找朋友</string>
+    <string name="study_with_other_study_partner">与学习伙伴一起学习！</string>
+    <string name="search_by_name_category_or_learning_styles">按名字、类别或学习风格搜索</string>
+    <string name="add_friends">添加朋友</string>
+    <string name="suggest_friends">推荐朋友</string>
+    <string name="search_a_post">搜索帖子</string>
+    <string name="explore_something_special">探索特别内容…</string>
+    <string name="type_something_to_search">输入内容以搜索</string>
+    <string name="search">搜索</string>
+    <string name="suggest_post">推荐帖子</string>
+    <string name="settings">设置</string>
+    <string name="setting_about_us">关于我们</string>
+    <string name="setting_contact_us">联系我们</string>
+    <string name="setting_language">语言</string>
+    <string name="sign_in">登录</string>
+    <string name="signIn_email">电子邮件</string>
+    <string name="signIn_password">密码</string>
+    <string name="sigIn_btn_sign_in">登录</string>
+    <string name="sign_in_with">用以下方式登录</string>
+    <string name="home">主页</string>
+    <string name="settings_menu">设置</string>
+    <string name="chat_menu">聊天</string>
+    <string name="profile_menu">个人主页</string>
+    <string name="sign_out_menu">登出</string>
+    <string name="course_profile">课程</string>
+
+    <array name="language_array">
+        <item>English</item>
+        <item>中文</item>
+    </array>
+    <array name="problem_type">
+        <item>无法添加朋友</item>
+        <item>无法加入群组</item>
+        <item>无法上传帖子</item>
+        <item>无法登录</item>
+        <item>其他</item>
+    </array>
+    <array name="category">
+        <item>作业</item>
+        <item>商业</item>
+        <item>计算机科学</item>
+        <item>会计</item>
+        <item>平面设计</item>
+        <item>学士课程</item>
+        <item>金融</item>
+        <item>医学</item>
+    </array>
+    <array name="course">
+        <item>商业</item>
+        <item>计算机科学</item>
+        <item>会计</item>
+        <item>平面设计</item>
+        <item>传媒</item>
+        <item>金融</item>
+        <item>医学</item>
+        <item>其他</item>
+    </array>
+    <array name="learning_style">
+        <item>视觉学习</item>
+        <item>听觉学习</item>
+        <item>动觉学习</item>
+        <item>阅读/写作学习</item>
+        <item>社交学习</item>
+        <item>个人学习</item>
+    </array>
+</resources>

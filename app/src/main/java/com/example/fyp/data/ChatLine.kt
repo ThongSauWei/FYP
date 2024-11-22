@@ -1,4 +1,4 @@
-package com.mainapp.finalyearproject.data
+package com.example.fyp.data
 
 data class ChatLine(
     val chatLineID: String = "",        // Default empty string

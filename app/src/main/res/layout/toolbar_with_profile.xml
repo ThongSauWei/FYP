@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:navigationIcon="@drawable/baseline_menu_24"
+    android:id="@+id/toolbar_with_profile">
+
+    <!-- Search Icon on the Right Side -->
+    <ImageView
+        android:id="@+id/btnSearchToolbarWithProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="end"
+        android:src="@drawable/baseline_search_24" />
+
+    <!-- Profile Card on the Right Side -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="end"
+        app:cardCornerRadius="25dp">
+
+        <ImageView
+            android:id="@+id/imgProfileToolbarWithProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nullprofile" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.appcompat.widget.Toolbar>
