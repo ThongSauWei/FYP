@@ -15,6 +15,8 @@
     <color name="medium_word">#AAAAAA</color>
     <color name="separator">#424242</color>
     <color name="normal_word_selected">#C5C5C5</color>
+    <color name="error_red">#E54A4A</color>
+    <color name="red_button">#BC2F2F</color>
     <color name="search_box">#E8E5E5</color>
     <color name="dialog_box">#4D4D4D</color>
     <color name="blue_dialog">#029BFB</color>

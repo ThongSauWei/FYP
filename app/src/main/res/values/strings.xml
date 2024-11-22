@@ -14,6 +14,11 @@
     <string name="delete_will_be_permanently">Delete will be permanently</string>
     <string name="sign_out">Sign Out</string>
 
+    <string name="no_internet">No Internet</string>
+    <string name="opps">OOPS!!!</string>
+    <string name="no_internet_description">No Internet connection found, check your connection</string>
+    <string name="reload">RELOAD</string>
+
     <string name="about_us">About Us</string>
     <string name="about_us_title">TARUMT Campus Hub</string>
     <string name="welcome_to_tarumt_campus_hub">Welcome to the free and innovative TARUMT Campus Hub. We are the TARUMT Campus Hub, a "learning interaction" platform that connects TARUMT students or Staff.</string>
@@ -178,16 +183,7 @@
         <item>Can\'t Login</item>
         <item>Others</item>
     </array>
-    <!--    <array name="category">-->
-    <!--        <item>Assignment</item>-->
-    <!--        <item>Business</item>-->
-    <!--        <item>Computer Science</item>-->
-    <!--        <item>Account</item>-->
-    <!--        <item>Graphic Design</item>-->
-    <!--        <item>Degree</item>-->
-    <!--        <item>Finance</item>-->
-    <!--        <item>Medicine</item>-->
-    <!--    </array>-->
+
     <array name="course">
         <item>Business</item>
         <item>Computer Science</item>
