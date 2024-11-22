@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".CreatePost">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewCreatePost"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="44dp"
+        app:cardBackgroundColor="@color/post"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2CreatePost"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="24dp"
+        app:cardBackgroundColor="@color/post"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardViewCreatePost"
+        app:layout_constraintStart_toEndOf="@+id/cardViewCreatePost"
+        app:layout_constraintTop_toTopOf="@+id/cardViewCreatePost">
+
+        <ImageView
+            android:id="@+id/btnAddCreatePost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/baseline_add_24" />
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/txtTitleCreatePost"
+        android:layout_width="330dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:gravity="start|top"
+        android:hint="@string/add_a_title"
+        android:inputType="text|textMultiLine"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewCreatePost" />
+
+    <View
+        android:id="@+id/separatorCreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitleCreatePost" />
+
+    <EditText
+        android:id="@+id/txtDescriptionCreatePost"
+        android:layout_width="330dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:gravity="start|top"
+        android:hint="@string/type_something_to_describe"
+        android:inputType="text|textMultiLine"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitleCreatePost"
+        app:layout_constraintStart_toStartOf="@+id/txtTitleCreatePost"
+        app:layout_constraintTop_toBottomOf="@+id/separatorCreatePost" />
+
+    <View
+        android:id="@+id/separator2CreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescriptionCreatePost" />
+
+    <TextView
+        android:id="@+id/lblLinkCreatePost"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/select_a_category"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/txtDescriptionCreatePost"
+        app:layout_constraintTop_toBottomOf="@+id/separator2CreatePost" />
+
+    <View
+        android:id="@+id/separator4CreatePost"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="40dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studyBuddyCard" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/assBuss"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="271dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toTopOf="@+id/separator4CreatePost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblLinkCreatePost"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvBuss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/business"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sciCard"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/assBuss"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/assBuss"
+        app:layout_constraintTop_toTopOf="@+id/assBuss"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvSci"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/box"
+            android:fontFamily="@font/abhayalibre_medium"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/sci"
+            android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/artCard"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="11dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sciCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/sciCard"
+        app:layout_constraintTop_toTopOf="@+id/sciCard"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvArt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/art"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itCard"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/artCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/artCard"
+        app:layout_constraintTop_toTopOf="@+id/artCard"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/tvIT"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/it"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sportCard"
+        android:layout_width="52dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintEnd_toEndOf="@+id/assBuss"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/assBuss"
+        app:layout_constraintTop_toBottomOf="@+id/assBuss">
+
+                <TextView
+                    android:id="@+id/tvSport"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/box"
+                    android:fontFamily="@font/abhayalibre_medium"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/sport"
+                    android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/langCard"
+        android:layout_width="75dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sportCard"
+        app:layout_constraintStart_toEndOf="@+id/sportCard"
+        app:layout_constraintTop_toTopOf="@+id/sportCard">
+
+            <TextView
+                android:id="@+id/tvLang"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/lang"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/assCard"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/langCard"
+        app:layout_constraintStart_toEndOf="@+id/langCard"
+        app:layout_constraintTop_toTopOf="@+id/langCard">
+
+            <TextView
+                android:id="@+id/tvAss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/assignment"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/revisionCard"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="37dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/assCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/assCard"
+        app:layout_constraintTop_toTopOf="@+id/assCard">
+
+            <TextView
+                android:id="@+id/tvRevision"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/revision"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/studyBuddyCard"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintEnd_toEndOf="@+id/sportCard"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/sportCard"
+        app:layout_constraintTop_toBottomOf="@+id/sportCard">
+
+            <TextView
+                android:id="@+id/tvStudyBuddy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/studyBuddy"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/helperCard"
+        android:layout_width="98dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/studyBuddyCard"
+        app:layout_constraintStart_toEndOf="@+id/studyBuddyCard"
+        app:layout_constraintTop_toTopOf="@+id/studyBuddyCard">
+
+            <TextView
+                android:id="@+id/tvHelper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/helper"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/otherCard"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="37dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/helperCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/helperCard"
+        app:layout_constraintTop_toTopOf="@+id/helperCard" >
+
+        <TextView
+            android:id="@+id/tvOther"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/box"
+            android:fontFamily="@font/abhayalibre_medium"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/other"
+            android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/privacy"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/lblLinkCreatePost"
+        app:layout_constraintTop_toBottomOf="@+id/separator4CreatePost" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/publicCard"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="115dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <TextView
+                android:id="@+id/tvPublic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/publicPrivacy"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/privateCard"
+        android:layout_width="85dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/publicCard"
+        app:layout_constraintStart_toEndOf="@+id/publicCard"
+        app:layout_constraintTop_toTopOf="@+id/publicCard">
+
+            <TextView
+                android:id="@+id/tvPrivate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/privatePrivacy"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/resCard"
+        android:layout_width="87dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="85dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/privateCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/privateCard"
+        app:layout_constraintTop_toTopOf="@+id/privateCard">
+
+            <TextView
+                android:id="@+id/tvRes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/box"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/resPrivacy"
+                android:textColor="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

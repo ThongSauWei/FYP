@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Detail">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/userProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.099"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.022" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="Name"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/userProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.03"
+                app:layout_constraintStart_toEndOf="@+id/userProfile"
+                app:layout_constraintTop_toTopOf="@+id/userProfile"
+                app:layout_constraintVertical_bias="0.529" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="152dp"
+                android:text="@string/time_ago"
+                android:textColor="@color/sub_word"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/userName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.148"
+                app:layout_constraintStart_toEndOf="@+id/userName"
+                app:layout_constraintTop_toTopOf="@+id/userName"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <!-- ViewPager -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/userProfile" />
+
+            <!-- Pagination Dots -->
+            <ImageView
+                android:id="@+id/option1"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/viewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/option1" />
+
+            <ImageView
+                android:id="@+id/option2"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toTopOf="@+id/option1"
+                app:layout_constraintStart_toEndOf="@+id/option1"
+                app:srcCompat="@drawable/option2" />
+
+            <ImageView
+                android:id="@+id/option3"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toTopOf="@+id/option2"
+                app:layout_constraintStart_toEndOf="@+id/option2"
+                app:srcCompat="@drawable/option2" />
+
+            <!-- Post Title -->
+            <TextView
+                android:id="@+id/postTitle"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="Today is Assignment Day !!!  Lets do together Today is Assignment Day !!!  Lets do together"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/option1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Post Description -->
+            <TextView
+                android:id="@+id/postDesc"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:text="IT assignment got so many aaaaaa. Anyone do together, learn together. Integrative Programming so hard aaaaa, anyone can help too"
+                android:textColor="@color/sub_word"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@+id/postTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Comment Input -->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewType"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="70dp"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/postDesc"
+                app:layout_constraintTop_toBottomOf="@+id/postDesc"
+                app:layout_constraintVertical_bias="0.02">
+
+                <TextView
+                    android:id="@+id/tvType1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/box"
+                    android:fontFamily="@font/abhayalibre_medium"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/assignment"
+                    android:textColor="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewType1"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="112dp"
+                android:layout_marginBottom="179dp"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="loveImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/cardViewType"
+                app:layout_constraintTop_toBottomOf="@+id/postDesc"
+                app:layout_constraintVertical_bias="0.0">
+
+                        <TextView
+                            android:id="@+id/tvType2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/box"
+                            android:fontFamily="@font/abhayalibre_medium"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:text="@string/assignment"
+                            android:textColor="@color/white" />
+
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/loveImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="350dp"
+                android:layout_marginBottom="140dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/postDesc"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewType"
+                app:layout_constraintVertical_bias="0.024"
+                app:srcCompat="@drawable/love_border" />
+
+            <TextView
+                android:id="@+id/loveNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:text="22"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/loveImage"
+                app:layout_constraintEnd_toStartOf="@+id/commentImage"
+                app:layout_constraintStart_toEndOf="@+id/loveImage"
+                app:layout_constraintTop_toTopOf="@+id/loveImage"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/commentImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/loveNum"
+                app:layout_constraintEnd_toStartOf="@+id/commentNum"
+                app:layout_constraintStart_toEndOf="@+id/loveNum"
+                app:layout_constraintTop_toTopOf="@+id/loveNum"
+                app:layout_constraintVertical_bias="0.4"
+                app:srcCompat="@drawable/comment" />
+
+            <TextView
+                android:id="@+id/commentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="-1dp"
+                android:text="10"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/commentImage"
+                app:layout_constraintEnd_toStartOf="@+id/share"
+                app:layout_constraintStart_toEndOf="@+id/commentImage"
+                app:layout_constraintTop_toTopOf="@+id/commentImage"
+                app:layout_constraintVertical_bias="0.166" />
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="207dp"
+                app:layout_constraintBottom_toBottomOf="@+id/commentNum"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/commentNum"
+                app:layout_constraintTop_toTopOf="@+id/commentNum"
+                app:srcCompat="@drawable/baseline_send_24" />
+
+            <ImageView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="160dp"
+                android:layout_marginEnd="27dp"
+                app:layout_constraintBottom_toBottomOf="@+id/share"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/share"
+                app:layout_constraintTop_toTopOf="@+id/share"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/bookmark_border" />
+
+            <View
+                android:id="@+id/separatorCommentHolder"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="17dp"
+                android:background="@color/separator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loveImage" />
+
+            <TextView
+                android:id="@+id/ttlComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="248dp"
+                android:layout_marginBottom="82dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/_4_comments"
+                android:textColor="#CFCFCF"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/postDesc"
+                app:layout_constraintTop_toBottomOf="@+id/separatorCommentHolder"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/writeComment"
+                android:layout_width="350dp"
+                android:layout_height="42dp"
+                android:layout_margin="16dp"
+                android:background="#2E2E2E"
+                android:paddingStart="20dp"
+                android:ems="10"
+                android:paddingEnd="20dp"
+                android:text="@string/write_a_comment"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:textColor="#C5C5C5"
+                app:layout_constraintTop_toBottomOf="@+id/ttlComment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/sendBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/writeComment"
+                app:layout_constraintTop_toTopOf="@+id/writeComment"
+                app:layout_constraintBottom_toBottomOf="@+id/writeComment"
+                app:srcCompat="@drawable/baseline_send_24" />
+
+
+<!--            &lt;!&ndash; Comments Section &ndash;&gt;-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/writeComment"
+                tools:listitem="@layout/comment_holder" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

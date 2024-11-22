@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayoutFriendHolder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#0F0F0F">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgProfileFriendHolder"-->
+<!--        android:layout_width="65dp"-->
+<!--        android:layout_height="65dp"   -->
+<!--        android:layout_marginStart="40dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/profile_pic_2" />-->
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/friendImage"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/post_image" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvNameFriend"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/abhayalibre_medium"
+        android:maxLines="1"
+        android:text="Name ahahaahahaha aaaaaaaaaa aaaaaaaa"
+        android:textColor="@color/normal_word_selected"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/friendImage"
+        app:layout_constraintStart_toEndOf="@+id/friendImage"
+        app:layout_constraintTop_toTopOf="@+id/friendImage"
+        app:layout_constraintVertical_bias="0.434" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/selectedFriend"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="29dp"
+        app:cardBackgroundColor="@color/background"
+        app:cardCornerRadius="100dp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/friendImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.372"
+        app:layout_constraintStart_toEndOf="@+id/tvNameFriend"
+        app:layout_constraintTop_toTopOf="@+id/friendImage"
+        app:layout_constraintVertical_bias="0.375">
+
+        <ImageView
+            android:id="@+id/btnActionFriendHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/imgProfileFriendHolder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgProfileFriendHolder"
+            app:srcCompat="@drawable/checkmark" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
