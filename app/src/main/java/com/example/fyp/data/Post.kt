@@ -1,5 +1,4 @@
-package com.mainapp.finalyearproject.data
-
+package com.example.fyp.data
 data class Post(
     val postID: String,
     val postDateTime: String,

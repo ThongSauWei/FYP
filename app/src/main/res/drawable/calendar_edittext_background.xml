@@ -25,4 +25,14 @@
         </shape>
     </item>
 
+    <!-- Calendar Icon Layer -->
+    <item android:gravity="end|center_vertical" android:right="10dp">
+        <bitmap
+            android:src="@drawable/cld"
+        android:gravity="end|center_vertical"
+        android:tileMode="disabled"
+        android:width="24dp"
+        android:height="27dp" />
+    </item>
+
 </layer-list>
