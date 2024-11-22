@@ -117,7 +117,7 @@
                 android:fontFamily="@font/abhayalibre_extrabold"
                 android:justificationMode="inter_word"
                 android:text="@string/today"
-                android:textColor="@color/medium_word"
+                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="@+id/cardViewProfile"
                 app:layout_constraintStart_toStartOf="@+id/cardViewProfile"

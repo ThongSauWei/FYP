@@ -167,9 +167,8 @@
     <string name="confirm_btn">Confirm</string>
     <string name="del_btn">Delete</string>
 
-<!--    map-->
+    <!--    map-->
     <string name="tar_map">TARUMT Map</string>
-
 
 
     <array name="language_array">

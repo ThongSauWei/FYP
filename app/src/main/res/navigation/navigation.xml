@@ -53,4 +53,9 @@
         android:name="com.example.fyp.Map"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/friendRequestFragment"
+        android:name="com.example.fyp.FriendRequest"
+        android:label="fragment_friend_request"
+        tools:layout="@layout/fragment_friend_request" />
 </navigation>
