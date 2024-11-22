@@ -28,4 +28,14 @@
         android:name="com.example.fyp.RestrictedUser"
         android:label="fragment_restricted"
         tools:layout="@layout/fragment_restricted" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.fyp.SearchPost"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/filterPostFragment"
+        android:name="com.example.fyp.FilterPost"
+        android:label="fragment_filter_post"
+        tools:layout="@layout/fragment_filter_post" />
 </navigation>

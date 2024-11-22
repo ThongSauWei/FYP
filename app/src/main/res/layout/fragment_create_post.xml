@@ -133,15 +133,15 @@
         app:layout_constraintTop_toBottomOf="@+id/lblLinkCreatePost"
         app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:id="@+id/tvBuss"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/box"
-                android:fontFamily="@font/abhayalibre_medium"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/business"
-                android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/tvBuss"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/box"
+            android:fontFamily="@font/abhayalibre_medium"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/business"
+            android:textColor="@color/white" />
     </androidx.cardview.widget.CardView>
 
 
