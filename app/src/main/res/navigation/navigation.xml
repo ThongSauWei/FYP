@@ -38,4 +38,19 @@
         android:name="com.example.fyp.FilterPost"
         android:label="fragment_filter_post"
         tools:layout="@layout/fragment_filter_post" />
+    <fragment
+        android:id="@+id/annoucementFragment"
+        android:name="com.example.fyp.Annoucement"
+        android:label="fragment_annoucement"
+        tools:layout="@layout/fragment_annoucement" />
+    <fragment
+        android:id="@+id/TARMapFragment"
+        android:name="com.example.fyp.TARMap"
+        android:label="fragment_t_a_r_map"
+        tools:layout="@layout/fragment_tar_map" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.fyp.Map"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>
