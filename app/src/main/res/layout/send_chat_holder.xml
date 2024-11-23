@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/chat_background">
+
+    <!-- Chat Bubble -->
+    <LinearLayout
+        android:id="@+id/chatBoxSendChatHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/outgoing_chat_bubble_shape"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Text Message -->
+        <TextView
+            android:id="@+id/tvChatSendChatHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:maxWidth="300dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="25dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/white"
+            android:text="This is a sample text message"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Image Message -->
+        <ImageView
+            android:id="@+id/imgChatSendChatHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/tarumt_logo"
+        android:visibility="gone" />
+
+        <!-- Video Thumbnail -->
+        <FrameLayout
+            android:id="@+id/videoChatSendChatHolder"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgVideoThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tarumt_logo" />
+
+            <ImageView
+                android:id="@+id/btnPlayVideo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/tarumt_logo" />
+        </FrameLayout>
+
+        <!-- Audio Message -->
+        <LinearLayout
+            android:id="@+id/audioChatSendChatHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:orientation="horizontal"
+            android:background="@drawable/tarumt_logo"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/btnPlayAudio"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/tarumt_logo" />
+
+        </LinearLayout>
+
+        <!-- Time and Status -->
+        <LinearLayout
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTimeSendChatHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="11:57 PM"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

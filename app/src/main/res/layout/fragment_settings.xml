@@ -242,6 +242,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/spinner_bg"
             android:entries="@array/language_array"
+            android:fontFamily="@font/abhayalibre_semibold"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:popupBackground="@drawable/spinner_dropdown_bg"

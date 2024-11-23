@@ -8,7 +8,11 @@ data class ChatLine(
     val mediaURL: String? = null,       // Default null for optional media URL
     val dateTime: String = "",          // Default empty string
     val senderID: String = "",          // Default empty string
-    val receiverID: String = ""         // Default empty string
+    val receiverID: String = "",        // Default empty string
+
+    val isSharedPost: Boolean = false,
+    val postSharedID: String? = null    //ID of the shared post, if applicable
+
 ) {
 
 }

@@ -43,22 +43,24 @@
     <string name="profileName">Name</string>
     <string name="profileLanguages">Language</string>
     <string name="profileMobile_phone">Mobile Phone</string>
-    <string name="profilrBirthday">Birthday</string>
+    <string name="profileBirthday">Birthday</string>
     <string name="profileDescription">Description</string>
     <string name="profileSave">Save</string>
     <string name="filter">Filter Post</string>
     <string name="category">Category</string>
     <string name="learning_style">Learning Style</string>
+    <string name="profile_description">Description…</string>
 
     <string name="add_friend">Add Friend</string>
     <string name="message">Message</string>
     <string name="friends">Friends</string>
     <string name="all_friends">All Friends</string>
-    <string name="_20_friends">20 Friends</string>
+    <string name="_0_friends">0 Friends</string>
     <string name="typing">Typing...</string>
     <string name="all">ALL</string>
     <string name="InnerChatTyping">Typing...</string>
 
+    <string name="post">Post</string>
     <string name="view_post">View Post</string>
     <string name="invite_friends_to_join">Invite Friends to Join</string>
     <string name="invite_more_friends_to_join_the_discussion_now">Invite more friends to join the discussion now!!</string>
@@ -75,7 +77,7 @@
     <string name="new_password_title">New Password</string>
     <string name="confirm_password_title">Confirm Password</string>
     <string name="submit_passRecover">Submit</string>
-    <string name="chat_with_friends">Chat with Friends</string>
+    <string name="search_chat_friends">Search Chat</string>
     <string name="search_your_friends">search your friends</string>
 
     <string name="chat">Chat</string>
@@ -101,7 +103,7 @@
     <string name="find_friends">Find Friends</string>
     <string name="study_with_other_study_partner">Find more friends !!</string>
     <string name="search_by_name_category_or_learning_styles">search by name, category or learning styles</string>
-    <string name="add_friends">Add Friends</string>
+    <string name="search_friends">Search Friends</string>
 
     <string name="suggest_friends">Suggest Friends</string>
     <string name="search_a_post">Search a Post</string>
@@ -169,9 +171,16 @@
     <string name="confirm_btn">Confirm</string>
     <string name="del_btn">Delete</string>
 
+    <!-- Feedback -->
+    <string name="feedback_title">Rate Of TARUMT Campus Hub</string>
+
     <!--    map-->
     <string name="tar_map">TARUMT Map</string>
 
+    <array name="profile_post">
+        <item>Edit</item>
+        <item>Delete</item>
+    </array>
 
     <array name="language_array">
         <item>English</item>
@@ -186,13 +195,14 @@
     </array>
 
     <array name="course">
-        <item>Business</item>
-        <item>Computer Science</item>
-        <item>Account</item>
-        <item>Graphic Design</item>
-        <item>Media</item>
-        <item>Finance</item>
-        <item>Medicine</item>
+        <item>Business, TARUMT</item>
+        <item>Computer Science, TARUMT</item>
+        <item>Account, TARUMT</item>
+        <item>Graphic Design, TARUMT</item>
+        <item>Media, TARUMT</item>
+        <item>Finance, TARUMT</item>
+        <item>Medicine, TARUMT</item>
+        <item>Sport, TARUMT</item>
         <item>Others</item>
     </array>
     <array name="learning_style">

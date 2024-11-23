@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profilePage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Profile">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <!-- Profile Header Section -->
+            <LinearLayout
+                android:id="@+id/linearLayoutProfile"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:background="@color/profile_color"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Profile Picture -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="150dp"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imgProfileProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/nullprofile" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Edit Profile Icon -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imgEditProfile"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="215dp"
+                app:cardBackgroundColor="@color/light_grey"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.27"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/changeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/baseline_edit_24" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imgSettingsProfile"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="-60dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/setting_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutProfile" />
+
+            <TextView
+                android:id="@+id/tvNameProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="Minions Bro"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/cardViewProfile"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewProfile" />
+
+            <TextView
+                android:id="@+id/tvPostsProfile"
+                android:layout_width="11dp"
+                android:layout_height="27dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvNameProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFriendsProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="56dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvPostsProfile"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDOBProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/abhaya_libre"
+                android:text="2003-11-21"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/tvNameProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvNameProfile" />
+
+            <TextView
+                android:id="@+id/lblPostsProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="17dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/post"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvDOBProfile"
+                app:layout_constraintEnd_toEndOf="@+id/tvPostsProfile"
+                app:layout_constraintStart_toStartOf="@+id/tvPostsProfile" />
+
+            <TextView
+                android:id="@+id/lblFriendsProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/profile_friends"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/lblPostsProfile"
+                app:layout_constraintEnd_toEndOf="@+id/tvFriendsProfile"
+                app:layout_constraintStart_toStartOf="@+id/tvFriendsProfile" />
+
+            <TextView
+                android:id="@+id/tvCoursesProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="Business, TARUMT"
+                android:textColor="@color/blue"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/tvDOBProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvDOBProfile" />
+
+            <TextView
+                android:id="@+id/tvLanguages"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="English"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/lblPostsProfile"
+                app:layout_constraintTop_toBottomOf="@+id/lblPostsProfile"/>
+
+            <TextView
+                android:id="@+id/tvBioProfile"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="Description..."
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tvCoursesProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvCoursesProfile" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewBtnEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/tvBioProfile"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/tvBioProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvBioProfile">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="340dp"
+                    android:layout_height="36dp"
+                    android:background="@color/white"
+                    android:fontFamily="@font/abhayalibre_semibold"
+                    android:text="@string/edit_profile"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:id="@+id/separatorProfile"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="28dp"
+                android:background="@color/separator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardViewBtnEditProfile" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewProfilePost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.524"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separatorProfile"
+                app:layout_constraintVertical_bias="0.05"
+                tools:listitem="@layout/post_item_profile" />
+
+            <Button
+                android:id="@+id/btnCreatePostProfile"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="110dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/create_post"
+                android:textAllCaps="false"
+                android:textColor="#868686"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewProfilePost"
+                app:strokeColor="@color/button_grey"
+                app:strokeWidth="2dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

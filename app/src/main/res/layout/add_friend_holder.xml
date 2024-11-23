@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <!-- Circular Profile Image -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewProfileFriendHolder"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        app:cardCornerRadius="32.5dp"
+        app:cardElevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgProfileFriendHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/nullprofile"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Friend Name -->
+
+    <!-- Friend Description -->
+
+    <!-- Add Friend Button -->
+    <TextView
+        android:id="@+id/tvNameFriendHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:maxLines="1"
+        android:text="Name"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btnAddFriendHolder"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/cardViewProfileFriendHolder"
+        app:layout_constraintTop_toTopOf="@id/cardViewProfileFriendHolder" />
+
+    <TextView
+        android:id="@+id/tvDescriptionFriendHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginTop="3dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:maxLines="1"
+        android:text="Business, TARUMT"
+        android:textColor="@color/blue"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btnAddFriendHolder"
+        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintStart_toEndOf="@id/cardViewProfileFriendHolder"
+        app:layout_constraintTop_toBottomOf="@id/tvNameFriendHolder" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btnAddFriendHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cardViewProfileFriendHolder"
+        app:layout_constraintBottom_toBottomOf="@id/cardViewProfileFriendHolder">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <ImageView
+                android:id="@+id/imgAddFriendIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/add_friend_icon"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/tvAddFriendText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="Add Buddies"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Separator -->
+    <View
+        android:id="@+id/separatorFriendHolder"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/separator"
+        app:layout_constraintTop_toBottomOf="@id/cardViewProfileFriendHolder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

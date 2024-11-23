@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayoutChatHolder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <!-- Profile Image -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewProfileChatHolder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgProfileChatHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/nullprofile"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Chat Name -->
+    <TextView
+        android:id="@+id/tvNameChatHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="Ben"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/cardViewProfileChatHolder"
+        app:layout_constraintTop_toTopOf="@id/cardViewProfileChatHolder" />
+
+    <!-- Last Message -->
+    <TextView
+        android:id="@+id/tvMessageChatHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Heloooooooooooooo"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvTimeChatHolder"
+        app:layout_constraintStart_toStartOf="@+id/tvNameChatHolder"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameChatHolder" />
+
+    <!-- Timestamp -->
+    <TextView
+        android:id="@+id/tvTimeChatHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="11:50 PM"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cardViewProfileChatHolder" />
+
+    <!-- Unread Message Badge -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewUnreadBadgeChatHolder"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTimeChatHolder">
+
+        <TextView
+            android:id="@+id/tvUnreadCountChatHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Separator -->
+    <View
+        android:id="@+id/separatorChatHolder"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardViewProfileChatHolder" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

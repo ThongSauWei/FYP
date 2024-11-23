@@ -35,11 +35,12 @@
     <string name="type_something_to_describe">输入一些内容进行描述…</string>
     <string name="select_a_category">选择类别</string>
     <string name="select_a_learning_style">选择一种学习风格</string>
+    <string name="profile_description">描述…</string>
     <string name="next">下一步</string>
     <string name="profileName">名字</string>
     <string name="profileLanguages">语言</string>
     <string name="profileMobile_phone">手机号码</string>
-    <string name="profilrBirthday">生日</string>
+    <string name="profileBirthday">生日</string>
     <string name="profileDescription">描述</string>
     <string name="profileSave">保存</string>
     <string name="filter">筛选</string>
@@ -47,9 +48,10 @@
     <string name="learning_style">学习风格</string>
     <string name="add_friend">添加朋友</string>
     <string name="message">消息</string>
+    <string name="post">帖子</string>
     <string name="friends">朋友</string>
     <string name="all_friends">所有朋友</string>
-    <string name="_20_friends">20 朋友</string>
+    <string name="_0_friends">0 朋友</string>
     <string name="typing">输入中…</string>
     <string name="all">所有</string>
     <string name="InnerChatTyping">输入中…</string>
@@ -67,7 +69,7 @@
     <string name="new_password_title">新密码</string>
     <string name="confirm_password_title">确认密码</string>
     <string name="submit_passRecover">提交</string>
-    <string name="chat_with_friends">和朋友聊天</string>
+    <string name="search_chat_friends">搜索聊天</string>
     <string name="search_your_friends">搜索你的朋友</string>
     <string name="chat">聊天</string>
     <string name="password_recovery">密码恢复</string>
@@ -91,7 +93,7 @@
     <string name="find_friends">寻找朋友</string>
     <string name="study_with_other_study_partner">与学习伙伴一起学习！</string>
     <string name="search_by_name_category_or_learning_styles">按名字、类别或学习风格搜索</string>
-    <string name="add_friends">添加朋友</string>
+    <string name="search_friends">搜寻朋友</string>
     <string name="suggest_friends">推荐朋友</string>
     <string name="search_a_post">搜索帖子</string>
     <string name="explore_something_special">探索特别内容…</string>
@@ -120,6 +122,12 @@
         <item>English</item>
         <item>中文</item>
     </array>
+
+    <array name="profile_post">
+        <item>编辑</item>
+        <item>删除</item>
+    </array>
+
     <array name="problem_type">
         <item>无法添加朋友</item>
         <item>无法加入群组</item>
@@ -129,13 +137,14 @@
     </array>
 
     <array name="course">
-        <item>商业</item>
-        <item>计算机科学</item>
-        <item>会计</item>
-        <item>平面设计</item>
-        <item>传媒</item>
-        <item>金融</item>
-        <item>医学</item>
+        <item>商业, TARUMT</item>
+        <item>计算机科学, TARUMT</item>
+        <item>会计, TARUMT</item>
+        <item>平面设计, TARUMT</item>
+        <item>传媒, TARUMT</item>
+        <item>金融, TARUMT</item>
+        <item>医学, TARUMT</item>
+        <item>运动, TARUMT</item>
         <item>其他</item>
     </array>
     <array name="learning_style">
@@ -147,7 +156,19 @@
         <item>个人学习</item>
     </array>
 
-    <!--   post time-->
+    <!--    Friend Request-->
+    <string name="friend_request">好友请求</string>
+    <string name="approve_or_ignore">批准或忽略好友请求</string>
+    <string name="today">今天</string>
+    <string name="confirm_btn">确认</string>
+    <string name="del_btn">删除</string>
+
+    <!-- Feedback -->
+    <string name="feedback_title">TARUMT校园中评分</string>
+
+    <!-- Map -->
+    <string name="tar_map">TARUMT 地图</string>
+
     <!--   post time-->
     <string name="select_date">日期</string>
     <string name="time_ago">10分钟前</string>

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:navigationIcon="@drawable/baseline_menu_24"
     android:gravity="center"
-    android:id="@+id/toolbar_with_profile">
+    android:id="@+id/toolbar_with_annouce">
 
     <!-- TARUMT HUB text beside the logo -->
     <TextView
@@ -25,7 +25,7 @@
 
     <!-- Search Icon on the Right Side -->
     <ImageView
-        android:id="@+id/btnSearchToolbarWithProfile"
+        android:id="@+id/btnSearchToolbarWithAnnouce"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"

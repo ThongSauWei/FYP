@@ -38,7 +38,7 @@
                 android:layout_width="121dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-56dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_alignBaseline="@id/btnExitRegister"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="16dp"
@@ -62,7 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpName"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -71,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpName"
@@ -85,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/SignUpEmail"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -97,7 +100,8 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/SignUpEmail"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:inputType="textEmailAddress"
                 android:padding="10dp" />
 
@@ -108,7 +112,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpMobile_number"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -120,7 +125,8 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpMobile_number"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:inputType="phone"
                 android:padding="10dp" />
 
@@ -131,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpBirthday"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -144,12 +151,12 @@
                     android:id="@+id/txtBirthdayRegister"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginEnd="8dp"
                     android:background="@drawable/edittext_background"
                     android:hint="@string/signUpBirthday"
                     android:inputType="date"
                     android:padding="10dp"
-                    android:layout_marginStart="2dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnCalendarRegister"
                     app:layout_constraintStart_toStartOf="parent"
@@ -175,7 +182,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUpPassword"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -187,7 +195,8 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUpPassword"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:inputType="textPassword"
                 android:padding="10dp" />
 
@@ -198,7 +207,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/confirm_password_title"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -210,7 +220,8 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/confirm_password_title"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:inputType="textPassword"
                 android:padding="10dp" />
 
@@ -221,7 +232,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/signUp_security_question"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -233,7 +245,8 @@
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/signUp_security_question"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:inputType="text"
                 android:padding="10dp" />
 
@@ -244,6 +257,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
