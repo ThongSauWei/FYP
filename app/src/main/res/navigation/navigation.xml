@@ -58,4 +58,24 @@
         android:name="com.example.fyp.FriendRequest"
         android:label="fragment_friend_request"
         tools:layout="@layout/fragment_friend_request" />
+    <fragment
+        android:id="@+id/historyPost"
+        android:name="com.example.fyp.HistoryPost"
+        android:label="fragment_history_post"
+        tools:layout="@layout/fragment_history_post" />
+    <fragment
+        android:id="@+id/savedPost"
+        android:name="com.example.fyp.SavedPost"
+        android:label="fragment_saved_post"
+        tools:layout="@layout/fragment_saved_post" />
+    <fragment
+        android:id="@+id/likedPost"
+        android:name="com.example.fyp.LikedPost"
+        android:label="fragment_liked_post"
+        tools:layout="@layout/fragment_liked_post" />
+    <fragment
+        android:id="@+id/searchPostHistory"
+        android:name="com.example.fyp.SearchPostHistory"
+        android:label="fragment_search_post_history"
+        tools:layout="@layout/fragment_search_post_history" />
 </navigation>

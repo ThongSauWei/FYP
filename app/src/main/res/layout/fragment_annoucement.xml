@@ -22,15 +22,15 @@
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/separatorAnnHolder"
+                android:id="@+id/separatorAnnHolder1"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="96dp"
+                android:layout_marginTop="36dp"
                 android:background="#424242"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/textView11" />
 
             <View
                 android:id="@+id/separatorAnnHolder"

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#0F0F0F">
+
+    <!-- Circle Design -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/circleDesign"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="44dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Vertical Line -->
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="2dp"
+        android:layout_height="410dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/circleDesign"
+        app:layout_constraintStart_toStartOf="@id/circleDesign"
+        app:layout_constraintEnd_toEndOf="@id/circleDesign" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="18dp"
+        app:cardBackgroundColor="@color/post"
+        app:cardCornerRadius="11dp"
+        app:cardElevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todayDate">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/postNameHistoryHolderHolder"
+                android:layout_width="103dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/abhayalibre_extrabold"
+                android:text="Name"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/cvProfileImageHistory"
+                app:layout_constraintStart_toEndOf="@+id/cvProfileImageHistory"
+                app:layout_constraintTop_toTopOf="@+id/cvProfileImageHistory"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/todayDateHistoryHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="18dp"
+                android:fontFamily="@font/abhaya_libre"
+                android:text="10minutes ago"
+                android:textColor="@color/sub_word"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/postNameHistoryHolderHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.597"
+                app:layout_constraintStart_toEndOf="@+id/postNameHistoryHolderHolder"
+                app:layout_constraintTop_toTopOf="@+id/postNameHistoryHolderHolder"
+                app:layout_constraintVertical_bias="0.181" />
+
+            <View
+                android:id="@+id/separatorPostHolder"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="58dp" />
+
+            <ImageView
+                android:id="@+id/imgPostHistoryHolder"
+                android:layout_width="367dp"
+                android:layout_height="190dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/post_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separatorPostHolder" />
+
+            <TextView
+                android:id="@+id/tvPostTitleHistoryHolder"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:justificationMode="inter_word"
+                android:text="Today is Assignment Day !!! aaaaaaaaaaaa aaaaaaaaa aaaaaaaa aaaa "
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/todayDateHistoryHolder"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/cvProfileImageHistory"
+                app:layout_constraintTop_toBottomOf="@+id/imgPostHistoryHolder" />
+
+            <ImageView
+                android:id="@+id/componentHistoryHolder"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tvPostTitleHistoryHolder"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostTitleHistoryHolder"
+                app:layout_constraintVertical_bias="0.05"
+                app:srcCompat="@drawable/baseline_favorite_24" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvProfileImageHistory"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="21dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toTopOf="@+id/separatorPostHolder"
+                app:layout_constraintEnd_toStartOf="@+id/postNameHistoryHolderHolder"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/imageProfileHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/post_image" />
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/todayDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="289dp"
+        android:fontFamily="@font/abhayalibre_extrabold"
+        android:justificationMode="inter_word"
+        android:text="@string/today"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleDesign"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/circleDesign"
+        app:layout_constraintTop_toTopOf="@+id/circleDesign" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

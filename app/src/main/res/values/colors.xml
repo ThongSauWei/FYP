@@ -20,5 +20,6 @@
     <color name="search_box">#E8E5E5</color>
     <color name="dialog_box">#4D4D4D</color>
     <color name="blue_dialog">#029BFB</color>
+    <color name="tab_unused">#646464</color>
 
 </resources>
