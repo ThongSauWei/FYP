@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homePage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".SearchPostHistory">
+
+    <ScrollView
+        android:id="@+id/scrollableContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvExplore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="11dp"
+                android:fontFamily="@font/abhayalibre_extrabold"
+                android:text="@string/explore"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/separatorAnnHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.135"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/separatorAnnHolder1"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="#424242"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvHistorySearch" />
+
+            <View
+                android:id="@+id/separatorAnnHolder"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="40dp"
+                android:background="#424242"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvExplore" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSuggestPost"
+                tools:listitem="@layout/postholder" />
+
+            <TextView
+                android:id="@+id/tvHistorySearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:justificationMode="inter_word"
+                android:text="@string/history_post"
+                android:textColor="@color/tab_unused"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvExplore"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="@+id/tvExplore"
+                app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder" />
+
+            <ImageView
+                android:id="@+id/searchImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:src="@drawable/baseline_search_24"
+                app:layout_constraintBottom_toBottomOf="@+id/tvLikedSearch"
+                app:layout_constraintStart_toEndOf="@+id/tvLikedSearch"
+                app:layout_constraintTop_toTopOf="@+id/tvLikedSearch"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/tvSavedSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="27dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:justificationMode="inter_word"
+                android:text="@string/saved_post"
+                android:textColor="@color/tab_unused"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvHistorySearch"
+                app:layout_constraintStart_toEndOf="@+id/tvHistorySearch"
+                app:layout_constraintTop_toTopOf="@+id/tvHistorySearch" />
+
+            <TextView
+                android:id="@+id/tvLikedSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="27dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:justificationMode="inter_word"
+                android:text="@string/liked_post"
+                android:textColor="@color/tab_unused"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvSavedSearch"
+                app:layout_constraintStart_toEndOf="@+id/tvSavedSearch"
+                app:layout_constraintTop_toTopOf="@+id/tvSavedSearch" />
+
+            <EditText
+                android:id="@+id/editSearchHistory"
+                android:layout_width="350dp"
+                android:layout_height="42dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/search_box_bg"
+                android:backgroundTint="#2E2E2E"
+                android:drawableStart="@drawable/baseline_search_light_24"
+                android:drawablePadding="10dp"
+                android:elevation="10dp"
+                android:ems="10"
+                android:fontFamily="@font/abhaya_libre"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/search_for_any_post_history"
+                android:textColor="#C5C5C5"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/searchImage"
+                app:layout_constraintStart_toStartOf="@+id/tvHistorySearch"
+                app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder1" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewBtnSearchPostHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/editSearchHistory"
+                app:layout_constraintStart_toStartOf="@+id/editSearchHistory"
+                app:layout_constraintTop_toBottomOf="@+id/editSearchHistory">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSearchHistory"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/button_grey"
+                    android:fontFamily="@font/abhayalibre_semibold"
+                    android:text="@string/search_post_history"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvSuggestPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/suggest_post"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                app:layout_constraintStart_toStartOf="@+id/tvHistorySearch"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewBtnSearchPostHistory" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

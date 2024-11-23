@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#0F0F0F">
 
     <androidx.cardview.widget.CardView
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         app:cardBackgroundColor="@color/post"
         app:cardCornerRadius="11dp"
         app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,9 +34,9 @@
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView3"
-                app:layout_constraintStart_toEndOf="@+id/cardView3"
-                app:layout_constraintTop_toTopOf="@+id/cardView3"
+                app:layout_constraintBottom_toBottomOf="@+id/cvProfilePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/cvProfilePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/cvProfilePostHolder"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -67,21 +69,21 @@
                 android:layout_width="367dp"
                 android:layout_height="230dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/post_image"
                 android:scaleType="fitXY"
+                android:src="@drawable/post_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separatorPostHolder" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/option1PostHolder"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:layout_marginStart="164dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="200dp"
                 android:layout_marginBottom="144dp"
-                android:layout_marginTop="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -91,11 +93,11 @@
                 app:srcCompat="@drawable/option1" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/option2PostHolder"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
-                android:layout_marginBottom="144dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="144dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -104,11 +106,11 @@
                 app:srcCompat="@drawable/option2" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/option3PostHolder"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
-                android:layout_marginBottom="144dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="144dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.549"
@@ -134,11 +136,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/imgPostPostHolder"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/option1PostHolder"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewType"
+                android:id="@+id/cardViewTypeHolder"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="24dp"
@@ -164,7 +166,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewType1"
+                android:id="@+id/cardViewType1Holder"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="26dp"
@@ -174,7 +176,7 @@
                 app:cardCornerRadius="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cardViewType"
+                app:layout_constraintStart_toEndOf="@+id/cardViewTypeHolder"
                 app:layout_constraintTop_toBottomOf="@+id/tvPostTitlePostHolder">
 
                 <TextView
@@ -190,7 +192,7 @@
             </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/love"
+                android:id="@+id/lovePostHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -198,36 +200,36 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/numLove"
+                app:layout_constraintEnd_toStartOf="@+id/numLovePostHolder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewType"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewTypeHolder"
                 app:srcCompat="@drawable/love_border" />
 
             <TextView
-                android:id="@+id/numLove"
+                android:id="@+id/numLovePostHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:fontFamily="@font/abhayalibre_medium"
                 android:text="22"
                 android:textColor="@color/white"
-                android:fontFamily="@font/abhayalibre_medium"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/love"
-                app:layout_constraintStart_toEndOf="@+id/love"
-                app:layout_constraintTop_toTopOf="@+id/love" />
+                app:layout_constraintBottom_toBottomOf="@+id/lovePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/lovePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/lovePostHolder" />
 
             <ImageView
-                android:id="@+id/comment"
+                android:id="@+id/commentPostHolder"
                 android:layout_width="22dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/numLove"
-                app:layout_constraintStart_toEndOf="@+id/numLove"
-                app:layout_constraintTop_toTopOf="@+id/numLove"
+                app:layout_constraintBottom_toBottomOf="@+id/numLovePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/numLovePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/numLovePostHolder"
                 app:srcCompat="@drawable/comment" />
 
             <TextView
-                android:id="@+id/numComment"
+                android:id="@+id/numCommentPostHolder"
                 android:layout_width="8dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="5dp"
@@ -235,34 +237,34 @@
                 android:text="9"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/comment"
-                app:layout_constraintStart_toEndOf="@+id/comment"
-                app:layout_constraintTop_toTopOf="@+id/comment"
+                app:layout_constraintBottom_toBottomOf="@+id/commentPostHolder"
+                app:layout_constraintStart_toEndOf="@+id/commentPostHolder"
+                app:layout_constraintTop_toTopOf="@+id/commentPostHolder"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/sharePostHolder"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/numComment"
-                app:layout_constraintStart_toEndOf="@+id/numComment"
-                app:layout_constraintTop_toTopOf="@+id/numComment"
+                app:layout_constraintBottom_toBottomOf="@+id/numCommentPostHolder"
+                app:layout_constraintStart_toEndOf="@+id/numCommentPostHolder"
+                app:layout_constraintTop_toTopOf="@+id/numCommentPostHolder"
                 app:srcCompat="@drawable/baseline_send_24" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/bookmarkPostHolder"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="156dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="@+id/imageView4"
+                app:layout_constraintBottom_toBottomOf="@+id/sharePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/sharePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/sharePostHolder"
                 app:srcCompat="@drawable/bookmark_border" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
+                android:id="@+id/cvProfilePostHolder"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="25dp"
@@ -275,10 +277,10 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" >
+                app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
-                    android:id="@+id/imageView11"
+                    android:id="@+id/profileUserImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/post_image" />

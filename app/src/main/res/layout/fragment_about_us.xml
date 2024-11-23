@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".AboutUs">
+
+    <TextView
+        android:id="@+id/tvAboutUsAboutUs"
+        android:layout_width="165dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/caveat"
+        android:text="@string/about_us"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.223"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgLogoAboutUs"
+        android:layout_width="463dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/tarumt_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAboutUsAboutUs" />
+
+    <TextView
+        android:id="@+id/tvNameAboutUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/about_us_title"
+        android:textColor="@color/dark_yellow"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/tvWelcomeMsgAboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/imgLogoAboutUs" />
+
+    <TextView
+        android:id="@+id/tvWelcomeMsgAboutUs"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/abhayalibre_regular"
+        android:justificationMode="inter_word"
+        android:text="@string/welcome_to_tarumt_campus_hub"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameAboutUs" />
+
+    <TextView
+        android:id="@+id/tvMissionAboutUs"
+        android:layout_width="122dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/our_mission"
+        android:textColor="@color/dark_yellow"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/tvWelcomeMsgAboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcomeMsgAboutUs" />
+
+    <TextView
+        android:id="@+id/tvMissionDescAboutUs"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/abhayalibre_regular"
+        android:justificationMode="inter_word"
+        android:text="@string/mission_description"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/tvMissionAboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/tvMissionAboutUs" />
+
+    <TextView
+        android:id="@+id/tvWhyAboutUs"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/why_tarumt_campus_hub"
+        android:textColor="@color/dark_yellow"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/tvMissionDescAboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/tvMissionDescAboutUs" />
+
+    <TextView
+        android:id="@+id/tvReasonAboutUs"
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:justificationMode="inter_word"
+        android:fontFamily="@font/abhayalibre_regular"
+        android:text="@string/why_description"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tvWhyAboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/tvWhyAboutUs" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

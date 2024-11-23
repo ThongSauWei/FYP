@@ -181,6 +181,14 @@
         <item>Edit</item>
         <item>Delete</item>
     </array>
+    <!--    history-->
+    <string name="explore">Explore</string>
+    <string name="history_post">History Post</string>
+    <string name="saved_post">Saved Post</string>
+    <string name="liked_post">Liked Post</string>
+    <string name="search_for_any_post_history">Search for any post history</string>
+    <string name="search_post_history">Search post history</string>
+
 
     <array name="language_array">
         <item>English</item>

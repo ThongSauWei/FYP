@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homePage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".SavedPost">
+
+    <ScrollView
+        android:id="@+id/scrollableContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvExplore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="11dp"
+                android:fontFamily="@font/abhayalibre_extrabold"
+                android:text="@string/explore"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/separatorAnnHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.135"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/separatorAnnHolder1"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="#424242"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+
+            <View
+                android:id="@+id/separatorAnnHolder"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="40dp"
+                android:background="#424242"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvExplore" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder1"
+                tools:listitem="@layout/history_holder" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="18dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvHistory"
+                app:layout_constraintStart_toEndOf="@+id/tvHistory"
+                app:layout_constraintTop_toTopOf="@+id/tvHistory">
+
+                <TextView
+                    android:id="@+id/tvSavedPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/abhayalibre_medium"
+                    android:justificationMode="inter_word"
+                    android:text="@string/saved_post"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:justificationMode="inter_word"
+                android:text="@string/history_post"
+                android:textColor="@color/tab_unused"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvExplore"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="@+id/tvExplore"
+                app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder" />
+
+            <TextView
+                android:id="@+id/tvLiked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="18dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:justificationMode="inter_word"
+                android:text="@string/liked_post"
+                android:textColor="@color/tab_unused"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+                app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView" />
+
+            <ImageView
+                android:id="@+id/imageSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:src="@drawable/search_unused"
+                app:layout_constraintBottom_toBottomOf="@+id/tvLiked"
+                app:layout_constraintStart_toEndOf="@+id/tvLiked"
+                app:layout_constraintTop_toTopOf="@+id/tvLiked" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

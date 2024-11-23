@@ -30,4 +30,7 @@
     <color name="chat_background">#FF1E1E1E</color>
     <color name="chat_bubble">#FFE7E7E7</color>
     <color name="outgoing_chat_bubble">#484848</color>
+    <color name="tab_unused">#646464</color>
+
+
 </resources>
