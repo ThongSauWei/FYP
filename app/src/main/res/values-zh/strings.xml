@@ -201,16 +201,6 @@
     <!--    restricted user-->
     <string name="chooseRestricted">选择受限用户 :</string>
 
-    <!--    Friend Request-->
-    <string name="friend_request">好友申請</string>
-    <string name="approve_or_ignore">批准或忽略好友请求</string>
-    <string name="today">今天</string>
-    <string name="confirm_btn">確定</string>
-    <string name="del_btn">刪除</string>
-
-    <!--    map-->
-    <string name="tar_map">TARUMT 地圖</string>
-
     <!--    history-->
     <string name="explore">探索</string>
     <string name="history_post">浏览帖子</string>
