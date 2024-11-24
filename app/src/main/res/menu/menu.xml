@@ -6,7 +6,7 @@
     <item android:title="USER">
         <menu>
             <item
-                android:id="@+id/nav_user"
+                android:id="@+id/nav_home"
                 android:icon="@drawable/baseline_home_24"
                 android:title="Home" />
             <item
