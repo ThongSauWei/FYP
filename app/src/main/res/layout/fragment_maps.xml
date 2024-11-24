@@ -24,16 +24,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Map Layer Toggle -->
-    <ImageButton
-        android:id="@+id/btnLayerToggle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/toggle_map_layers"
-        android:src="@drawable/ic_layers"
-        android:tint="@color/white"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnZoom" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/btnLayerToggle"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="?android:attr/selectableItemBackgroundBorderless"-->
+<!--        android:contentDescription="@string/toggle_map_layers"-->
+<!--        android:src="@drawable/ic_layers"-->
+<!--        android:tint="@color/white"-->
+<!--        android:layout_margin="16dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btnZoom" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
