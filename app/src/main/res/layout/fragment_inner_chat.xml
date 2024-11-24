@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".InnerChat">
+
+    <!-- Header Section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerInnerChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBackInnerChat"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Profile Image -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewInnerChat"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="5dp"
+            app:layout_constraintStart_toEndOf="@+id/btnBackInnerChat"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgProfileInnerChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:src="@drawable/nullprofile" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Name -->
+        <TextView
+            android:id="@+id/tvNameInnerChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/caveat"
+            android:textColor="@color/white"
+            android:text="Minion Bro"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cardViewInnerChat"
+            app:layout_constraintStart_toEndOf="@+id/cardViewInnerChat"
+            app:layout_constraintTop_toTopOf="@+id/cardViewInnerChat" />
+
+        <!-- Separator -->
+        <View
+            android:id="@+id/separatorInnerChat"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/inner_chat_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBackInnerChat" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- RecyclerView for Messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChatInnerChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/headerInnerChat"
+        app:layout_constraintBottom_toTopOf="@id/inputContainerInnerChat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/send_chat_holder" />
+
+    <!-- Input Section -->
+    <LinearLayout
+        android:id="@+id/inputContainerInnerChat"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/background"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Attachment Button -->
+        <ImageView
+            android:id="@+id/btnAddAttachmentInnerChat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/baseline_add_24"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Camera Button -->
+        <ImageView
+            android:id="@+id/btnCameraInnerChat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/baseline_camera_24"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Chat Input -->
+        <EditText
+            android:id="@+id/txtChatInnerChat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/search_box_bg"
+            android:hint="@string/InnerChatTyping"
+            android:paddingStart="15dp"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <!-- Dynamic Action Button -->
+        <ImageView
+            android:id="@+id/btnActionInnerChat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/baseline_keyboard_voice_24"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
