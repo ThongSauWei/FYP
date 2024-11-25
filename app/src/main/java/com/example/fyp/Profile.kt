@@ -2,6 +2,9 @@ package com.example.fyp
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -55,8 +59,10 @@ class Profile : Fragment() {
     private lateinit var languageProfile: TextView
     private lateinit var lblGroupClick: TextView
     private lateinit var lblFriendClick: TextView
+    private lateinit var linearLayoutProfile: LinearLayout
 
     private val imagePickRequestCode = 1000
+    private val backgroundPickRequestCode = 2000
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,18 +88,24 @@ class Profile : Fragment() {
         cardViewProfile = view.findViewById(R.id.cardViewProfile)
         btnEditProfile = view.findViewById(R.id.btnEditProfile)
         scCreatePost = view.findViewById(R.id.btnCreatePostProfile)
+        linearLayoutProfile = view.findViewById(R.id.linearLayoutProfile)
         currentUserID = SaveSharedPreference.getUserID(requireContext())
         profileDao = ProfileDAO()
         storageRef = FirebaseStorage.getInstance().getReference()
 
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
 
+        loadProfileBackground()
         loadProfilePicture()
 
         recyclerView = view.findViewById(R.id.recyclerViewProfilePost)
         setupProfileInfo(currentUserID)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
+
+        linearLayoutProfile.setOnClickListener {
+            pickBackgroundImageFromGallery()
+        }
 
         scCreatePost.setOnClickListener {
             val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -142,20 +154,21 @@ class Profile : Fragment() {
         return view
     }
 
+
     private fun setupProfileInfo(userID: String) {
         val userViewModel: UserViewModel =
             ViewModelProvider(this).get(UserViewModel::class.java)
         val profileViewModel: ProfileViewModel =
             ViewModelProvider(this).get(ProfileViewModel::class.java)
-        val postViewModel: PostViewModel =
-            ViewModelProvider(this).get(PostViewModel::class.java)
+        /*val postViewModel: PostViewModel =
+            ViewModelProvider(this).get(PostViewModel::class.java)*/
 
         lifecycleScope.launch {
             val user = userViewModel.getUserByID(userID)!!
             val profile = profileViewModel.getProfile(userID)
             val totalFriend = friendViewModel.getFriendList(userID).size
-            postList = postViewModel.getPostByUser(userID) // Get all posts by user
-            val totalPosts = postList.size // Count total posts
+            /*postList = postViewModel.getPostByUser(userID) // Get all posts by user
+            val totalPosts = postList.size // Count total posts*/
 
             nameProfile.text = user.username
             DOBProfile.text = user.userDOB
@@ -163,12 +176,41 @@ class Profile : Fragment() {
             userBIOProfile.text = profile?.userBio ?: ""
             languageProfile.text = profile?.userChosenLanguage ?: ""
             ttlFriendProfile.text = totalFriend.toString()
-            ttlGroupProfile.text = totalPosts.toString() // Set post count
+            /*ttlGroupProfile.text = totalPosts.toString() */// Set post count
 
-            if (postList.isNotEmpty()) {
+            /*if (postList.isNotEmpty()) {
                 val adapter = PostAdapter(postList)
                 adapter.setViewModel(userViewModel)
                 recyclerView.adapter = adapter
+            }*/
+        }
+    }
+
+    private fun loadBackgroundImage(imageUrl: String) {
+        val linearLayoutProfile = view?.findViewById<LinearLayout>(R.id.linearLayoutProfile)
+        Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
+            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                val drawable = BitmapDrawable(resources, bitmap)
+                linearLayoutProfile?.background = drawable // Set the background as the loaded image
+            }
+
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                Toast.makeText(requireContext(), "Failed to load background", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                // Optional placeholder
+            }
+        })
+    }
+
+    private fun loadProfileBackground() {
+        lifecycleScope.launch {
+            val profile = profileViewModel.getProfile(currentUserID)
+            profile?.userBackgroundImage?.let { imageUrl ->
+                if (imageUrl.isNotEmpty()) {
+                    loadBackgroundImage(imageUrl) // Load the existing background image
+                }
             }
         }
     }
@@ -188,20 +230,32 @@ class Profile : Fragment() {
         }
     }
 
+    private fun pickBackgroundImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, backgroundPickRequestCode)
+    }
+
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, imagePickRequestCode)
     }
 
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == imagePickRequestCode && resultCode == Activity.RESULT_OK && data != null) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
             data.data?.let { imageUri ->
-                updateProfilePicture(imageUri)
+                when (requestCode) {
+                    imagePickRequestCode -> updateProfilePicture(imageUri) // Profile picture logic
+                    backgroundPickRequestCode -> updateBackgroundImage(imageUri) // Background image logic
+                }
             }
         }
     }
+
 
     private fun updateProfilePicture(imageUri: Uri) {
         val imageRef = storageRef.child("imageProfile").child("$currentUserID.png")
@@ -219,6 +273,23 @@ class Profile : Fragment() {
                 Toast.makeText(requireContext(), "Failed to upload image: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun updateBackgroundImage(imageUri: Uri) {
+        val imageRef = storageRef.child("backgroundImages").child("$currentUserID.png") // Firebase Storage path
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    val newBackgroundUrl = downloadUri.toString()
+                    profileDao.updateBackgroundImage(currentUserID, newBackgroundUrl) // Update database
+                    loadBackgroundImage(newBackgroundUrl) // Display the new image
+                    Toast.makeText(requireContext(), "Background updated successfully!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Failed to upload background: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
     private fun navigateToProfile() {
         val transaction = activity?.supportFragmentManager?.beginTransaction()

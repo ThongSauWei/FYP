@@ -190,10 +190,20 @@ class Register : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-            txtBirthdayRegister.setText(selectedDate)
+            val selectedCalendar = Calendar.getInstance()
+            selectedCalendar.set(selectedYear, selectedMonth, selectedDay)
+
+            // Check if selected date is after the current date
+            if (selectedCalendar.after(calendar)) {
+                Toast.makeText(requireContext(), "Birthday cannot be in the future", Toast.LENGTH_SHORT).show()
+            } else {
+                val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                txtBirthdayRegister.setText(selectedDate)
+            }
         }, year, month, day)
 
+        // Prevent user from selecting a future date
+        datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         datePickerDialog.show()
     }
 }

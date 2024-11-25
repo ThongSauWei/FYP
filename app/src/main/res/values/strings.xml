@@ -132,6 +132,12 @@
     <string name="menu_close" translatable="false">Close</string>
     <string name="course_profile">Course</string>
 
+    <!-- sample -->
+    <string name="email_sample">abc-xx21@student.tarc.edu.my</string>
+    <string name="name_sample">ABC</string>
+    <string name="mobileNo_sample">0123456789</string>
+    <string name="birthday_sample">01/01/1999</string>
+
     <!--   post time-->
     <string name="select_date">Date</string>
     <string name="time_ago">10 mins ago</string>

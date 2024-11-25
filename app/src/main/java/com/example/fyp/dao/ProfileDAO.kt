@@ -36,6 +36,16 @@ class ProfileDAO {
             }
     }
 
+    fun updateBackgroundImage(userID: String, newImageUrl: String) {
+        dbRef.child(userID).child("userBackgroundImage").setValue(newImageUrl)
+            .addOnSuccessListener {
+                // Optional: Log success or update UI
+            }
+            .addOnFailureListener {
+                // Optional: Log failure
+            }
+    }
+
     suspend fun getProfile(userID : String) : Profile? = suspendCoroutine { continuation ->
 
         dbRef.orderByChild("userID").equalTo(userID)

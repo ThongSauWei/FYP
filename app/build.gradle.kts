@@ -59,6 +59,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.4.4")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.2")
