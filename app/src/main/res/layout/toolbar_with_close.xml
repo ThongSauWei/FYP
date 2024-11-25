@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:background="@color/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:navigationIcon="@drawable/baseline_menu_24"
     android:id="@+id/toolbar_with_profile">
+
+    <ImageView
+        android:id="@+id/navIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="28dp"
+        android:src="@drawable/baseline_menu_24"
+        android:contentDescription="Navigation Icon" />
 
     <!-- Search Icon on the Right Side -->
     <ImageView
         android:id="@+id/btnSearchToolbarWithProfile"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
         android:layout_gravity="end"
 
