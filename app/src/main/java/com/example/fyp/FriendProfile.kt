@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class FriendProfile {
+import androidx.fragment.app.Fragment
+
+class FriendProfile : Fragment() {
 }

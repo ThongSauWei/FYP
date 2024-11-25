@@ -18,6 +18,6 @@ object SaveSharedPreference { //save and retrieve user-specific data, such as th
     }
 
     fun getUserID(context : Context) : String {
-        return getSharedPreference(context).getString(PREF_USER_ID, "U100")?: "U100" // U100 as default make sure the app have somethings to works
+        return getSharedPreference(context).getString(PREF_USER_ID, "U1000")?: "U1000" // U1000 as default make sure the app have somethings to works
     }
 }

@@ -1,7 +1,7 @@
 package com.example.fyp.data
 
 data class Announcement(
-    val announcementID: String,
+    var announcementID: String,
     val announcementTitle: String,
     val announcementDesc: String,
     val announcementDate: String,

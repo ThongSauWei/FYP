@@ -1,7 +1,7 @@
 package com.example.fyp.data
 
 data class ChatLine(
-    val chatLineID: String = "",        // Default empty string
+    var chatLineID: String = "",        // Default empty string
     val chatID: String = "",            // Default empty string
     val content: String? = null,        // Default null for optional text
     val mediaType: String? = null,      // Default null for optional media type

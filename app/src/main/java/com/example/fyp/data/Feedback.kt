@@ -1,7 +1,7 @@
 package com.example.fyp.data
 
 data class Feedback(
-    val feedbackID: String,
+    var feedbackID: String,
     val userID: String,
     val feedbackContent: String,
     val feedbackDateTime: String,

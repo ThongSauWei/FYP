@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class SearchFriend {
+import androidx.fragment.app.Fragment
+
+class SearchFriend : Fragment() {
 }

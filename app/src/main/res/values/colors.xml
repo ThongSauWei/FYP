@@ -32,6 +32,8 @@
     <color name="outgoing_chat_bubble">#484848</color>
     <color name="tab_unused">#646464</color>
     <color name="drawer">#242424</color>
+    <color name="dialog_stroke">#C1C1C1</color>
+    <color name="dialog">#FEFEFE</color>
 
 
 </resources>

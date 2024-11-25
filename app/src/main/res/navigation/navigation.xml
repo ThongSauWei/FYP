@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/createPostFragment">
+    app:startDestination="@id/signIn">
     <fragment
         android:id="@+id/signIn"
+        android:name="com.example.fyp.SignIn"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" />
     <fragment
@@ -83,4 +84,74 @@
         android:name="com.example.fyp.AboutUs"
         android:label="fragment_about_us1"
         tools:layout="@layout/fragment_about_us" />
+    <fragment
+        android:id="@+id/errorPage"
+        android:name="com.example.fyp.ErrorPage"
+        android:label="error_page"
+        tools:layout="@layout/error_page" />
+    <fragment
+        android:id="@+id/contactUs"
+        android:name="com.example.fyp.ContactUs"
+        android:label="fragment_contact_us"
+        tools:layout="@layout/fragment_contact_us" />
+    <fragment
+        android:id="@+id/editProfile"
+        android:name="com.example.fyp.EditProfile"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/feedback"
+        android:name="com.example.fyp.Feedback"
+        android:label="fragment_feedback"
+        tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/friends"
+        android:name="com.example.fyp.Friends"
+        android:label="fragment_friend"
+        tools:layout="@layout/fragment_friend" />
+    <fragment
+        android:id="@+id/friendProfile"
+        android:name="com.example.fyp.FriendProfile"
+        android:label="fragment_friend_profile"
+        tools:layout="@layout/fragment_friend_profile" />
+    <fragment
+        android:id="@+id/innerChat"
+        android:name="com.example.fyp.InnerChat"
+        android:label="fragment_inner_chat"
+        tools:layout="@layout/fragment_inner_chat" />
+    <fragment
+        android:id="@+id/newPassword"
+        android:name="com.example.fyp.NewPassword"
+        android:label="fragment_new_password"
+        tools:layout="@layout/fragment_new_password" />
+    <fragment
+        android:id="@+id/outerChat"
+        android:name="com.example.fyp.OuterChat"
+        android:label="fragment_outer_chat"
+        tools:layout="@layout/fragment_outer_chat" />
+    <fragment
+        android:id="@+id/passwordRecovery"
+        android:name="com.example.fyp.PasswordRecovery"
+        android:label="fragment_password_recovery"
+        tools:layout="@layout/fragment_password_recovery" />
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.example.fyp.Profile"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/register"
+        android:name="com.example.fyp.Register"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/searchFriend"
+        android:name="com.example.fyp.SearchFriend"
+        android:label="fragment_search_friend"
+        tools:layout="@layout/fragment_search_friend" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.example.fyp.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

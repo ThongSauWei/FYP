@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class OuterChat {
+import androidx.fragment.app.Fragment
+
+class OuterChat : Fragment() {
 }

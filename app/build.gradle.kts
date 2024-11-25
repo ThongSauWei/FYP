@@ -54,10 +54,12 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.filament.android)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation("com.squareup.picasso:picasso:2.71828")
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.2")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.2")

@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class NewPassword {
+import androidx.fragment.app.Fragment
+
+class NewPassword : Fragment() {
 }

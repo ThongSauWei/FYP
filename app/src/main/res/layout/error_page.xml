@@ -15,7 +15,7 @@
         android:id="@+id/tvErrorTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="85dp"
         android:fontFamily="@font/abhayalibre_semibold"
         android:text="@string/no_internet"
         android:textColor="@color/error_red"

@@ -1,8 +1,8 @@
 package com.example.fyp.data
 
 data class Friend(
-    val friendID: String,
-    val receiverUserID: String,
+    var friendID: String,
+    val receiveUserID: String,
     val requestUserID: String,
     val status: String,
     val timeStamp: String
