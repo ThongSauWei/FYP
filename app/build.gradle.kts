@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.filament.android)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
