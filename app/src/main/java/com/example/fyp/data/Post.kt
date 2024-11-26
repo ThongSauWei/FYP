@@ -1,6 +1,6 @@
 package com.example.fyp.data
 data class Post(
-    val postID: String,
+    var postID: String,
     val postDateTime: String,
     val postDescription: String,
     val postTitle: String,
