@@ -8,57 +8,51 @@
     android:background="@color/background"
     tools:context=".CreatePost">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewCreatePost"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="44dp"
-        app:cardBackgroundColor="@color/post"
-        app:cardCornerRadius="10dp"
+    <!-- HorizontalScrollView for dynamically added images and the Add button -->
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="29dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2CreatePost"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="24dp"
-        app:cardBackgroundColor="@color/post"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardViewCreatePost"
-        app:layout_constraintStart_toEndOf="@+id/cardViewCreatePost"
-        app:layout_constraintTop_toTopOf="@+id/cardViewCreatePost">
-
-        <ImageView
-            android:id="@+id/btnAddCreatePost"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/linearLayoutImages"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/baseline_add_24" />
-    </androidx.cardview.widget.CardView>
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
     <EditText
         android:id="@+id/txtTitleCreatePost"
         android:layout_width="330dp"
         android:layout_height="80dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="@android:color/transparent"
         android:ems="10"
         android:fontFamily="@font/abhayalibre_semibold"
         android:gravity="start|top"
         android:hint="@string/add_a_title"
         android:inputType="text|textMultiLine"
+        android:textColor="@color/white"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewCreatePost" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/horizontalScrollView"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
     <View
         android:id="@+id/separatorCreatePost"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="25dp"
         android:background="@color/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +65,7 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="@android:color/transparent"
         android:ems="10"
+        android:textColor="@color/white"
         android:fontFamily="@font/abhayalibre_semibold"
         android:gravity="start|top"
         android:hint="@string/type_something_to_describe"
@@ -84,9 +79,9 @@
         android:id="@+id/separator2CreatePost"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="25dp"
         android:background="@color/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -109,48 +104,50 @@
         android:id="@+id/separator4CreatePost"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="25dp"
         android:background="@color/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/studyBuddyCard" />
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/assBuss"
-        android:layout_width="80dp"
+        android:layout_width="72dp"
         android:layout_height="30dp"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="271dp"
         app:cardCornerRadius="7dp"
-        app:layout_constraintBottom_toTopOf="@+id/separator4CreatePost"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblLinkCreatePost"
-        app:layout_constraintVertical_bias="0.0">
+        app:cardBackgroundColor="@color/box"
+    app:layout_constraintBottom_toTopOf="@+id/separator4CreatePost"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="@+id/lblLinkCreatePost"
+    app:layout_constraintTop_toBottomOf="@+id/lblLinkCreatePost"
+    app:layout_constraintVertical_bias="0.008">
 
-        <TextView
-            android:id="@+id/tvBuss"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/box"
-            android:fontFamily="@font/abhayalibre_medium"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/business"
-            android:textColor="@color/white" />
-    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/tvBuss"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/abhayalibre_medium"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/business"
+        android:textColor="@color/white" />
+</androidx.cardview.widget.CardView>
 
 
-    <androidx.cardview.widget.CardView
+
+<androidx.cardview.widget.CardView
         android:id="@+id/sciCard"
-        android:layout_width="70dp"
+        android:layout_width="66dp"
         android:layout_height="30dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="11dp"
         app:cardCornerRadius="7dp"
+    app:cardBackgroundColor="@color/box"
         app:layout_constraintBottom_toBottomOf="@+id/assBuss"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -162,7 +159,6 @@
             android:id="@+id/tvSci"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/box"
             android:fontFamily="@font/abhayalibre_medium"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/sci"
@@ -172,10 +168,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/artCard"
-        android:layout_width="100dp"
+        android:layout_width="92dp"
         android:layout_height="30dp"
         android:layout_marginStart="11dp"
         app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/box"
         app:layout_constraintBottom_toBottomOf="@+id/sciCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -187,7 +184,6 @@
                 android:id="@+id/tvArt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/art"
@@ -196,10 +192,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itCard"
-        android:layout_width="50dp"
+        android:layout_width="47dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
         app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/box"
         app:layout_constraintBottom_toBottomOf="@+id/artCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -211,7 +208,6 @@
                 android:id="@+id/tvIT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/it"
@@ -220,10 +216,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/sportCard"
-        android:layout_width="52dp"
+        android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/box"
         app:layout_constraintEnd_toEndOf="@+id/assBuss"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/assBuss"
@@ -233,7 +230,6 @@
                     android:id="@+id/tvSport"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/box"
                     android:fontFamily="@font/abhayalibre_medium"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="@string/sport"
@@ -242,10 +238,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/langCard"
-        android:layout_width="75dp"
+        android:layout_width="72dp"
         android:layout_height="30dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="11dp"
         app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/box"
         app:layout_constraintBottom_toBottomOf="@+id/sportCard"
         app:layout_constraintStart_toEndOf="@+id/sportCard"
         app:layout_constraintTop_toTopOf="@+id/sportCard">
@@ -254,7 +251,6 @@
                 android:id="@+id/tvLang"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/lang"
@@ -263,9 +259,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/assCard"
-        android:layout_width="85dp"
+        android:layout_width="86dp"
         android:layout_height="30dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="11dp"
+        app:cardBackgroundColor="@color/box"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/langCard"
         app:layout_constraintStart_toEndOf="@+id/langCard"
@@ -275,7 +272,6 @@
                 android:id="@+id/tvAss"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/assignment"
@@ -284,21 +280,23 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/revisionCard"
-        android:layout_width="85dp"
+        android:layout_width="69dp"
         android:layout_height="30dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="11dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginEnd="37dp"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/assCard"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toEndOf="@+id/assCard"
-        app:layout_constraintTop_toTopOf="@+id/assCard">
+        app:layout_constraintTop_toTopOf="@+id/assCard"
+        app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/tvRevision"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/revision"
@@ -307,8 +305,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/studyBuddyCard"
-        android:layout_width="130dp"
+        android:layout_width="135dp"
         android:layout_height="30dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="7dp"
         app:layout_constraintEnd_toEndOf="@+id/sportCard"
@@ -320,7 +319,6 @@
                 android:id="@+id/tvStudyBuddy"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/studyBuddy"
@@ -329,8 +327,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/helperCard"
-        android:layout_width="98dp"
+        android:layout_width="94dp"
         android:layout_height="30dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginStart="12dp"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/studyBuddyCard"
@@ -341,7 +340,6 @@
                 android:id="@+id/tvHelper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/helper"
@@ -350,25 +348,27 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/otherCard"
-        android:layout_width="85dp"
+        android:layout_width="58dp"
         android:layout_height="30dp"
         android:layout_marginStart="9dp"
         android:layout_marginEnd="37dp"
+        app:cardBackgroundColor="@color/box"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/helperCard"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toEndOf="@+id/helperCard"
-        app:layout_constraintTop_toTopOf="@+id/helperCard" >
+        app:layout_constraintTop_toTopOf="@+id/helperCard"
+        app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/tvOther"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/box"
-            android:fontFamily="@font/abhayalibre_medium"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/other"
-            android:textColor="@color/white" />
+            <TextView
+                android:id="@+id/tvOther"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/other"
+                android:textColor="@color/white" />
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -387,6 +387,7 @@
         android:id="@+id/publicCard"
         android:layout_width="85dp"
         android:layout_height="30dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="115dp"
         app:cardCornerRadius="7dp"
@@ -396,21 +397,21 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
-            <TextView
-                android:id="@+id/tvPublic"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/box"
-                android:fontFamily="@font/abhayalibre_medium"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/publicPrivacy"
-                android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/tvPublic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/abhayalibre_medium"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/publicPrivacy"
+            android:textColor="@color/white" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/privateCard"
         android:layout_width="85dp"
         android:layout_height="30dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginStart="14dp"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/publicCard"
@@ -421,7 +422,6 @@
                 android:id="@+id/tvPrivate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/privatePrivacy"
@@ -432,19 +432,21 @@
         android:id="@+id/resCard"
         android:layout_width="87dp"
         android:layout_height="30dp"
+        app:cardBackgroundColor="@color/box"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="85dp"
         app:cardCornerRadius="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/privateCard"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/privateCard"
-        app:layout_constraintTop_toTopOf="@+id/privateCard">
+        app:layout_constraintTop_toTopOf="@+id/privateCard"
+        app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/tvRes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/box"
                 android:fontFamily="@font/abhayalibre_medium"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/resPrivacy"
