@@ -54,7 +54,6 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.filament.android)
-    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,12 +61,6 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.2")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.2")
-
-    implementation ("com.google.firebase:firebase-database:20.3.0")
-    implementation ("com.google.firebase:firebase-storage:20.2.1")
-    implementation ("com.google.firebase:firebase-auth:22.0.0")
-
-
 
 
 }

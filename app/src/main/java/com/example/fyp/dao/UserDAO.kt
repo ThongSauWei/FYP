@@ -29,6 +29,10 @@ class UserDAO {
 
     //add user
     suspend fun addUser(user : User) {
+        if (getUserByID(user.userID) == null) {
+            user.userID = "U$nextID"
+            nextID++
+        }
         dbRef.child(user.userID).setValue(user)
             .addOnCompleteListener{
 
@@ -111,7 +115,7 @@ class UserDAO {
     }
 
     suspend fun getUserByEmail(userEmail: String): User? = suspendCoroutine { continuation ->
-        dbRef.orderByChild("userEmail").equalTo(userEmail)
+        dbRef.orderByChild("email").equalTo(userEmail)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -134,12 +138,12 @@ class UserDAO {
 
 
     suspend fun getUserByLogin(userEmail : String, hashedPassword : String) : User? = suspendCoroutine { continuation ->
-        dbRef.orderByChild("userEmail").equalTo(userEmail)
+        dbRef.orderByChild("email").equalTo(userEmail)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         for (userSnapshot in snapshot.children) {
-                            val password = userSnapshot.child("userPassword").getValue(String::class.java)
+                            val password = userSnapshot.child("password").getValue(String::class.java)
                             if (password == hashedPassword) {
                                 val user = userSnapshot.getValue(User::class.java)
                                 continuation.resume(user)
@@ -159,7 +163,7 @@ class UserDAO {
     }
 
     suspend fun isEmailRegistered(email: String): Boolean = suspendCancellableCoroutine { continuation ->
-        dbRef.orderByChild("userEmail").equalTo(email)
+        dbRef.orderByChild("email").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     // Check if the snapshot contains any data
@@ -179,12 +183,11 @@ class UserDAO {
             })
     }
 
-
     private suspend fun getNextID() : Int {
-        var userID = 100 //default the id is start from 100
-        val snapshot = dbRef.orderByKey().limitToLast(1).get().await() //fetch last record id
+        var userID = 1000
+        val snapshot = dbRef.orderByKey().limitToLast(1).get().await()
 
-        if (snapshot.exists()) { //check exists
+        if (snapshot.exists()) {
             for (userSnapshot in snapshot.children) {
                 val lastUserID = userSnapshot.key!!
                 userID = lastUserID.substring(1).toInt() + 1

@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class PasswordRecovery {
+import androidx.fragment.app.Fragment
+
+class PasswordRecovery : Fragment() {
 }

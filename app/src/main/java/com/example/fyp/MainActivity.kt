@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        AndroidThreeTen.init(this)
 
         // Apply system bar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -60,11 +63,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_friend -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
 
-//                    val transaction = manager.beginTransaction()
-//                    val fragment = Friends()
-//                    transaction.replace(R.id.fragmentContainerView, fragment)
-//                    transaction.addToBackStack(null)
-//                    transaction.commit()
+                    val transaction = manager.beginTransaction()
+                    val fragment = Friends()
+                    transaction.replace(R.id.fragmentContainerView, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
 
                     true
                 }
@@ -115,22 +118,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_feedback -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
 
-//                    val transaction = manager.beginTransaction()
-//                    val fragment = Feedback()
-//                    transaction.replace(R.id.fragmentContainerView, fragment)
-//                    transaction.addToBackStack(null)
-//                    transaction.commit()
+                    val transaction = manager.beginTransaction()
+                    val fragment = Feedback()
+                    transaction.replace(R.id.fragmentContainerView, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
 
                     true
                 }
                 R.id.nav_settings -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
 
-//                    val transaction = manager.beginTransaction()
-//                    val fragment = Settings()
-//                    transaction.replace(R.id.fragmentContainerView, fragment)
-//                    transaction.addToBackStack(null)
-//                    transaction.commit()
+                    val transaction = manager.beginTransaction()
+                    val fragment = Settings()
+                    transaction.replace(R.id.fragmentContainerView, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
 
                     true
                 }
@@ -138,6 +141,17 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
             }
+        }
+
+        val footerMenu : View = findViewById(R.id.footerMenu)
+        footerMenu.setOnClickListener {
+            SaveSharedPreference.setUserID(this, "")
+
+            val transaction = manager.beginTransaction()
+            val fragment = SignIn()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
 
         // Set up Drawer Toggle

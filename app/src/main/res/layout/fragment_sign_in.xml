@@ -9,11 +9,11 @@
 
     <!-- Back Button Icon -->
     <ImageView
-        android:id="@+id/backIcon"
+        android:id="@+id/btnExitSignIn"
         android:layout_width="28dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/arrow_back"
         android:contentDescription="@string/go_back" />
 
@@ -22,11 +22,11 @@
         android:id="@+id/titleText"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/backIcon"
+        android:layout_alignBaseline="@id/btnExitSignIn"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_toEndOf="@id/backIcon"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@id/btnExitSignIn"
         android:fontFamily="@font/caveat"
         android:text="@string/sign_in"
         android:textColor="@color/white"
@@ -39,7 +39,7 @@
         android:layout_width="350dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/backIcon"
+        android:layout_below="@id/btnExitSignIn"
         android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/tarumt_logo" />
@@ -59,7 +59,7 @@
 
     <!-- Email Input Field -->
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/txtEmailSignIn"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@id/emailLabel"
@@ -67,7 +67,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/edittext_background"
-        android:hint="@string/signIn_email"
+        android:hint="@string/email_sample"
         android:fontFamily="@font/abhayalibre_semibold"
         android:inputType="textEmailAddress"
         android:padding="10dp"
@@ -79,7 +79,7 @@
         android:id="@+id/passwordLabel"
         android:layout_width="108dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/emailEditText"
+        android:layout_below="@id/txtEmailSignIn"
         android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/abhayalibre_semibold"
@@ -89,7 +89,7 @@
 
     <!-- Password Input Field -->
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/txtPasswordSignIn"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@id/passwordLabel"
@@ -109,7 +109,7 @@
         android:id="@+id/cardViewSignInButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/passwordEditText"
+        android:layout_below="@id/txtPasswordSignIn"
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"

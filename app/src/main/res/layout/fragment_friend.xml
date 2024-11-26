@@ -24,7 +24,7 @@
                 android:layout_width="165dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="28dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="50dp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/caveat"
                 android:text="@string/all_friends"

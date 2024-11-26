@@ -1,4 +1,6 @@
 package com.example.fyp
 
-class Feedback {
+import androidx.fragment.app.Fragment
+
+class Feedback : Fragment() {
 }

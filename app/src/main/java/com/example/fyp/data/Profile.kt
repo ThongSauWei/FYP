@@ -5,7 +5,8 @@ data class Profile(
     val userCourse : String,
     val userBio : String,
     val userImage : String,
+    val userBackgroundImage : String,
     val userChosenLanguage : String
 ) {
-    constructor() : this("", "", "", "", "")
+    constructor() : this("", "", "", "", "","")
 }
