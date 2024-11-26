@@ -1,24 +1,24 @@
 package com.example.fyp
 
-import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Spinner
-import java.util.Locale
-
+import androidx.fragment.app.Fragment
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 
 class Settings : Fragment() {
 
-    private lateinit var btnAboutUs: Button
-    private lateinit var btnContactUs: Button
-    private lateinit var ddlLanguage: Spinner
+    private lateinit var spinnerLanguageSettings: Spinner
     private lateinit var btnBackSettings: ImageView
+    private lateinit var btnSaveSettings: ImageView
+    private lateinit var btnAboutUs: LinearLayout
+    private lateinit var btnContactUs: LinearLayout
+    private lateinit var btnFeedback: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,66 +26,62 @@ class Settings : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
-        (activity as MainActivity).setToolbar()
+
+        // Initialize views
+        spinnerLanguageSettings = view.findViewById(R.id.spinnerLanguageSettings)
+        btnBackSettings = view.findViewById(R.id.btnBackSettings)
+        btnSaveSettings = view.findViewById(R.id.btnSaveSettings)
         btnAboutUs = view.findViewById(R.id.btnAboutUsSettings)
         btnContactUs = view.findViewById(R.id.btnContactUsSettings)
-        ddlLanguage = view.findViewById(R.id.spinnerLanguageSettings)
-        btnBackSettings = view.findViewById(R.id.btnBackSettings)
+        btnFeedback = view.findViewById(R.id.btnFeedbackSettings)
 
-        // Populate the spinner with language options
+        // Populate spinner with language options
         val languages = resources.getStringArray(R.array.language_array)
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        ddlLanguage.adapter = adapter
+        spinnerLanguageSettings.adapter = adapter
 
+        // Load saved language and set the spinner selection
+        val savedLanguage = SaveSharedPreference.getLanguage(requireContext())
+        spinnerLanguageSettings.setSelection(if (savedLanguage == "zh") 1 else 0)
+
+        // Back button functionality
         btnBackSettings.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
 
+        // Save selected language and restart activity
+        btnSaveSettings.setOnClickListener {
+            val selectedLanguage = spinnerLanguageSettings.selectedItem.toString()
+            val languageCode = if (selectedLanguage == "中文") "zh" else "en"
+            SaveSharedPreference.setLanguage(requireContext(), languageCode)
+
+            // Restart the activity to apply the new language
+            activity?.recreate()
+        }
+
+        // About Us button click
         btnAboutUs.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            val fragment = AboutUs()
-            transaction?.replace(R.id.fragmentContainerView, fragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+            navigateToFragment(AboutUs())
         }
 
+        // Contact Us button click
         btnContactUs.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            val fragment = ContactUs()
-            transaction?.replace(R.id.fragmentContainerView, fragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+            navigateToFragment(ContactUs())
         }
 
-        // Handle the click event for the tick button
-        view.findViewById<View>(R.id.btnSaveSettings).setOnClickListener {
-            // Get the selected language from the spinner
-            val selectedLanguage = ddlLanguage.selectedItem.toString()
-
-            // Update the app's locale configuration based on the selected language
-            updateLocale(selectedLanguage)
+        // Feedback button click
+        btnFeedback.setOnClickListener {
+            navigateToFragment(Feedback())
         }
 
         return view
     }
 
-    private fun updateLocale(language: String) {
-        val locale = when (language) {
-            "中文" -> Locale("zh")
-            else -> Locale("en")
-        }
-
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        requireContext().resources.updateConfiguration(
-            config,
-            requireContext().resources.displayMetrics
-        )
-
-        // Restart the activity to apply the language changes
-        activity?.recreate()
+    private fun navigateToFragment(fragment: Fragment) {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.replace(R.id.fragmentContainerView, fragment)
+        transaction?.addToBackStack(null)
+        transaction?.commit()
     }
 }

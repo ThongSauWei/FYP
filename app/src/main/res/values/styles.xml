@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chinese Font Style -->
+    <style name="AppTheme.Chinese" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Chinese font -->
+        <item name="android:fontFamily">@font/source_han_serif_cn_semibold_7</item>
+    </style>
+
+</resources>

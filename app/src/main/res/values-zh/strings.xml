@@ -129,6 +129,15 @@
         <item>中文</item>
     </array>
 
+    <!--    Friend Request-->
+    <string name="friend_request">好友请求</string>
+    <string name="approve_or_ignore">同意或无视好友请求</string>
+    <string name="today">今天</string>
+    <string name="confirm_btn">确认</string>
+    <string name="del_btn">删除</string>
+
+    <string name="tar_map">TARUMT 地图</string>
+
     <array name="profile_post">
         <item>编辑</item>
         <item>删除</item>

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -151,6 +152,19 @@ class Profile : Fragment() {
             transaction?.commit()
         }
 
+        cardViewProfile.setOnClickListener {
+            val userID = SaveSharedPreference.getUserID(requireContext())
+            val ref = storageRef.child("imageProfile").child("$userID.png")
+            ref.downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val imageUrl = task.result.toString()
+                    showImageInDialog(imageUrl) // Show image in a dialog
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load image.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         return view
     }
 
@@ -186,44 +200,48 @@ class Profile : Fragment() {
         }
     }
 
-    private fun loadBackgroundImage(imageUrl: String) {
-        val linearLayoutProfile = view?.findViewById<LinearLayout>(R.id.linearLayoutProfile)
-        Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
-            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                val drawable = BitmapDrawable(resources, bitmap)
-                linearLayoutProfile?.background = drawable // Set the background as the loaded image
-            }
-
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                Toast.makeText(requireContext(), "Failed to load background", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                // Optional placeholder
-            }
-        })
-    }
 
     private fun loadProfileBackground() {
-        lifecycleScope.launch {
-            val profile = profileViewModel.getProfile(currentUserID)
-            profile?.userBackgroundImage?.let { imageUrl ->
-                if (imageUrl.isNotEmpty()) {
-                    loadBackgroundImage(imageUrl) // Load the existing background image
-                }
+        val userID = SaveSharedPreference.getUserID(requireContext())
+        val ref = storageRef.child("userBackgroundImage").child("$userID.png")
+
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                val linearLayoutProfile = view?.findViewById<LinearLayout>(R.id.linearLayoutProfile)
+                Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                        val drawable = BitmapDrawable(resources, bitmap)
+                        linearLayoutProfile?.background = drawable // Set the background as the loaded image
+                    }
+
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        Toast.makeText(requireContext(), "Failed to load background image.", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        // Placeholder logic (optional)
+                    }
+                })
+            } else {
+                Toast.makeText(requireContext(), "Failed to load background URL.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+
 
     private fun loadProfilePicture() {
         val userID = SaveSharedPreference.getUserID(requireContext())
         val ref = storageRef.child("imageProfile").child("$userID.png")
 
-        ref.downloadUrl.addOnCompleteListener {
-            if (it.isSuccessful) {
-                val imageUrl = it.result.toString()
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
                 val imageView = view?.findViewById<ImageView>(R.id.imgProfileProfile)
-                Picasso.get().load(imageUrl).into(imageView)
+                imageView?.let {
+                    Picasso.get().load(imageUrl).into(it)
+                }
             } else {
                 Toast.makeText(requireContext(), "Failed to load profile picture", Toast.LENGTH_SHORT).show()
             }
@@ -264,7 +282,7 @@ class Profile : Fragment() {
                 imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
                     val newImageUrl = downloadUri.toString()
                     profileDao.updateProfilePicture(currentUserID, newImageUrl)
-                    loadProfilePicture()
+                    loadProfileBackground()
                     navigateToProfile()
                     Toast.makeText(requireContext(), "Image change successful!", Toast.LENGTH_SHORT).show()
                 }
@@ -274,20 +292,38 @@ class Profile : Fragment() {
             }
     }
 
+
     private fun updateBackgroundImage(imageUri: Uri) {
-        val imageRef = storageRef.child("backgroundImages").child("$currentUserID.png") // Firebase Storage path
+        val imageRef = storageRef.child("userBackgroundImage").child("$currentUserID.png") // Firebase Storage path
         imageRef.putFile(imageUri)
             .addOnSuccessListener {
                 imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
                     val newBackgroundUrl = downloadUri.toString()
                     profileDao.updateBackgroundImage(currentUserID, newBackgroundUrl) // Update database
-                    loadBackgroundImage(newBackgroundUrl) // Display the new image
+                    loadProfileBackground() // Display the new image
                     Toast.makeText(requireContext(), "Background updated successfully!", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), "Failed to upload background: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun showImageInDialog(imageUrl: String) {
+        val dialog = android.app.Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_image_view) // Create this layout file (see below)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
+        val closeButton = dialog.findViewById<ImageButton>(R.id.closeFullImageButton)
+        Picasso.get().load(imageUrl).into(imageView) // Load the image
+
+        // Close the dialog when the button is clicked
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 
