@@ -3,6 +3,7 @@ package com.example.fyp
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -196,11 +197,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar)
         supportActionBar?.title = ""
 
-        // Set navigation click listener
-        toolbar.setNavigationOnClickListener {
-            openDrawer()
+        // Find the navIcon (ImageView) and set click listener
+        val navIcon: ImageView = toolbar.findViewById(R.id.navIcon)
+        navIcon.setOnClickListener {
+            openDrawer()  // This will open the drawer
         }
     }
+
 
     fun setToolbar() {
         toolbarContainer.removeAllViews()
