@@ -7,6 +7,10 @@ import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.*
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 
 class PostCategoryDAO {
@@ -73,6 +77,24 @@ class PostCategoryDAO {
             }
         })
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun getCategoriesByPostID(postID: String): List<PostCategory> = suspendCancellableCoroutine { continuation ->
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val categories = mutableListOf<PostCategory>()
+                for (categorySnapshot in snapshot.children) {
+                    categorySnapshot.getValue(PostCategory::class.java)?.let { categories.add(it) }
+                }
+                continuation.resume(categories)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
+
 
 }
 

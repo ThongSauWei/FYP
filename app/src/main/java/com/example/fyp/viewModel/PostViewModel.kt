@@ -26,6 +26,11 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         }
     }
 
+    suspend fun getAllPosts(): List<Post> {
+        return postRepository.getAllPosts()
+    }
+
+
 
 
 }

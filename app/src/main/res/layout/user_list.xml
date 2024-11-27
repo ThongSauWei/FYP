@@ -7,22 +7,11 @@
     android:layout_height="wrap_content"
     android:background="#0F0F0F">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imgProfileFriendHolder"-->
-<!--        android:layout_width="65dp"-->
-<!--        android:layout_height="65dp"   -->
-<!--        android:layout_marginStart="40dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@drawable/profile_pic_2" />-->
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/friendImage"
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:layout_marginStart="37dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="100dp"
@@ -40,7 +29,7 @@
 
     <TextView
         android:id="@+id/tvNameFriend"
-        android:layout_width="230dp"
+        android:layout_width="198dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:ellipsize="end"
@@ -56,10 +45,10 @@
         app:layout_constraintVertical_bias="0.434" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/selectedFriend"
+        android:id="@+id/selectedFriendCardView"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="29dp"
         app:cardBackgroundColor="@color/background"
         app:cardCornerRadius="100dp"
@@ -74,7 +63,7 @@
         <ImageView
             android:id="@+id/btnActionFriendHolder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="@+id/imgProfileFriendHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imgProfileFriendHolder"

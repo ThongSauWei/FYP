@@ -8,12 +8,16 @@ import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.*
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class PostImageDAO(
     private val storageRef: StorageReference,
     private val databaseRef: DatabaseReference
 ) {
     private val TAG = "PostImageDAO"
+    private val dbRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("PostImage")
 
     fun uploadImages(postID: String, uris: List<Uri>, userID: String, callback: (Boolean, Exception?) -> Unit) {
         if (uris.isEmpty()) {
@@ -104,6 +108,22 @@ class PostImageDAO(
                     Log.e(TAG, "Failed to generate unique ID", error?.toException())
                     callback(null)
                 }
+            }
+        })
+    }
+
+    suspend fun getImagesByPostID(postID: String): List<PostImage> = suspendCancellableCoroutine { continuation ->
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val images = mutableListOf<PostImage>()
+                for (imageSnapshot in snapshot.children) {
+                    imageSnapshot.getValue(PostImage::class.java)?.let { images.add(it) }
+                }
+                continuation.resume(images)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
             }
         })
     }

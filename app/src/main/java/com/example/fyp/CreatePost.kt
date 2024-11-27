@@ -124,6 +124,17 @@ class CreatePost : Fragment() {
         val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
         btnSearchToolbarWithAnnouce?.setImageResource(R.drawable.send_post)
 
+// Convert 30dp to pixels
+        val density = resources.displayMetrics.density
+        val sizeInPixels = (30 * density).toInt()
+
+// Set the width and height to 30dp (in pixels)
+        val layoutParams = btnSearchToolbarWithAnnouce?.layoutParams
+        layoutParams?.width = sizeInPixels
+        layoutParams?.height = sizeInPixels
+        btnSearchToolbarWithAnnouce?.layoutParams = layoutParams
+
+
         val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
         btnNotification?.visibility = View.GONE
 
@@ -264,22 +275,45 @@ class CreatePost : Fragment() {
         Log.d("CreatePost", "All Selected Categories: $selectedCategories")
     }
 
-    private fun selectPrivacy(privacy: String, cardView: CardView) {
-        if (selectedPrivacies.contains(privacy)) {
-            // Deselect the card if it's already selected
+    private fun selectPrivacy(privacy: String, selectedCardView: CardView) {
+        // Clear previously selected privacy
+        listOf(publicCard, privateCard, resCard).forEach { cardView ->
             cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.box))
-            selectedPrivacies.remove(privacy) // Remove from the set
-            Log.d("CreatePost", "Privacy deselected: $privacy")
-        } else {
-            // Select the new privacy option
-            cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_yellow))
-            selectedPrivacies.add(privacy) // Add to the set
-            Log.d("CreatePost", "Selected Privacy: $privacy")
+        }
+        selectedPrivacies.clear() // Clear the set of selected privacies
+
+        // Select the new privacy
+        selectedCardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_yellow))
+        selectedPrivacies.add(privacy) // Add the selected privacy to the set
+
+        // Navigate to RestrictedUser fragment if "Restricted" privacy is selected
+        if (privacy == "Restricted") {
+            val fragment = RestrictedUser()
+
+            // Prepare the post data bundle
+            val bundle = Bundle().apply {
+                putString("title", view?.findViewById<EditText>(R.id.txtTitleCreatePost)?.text.toString().trim())
+                putString("description", view?.findViewById<EditText>(R.id.txtDescriptionCreatePost)?.text.toString().trim())
+                putStringArrayList("categories", ArrayList(selectedCategories))
+                putParcelableArrayList("imageUris", ArrayList(imageUris))
+            }
+
+            // Attach the bundle to the fragment
+            fragment.arguments = bundle
+
+            // Navigate to the fragment
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
         }
 
-        // Log all currently selected privacy options
+        // Log the selection
+        Log.d("CreatePost", "Selected Privacy: $privacy")
         Log.d("CreatePost", "All Selected Privacy: $selectedPrivacies")
     }
+
+
 
     private fun validateFields(): Boolean {
         // Ensure all fields are filled in

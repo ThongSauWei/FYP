@@ -22,7 +22,7 @@
                 android:id="@+id/tvTitleFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="29dp"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="28dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="@string/chooseRestricted"
