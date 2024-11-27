@@ -151,6 +151,8 @@
         <item>其他</item>
     </array>
 
+    <string name="course_label">科系</string>
+
     <array name="course">
         <item>商业, TARUMT</item>
         <item>计算机科学, TARUMT</item>

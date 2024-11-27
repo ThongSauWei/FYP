@@ -105,8 +105,11 @@
                 android:layout_marginEnd="20dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/abhayalibre_semibold"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/name"
+                android:textColorHint="@color/grey"
                 android:inputType="textPersonName"
                 android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,9 +137,12 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/email"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:textColor="@color/grey"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:inputType="textEmailAddress"
+                android:editable="false"
+                android:inputType="none"
                 android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblEmailEditProfile" />
@@ -163,10 +169,13 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/signUpMobile_number"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:textColor="@color/black"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:inputType="phone"
                 android:padding="10dp"
+                android:textColorHint="@color/grey"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblPhoneEditProfile" />
 
@@ -185,6 +194,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPhoneEditProfile" />
 
+            <!-- Course Field -->
+            <TextView
+                android:id="@+id/lblCourseEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/course_label"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtBirthdayEditProfile" />
+
+            <Spinner
+                android:id="@+id/ddlCourseEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:background="@drawable/contact_us_spinner_bg"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:popupBackground="@drawable/contact_us_dropdown_bg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblCourseEditProfile" />
 
             <!-- Description Field -->
             <TextView
@@ -199,7 +237,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtBirthdayEditProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/ddlCourseEditProfile" />
 
             <EditText
                 android:id="@+id/txtDescriptionEditProfile"
@@ -210,6 +248,9 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/profileDescription"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/black"
                 android:inputType="textMultiLine"
                 android:padding="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -222,6 +263,9 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_background"
                 android:hint="@string/select_date"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/black"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:inputType="none"

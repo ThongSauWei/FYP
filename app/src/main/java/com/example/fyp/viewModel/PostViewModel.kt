@@ -26,6 +26,10 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         }
     }
 
+    fun deletePost(postID: String) {
+        postRepository.deletePost(postID)
+    }
+
 
 
 }

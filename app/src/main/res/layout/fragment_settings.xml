@@ -182,6 +182,7 @@
             android:fontFamily="@font/abhayalibre_semibold"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:textColor="@color/black"
             android:popupBackground="@drawable/sipnner_dropdown_bg"
             android:spinnerMode="dropdown" />
     </LinearLayout>
