@@ -1,25 +1,36 @@
 package com.example.fyp.dataAdapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.fyp.Detail
 import com.example.fyp.R
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Like
 import com.example.fyp.data.Post
 import com.example.fyp.data.PostCategory
+import com.example.fyp.data.Save
+import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,6 +38,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class PostAdapter(
@@ -35,7 +47,10 @@ class PostAdapter(
     private val postImageDAO: PostImageDAO,
     private val postCategoryDAO: PostCategoryDAO,
     private val likeDAO: LikeDAO,
-    private val postCommentDAO: PostCommentDAO
+    private val postCommentDAO: PostCommentDAO,
+    private val saveDAO: SaveDAO,
+    private val context: Context,
+    private val postViewModel: PostViewModel
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     private lateinit var storageRef : StorageReference
@@ -51,18 +66,25 @@ class PostAdapter(
         val viewPagerPostImages: ViewPager2 = itemView.findViewById(R.id.viewPagerPostImages)
         val indicatorContainer: LinearLayout = itemView.findViewById(R.id.indicatorContainer)
         val cardViewTypeHolder: LinearLayout = itemView.findViewById(R.id.cardViewTypeHolder)
+        val lovePostHolder: ImageView = itemView.findViewById(R.id.lovePostHolder)
+        val bookmarkPostHolder: ImageView = itemView.findViewById(R.id.bookmarkPostHolder)
+        val sharePostHolder: ImageView = itemView.findViewById(R.id.sharePostHolder)
+        val commentPostHolder: ImageView = itemView.findViewById(R.id.commentPostHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.postholder, parent, false)
 
         storageRef = FirebaseStorage.getInstance().getReference()
+//        postViewModel = ViewModelProvider(viewModelStoreOwner)[PostViewModel::class.java] // Use viewModelStoreOwner
 
         return PostViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
+
+        val currentUserID = getCurrentUserID()
 
         // Set post date and title
 //        holder.tvDateTimePostHolder.text = post.postDateTime
@@ -111,6 +133,155 @@ class PostAdapter(
             val categories = postCategoryDAO.getCategoriesByPostID(post.postID)
             populateCategories(holder, categories)
         }
+
+        // Check if the current user has liked the post and update the like button accordingly
+        GlobalScope.launch(Dispatchers.Main) {
+            val existingLike = likeDAO.getLikeByUserIDAndPostID(currentUserID, post.postID)
+            if (existingLike != null && existingLike.status == 1) {
+                holder.lovePostHolder.setImageResource(R.drawable.baseline_favorite_24)
+            } else {
+                holder.lovePostHolder.setImageResource(R.drawable.love_border)
+            }
+        }
+
+        // Check if the current user has bookmarked the post and update the bookmark button accordingly
+        GlobalScope.launch(Dispatchers.Main) {
+            val existingSave = saveDAO.getSaveByUserIDAndPostID(currentUserID, post.postID)
+            if (existingSave != null && existingSave.status == 1) {
+                holder.bookmarkPostHolder.setImageResource(R.drawable.bookmark_full)
+            } else {
+                holder.bookmarkPostHolder.setImageResource(R.drawable.bookmark_border)
+            }
+        }
+
+        // Add click listener for lovePostHolder
+        holder.lovePostHolder.setOnClickListener {
+            // Launch a coroutine when handling the like click
+            GlobalScope.launch(Dispatchers.Main) {
+                handleLikeClick(post, holder)
+            }
+        }
+
+        // Add click listener for bookmarkPostHolder
+        holder.bookmarkPostHolder.setOnClickListener {
+            // Launch a coroutine when handling the bookmark click
+            GlobalScope.launch(Dispatchers.Main) {
+                handleBookmarkClick(post, holder)
+            }
+        }
+
+
+        //share
+        holder.sharePostHolder.setOnClickListener {
+            val postDetails = "Check out this amazing post: ${post.postTitle}\n\nShared from TARUMT Campus App!"
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain" // Define the MIME type
+                putExtra(Intent.EXTRA_TEXT, postDetails) // Content to share
+            }
+            context.startActivity(Intent.createChooser(shareIntent, "Share post via"))
+        }
+
+        //comment
+        holder.commentPostHolder.setOnClickListener {
+            val fragment = Detail()
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+    }
+
+    // Add click listener for lovePostHolder
+    suspend fun handleLikeClick(post: Post, holder: PostViewHolder) {
+        val currentUserID = getCurrentUserID()
+
+        // Check if the current user has already liked this post
+        val existingLike = likeDAO.getLikeByUserIDAndPostID(currentUserID, post.postID)
+
+        if (existingLike != null) {
+            // Toggle like status
+            val newStatus = if (existingLike.status == 1) 0 else 1
+            existingLike.status = newStatus
+            likeDAO.updateLikeStatus(existingLike)
+
+            // Update UI
+            holder.lovePostHolder.setImageResource(
+                if (newStatus == 1) R.drawable.baseline_favorite_24 else R.drawable.love_border
+            )
+        } else {
+            // Create and save a new like
+            val like = Like(
+                likeID = UUID.randomUUID().toString(),
+                userID = currentUserID,
+                postID = post.postID,
+                status = 1,
+                timeStamp = getCurrentTimestamp()
+            )
+            likeDAO.saveLike(like)
+
+            // Update UI
+            holder.lovePostHolder.setImageResource(R.drawable.baseline_favorite_24)
+        }
+
+        // Refresh posts after a successful action
+        refreshPosts()
+    }
+
+
+    suspend fun handleBookmarkClick(post: Post, holder: PostViewHolder) {
+        val currentUserID = getCurrentUserID()
+
+        // Check if the current user has already bookmarked this post
+        val existingSave = saveDAO.getSaveByUserIDAndPostID(currentUserID, post.postID)
+
+        if (existingSave != null) {
+            // Toggle save status
+            val newStatus = if (existingSave.status == 1) 0 else 1
+            existingSave.status = newStatus
+            saveDAO.updateSaveStatus(existingSave)
+
+            // Update UI
+            holder.bookmarkPostHolder.setImageResource(
+                if (newStatus == 1) R.drawable.bookmark_full else R.drawable.bookmark_border
+            )
+        } else {
+            // Create and save a new bookmark
+            val save = Save(
+                saveID = UUID.randomUUID().toString(),
+                userID = currentUserID,
+                postID = post.postID,
+                status = 1,
+                timeStamp = getCurrentTimestamp()
+            )
+            saveDAO.saveSave(save)
+
+            // Update UI
+            holder.bookmarkPostHolder.setImageResource(R.drawable.bookmark_full)
+        }
+
+        // Refresh posts after a successful action
+        refreshPosts()
+    }
+
+    private fun refreshPosts() {
+        (context as? FragmentActivity)?.lifecycleScope?.launch {
+            try {
+                val updatedPosts = postViewModel.getAllPosts() // Fetch updated posts
+                updatePosts(updatedPosts) // Update adapter
+            } catch (e: Exception) {
+                Toast.makeText(context, "Failed to refresh posts.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getCurrentUserID(): String {
+        return SaveSharedPreference.getUserID(context) // Use the passed context
+    }
+
+    fun getCurrentTimestamp(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return sdf.format(Date())
     }
 
     // Function to dynamically create CardView elements for categories

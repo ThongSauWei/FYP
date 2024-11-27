@@ -15,6 +15,7 @@ import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.SaveDAO
 import com.example.fyp.dataAdapter.PostAdapter
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
@@ -42,12 +43,6 @@ class Home : Fragment() {
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        // Retrieve success message from arguments (if any)
-//        val successMessage = arguments?.getString("successMessage")
-//        if (!successMessage.isNullOrEmpty()) {
-//            Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show()
-//        }
-
         // Initialize RecyclerView
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -69,19 +64,30 @@ class Home : Fragment() {
 
         // Initialize RecyclerView Adapter with DAOs
         postAdapter = PostAdapter(
-            posts = listOf(), // Initially empty; populate below
+            posts = listOf(), // Initially empty; will be populated below
             userViewModel = userViewModel,
             postImageDAO = PostImageDAO(storageRef, databaseRef), // Pass both storageRef and databaseRef
             postCategoryDAO = PostCategoryDAO(),                  // No need for databaseRef here
             likeDAO = LikeDAO(),                                  // No need for databaseRef here
-            postCommentDAO = PostCommentDAO()                      // No need for databaseRef here
+            postCommentDAO = PostCommentDAO(),                    // No need for databaseRef here
+            saveDAO = SaveDAO(),                                  // Add SaveDAO here
+            context = requireContext(),                            // Pass context as well
+            postViewModel = postViewModel                         // Pass the PostViewModel
         )
+
         recyclerView.adapter = postAdapter
 
         // Fetch and Populate Posts
         lifecycleScope.launch {
-            val postList = postViewModel.getAllPosts()
-            postAdapter.updatePosts(postList) // Update the adapter's data
+            try {
+                // Get all posts from the ViewModel
+                val postList = postViewModel.getAllPosts()
+
+                // Update the adapter's posts data and refresh
+                postAdapter.updatePosts(postList)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
