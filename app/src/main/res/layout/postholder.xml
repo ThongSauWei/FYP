@@ -50,10 +50,26 @@
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.597"
+                app:layout_constraintHorizontal_bias="0.277"
                 app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
                 app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
                 app:layout_constraintVertical_bias="0.181" />
+
+            <ImageView
+                android:id="@+id/imgDropdownMenuPostItemProfile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="10dp"
+                android:contentDescription="dropdown"
+                android:src="@drawable/bullet"
+                app:layout_constraintEnd_toStartOf="@id/tvDateTimePostHolder"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tvDateTimePostHolder"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+
 
             <View
                 android:id="@+id/separatorPostHolder"

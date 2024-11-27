@@ -208,6 +208,8 @@
         <item>Others</item>
     </array>
 
+    <string name="course_label">Course</string>
+
     <array name="course">
         <item>Business, TARUMT</item>
         <item>Computer Science, TARUMT</item>

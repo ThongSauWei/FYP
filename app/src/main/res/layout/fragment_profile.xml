@@ -91,7 +91,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="Minions Bro"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/cardViewProfile"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewProfile" />
@@ -103,9 +103,10 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvNameProfile"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.537"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
@@ -116,7 +117,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvPostsProfile"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -128,7 +129,7 @@
                 android:fontFamily="@font/abhaya_libre"
                 android:text="2003-11-21"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/tvNameProfile"
                 app:layout_constraintTop_toBottomOf="@+id/tvNameProfile" />
 
@@ -139,7 +140,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="@string/post"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvDOBProfile"
                 app:layout_constraintEnd_toEndOf="@+id/tvPostsProfile"
                 app:layout_constraintStart_toStartOf="@+id/tvPostsProfile" />
@@ -151,7 +152,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="@string/profile_friends"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/lblPostsProfile"
                 app:layout_constraintEnd_toEndOf="@+id/tvFriendsProfile"
                 app:layout_constraintStart_toStartOf="@+id/tvFriendsProfile" />
@@ -164,7 +165,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="Business, TARUMT"
                 android:textColor="@color/blue"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/tvDOBProfile"
                 app:layout_constraintTop_toBottomOf="@+id/tvDOBProfile" />
 
@@ -172,13 +173,14 @@
                 android:id="@+id/tvLanguages"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="14dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="English"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/lblPostsProfile"
-                app:layout_constraintTop_toBottomOf="@+id/lblPostsProfile"/>
+                app:layout_constraintTop_toBottomOf="@+id/lblPostsProfile" />
 
             <TextView
                 android:id="@+id/tvBioProfile"
@@ -188,7 +190,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="Description..."
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tvCoursesProfile"
                 app:layout_constraintTop_toBottomOf="@+id/tvCoursesProfile" />
@@ -243,7 +245,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separatorProfile"
                 app:layout_constraintVertical_bias="0.05"
-                tools:listitem="@layout/post_item_profile" />
+                tools:listitem="@layout/postholder" />
 
             <Button
                 android:id="@+id/btnCreatePostProfile"

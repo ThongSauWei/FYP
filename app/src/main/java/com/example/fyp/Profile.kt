@@ -96,8 +96,14 @@ class Profile : Fragment() {
 
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
 
+        parentFragmentManager.setFragmentResultListener("ProfileUpdatedKey", this) { _, _ ->
+            loadProfilePicture()
+            loadProfileBackground()
+        }
+
         loadProfileBackground()
         loadProfilePicture()
+        onResume()
 
         recyclerView = view.findViewById(R.id.recyclerViewProfilePost)
         setupProfileInfo(currentUserID)
@@ -169,6 +175,12 @@ class Profile : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        loadProfilePicture() // Refresh profile picture when returning to this fragment
+        loadProfileBackground() // Refresh background as well, if necessary
+        setupProfileInfo(currentUserID) // Reload user data
+    }
     private fun setupProfileInfo(userID: String) {
         val userViewModel: UserViewModel =
             ViewModelProvider(this).get(UserViewModel::class.java)
@@ -282,7 +294,7 @@ class Profile : Fragment() {
                 imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
                     val newImageUrl = downloadUri.toString()
                     profileDao.updateProfilePicture(currentUserID, newImageUrl)
-                    loadProfileBackground()
+                    loadProfilePicture()
                     navigateToProfile()
                     Toast.makeText(requireContext(), "Image change successful!", Toast.LENGTH_SHORT).show()
                 }
