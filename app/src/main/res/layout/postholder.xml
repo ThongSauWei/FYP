@@ -43,18 +43,14 @@
                 android:id="@+id/tvDateTimePostHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/abhaya_libre"
                 android:text="10minutes ago"
                 android:textColor="@color/sub_word"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.277"
-                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
-                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
-                app:layout_constraintVertical_bias="0.181" />
+                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintTop_toBottomOf="@+id/lovePostHolder" />
 
             <ImageView
                 android:id="@+id/imgDropdownMenuPostItemProfile"
@@ -108,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="23dp"
                 android:layout_marginTop="13dp"
-                android:layout_marginBottom="117dp"
+                android:layout_marginBottom="131dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:justificationMode="inter_word"
                 android:text="Today is Assignment Day !!! aaaaaaaaaaaa aaaaaaaaa aaaaaaaa aaaa "
@@ -203,11 +199,13 @@
                 android:id="@+id/bookmarkPostHolder"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="158dp"
+                android:layout_marginStart="170dp"
                 app:layout_constraintBottom_toBottomOf="@+id/sharePostHolder"
                 app:layout_constraintEnd_toEndOf="@+id/tvDateTimePostHolder"
+                app:layout_constraintHorizontal_bias="0.078"
                 app:layout_constraintStart_toEndOf="@+id/sharePostHolder"
                 app:layout_constraintTop_toTopOf="@+id/sharePostHolder"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/bookmark_border" />
 
             <androidx.cardview.widget.CardView
@@ -231,6 +229,28 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             app:srcCompat="@drawable/post_image" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFollow"
+                android:layout_width="65dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="58dp"
+                app:cardBackgroundColor="@color/post_follow"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder" >
+
+                <TextView
+                    android:id="@+id/tvFollow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/abhayalibre_extrabold"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="Follow"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
 

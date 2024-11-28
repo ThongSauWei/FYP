@@ -18,16 +18,19 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.fyp.Detail
+import com.example.fyp.Profile
 import com.example.fyp.R
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Friend
 import com.example.fyp.data.Like
 import com.example.fyp.data.Post
 import com.example.fyp.data.PostCategory
 import com.example.fyp.data.Save
+import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.storage.FirebaseStorage
@@ -52,7 +55,8 @@ class PostAdapter(
     private val postCommentDAO: PostCommentDAO,
     private val saveDAO: SaveDAO,
     private val context: Context,
-    private val postViewModel: PostViewModel
+    private val postViewModel: PostViewModel,
+    private val friendViewModel: FriendViewModel
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     private lateinit var storageRef : StorageReference
@@ -71,6 +75,10 @@ class PostAdapter(
         val bookmarkPostHolder: ImageView = itemView.findViewById(R.id.bookmarkPostHolder)
         val sharePostHolder: ImageView = itemView.findViewById(R.id.sharePostHolder)
         val commentPostHolder: ImageView = itemView.findViewById(R.id.commentPostHolder)
+        // Follow button views
+        val cardFollow: CardView = itemView.findViewById(R.id.cardFollow)
+        val tvFollow: TextView = itemView.findViewById(R.id.tvFollow)
+        val cvProfilePostHolder: CardView = itemView.findViewById(R.id.cvProfilePostHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -86,6 +94,76 @@ class PostAdapter(
         val post = posts[position]
 
         val currentUserID = getCurrentUserID()
+
+
+
+        // By default, hide the cardFollow button
+        holder.cardFollow.visibility = View.GONE
+
+        // Show `cardFollow` button only if it's not the current user's post
+        if (currentUserID != post.userID) {
+            CoroutineScope(Dispatchers.Main).launch {
+                val friend = friendViewModel.getFriend(currentUserID, post.userID)
+                Log.d("PostAdapter", "Friend Status Check: currentUserID=$currentUserID, postUserID=${post.userID}, friend=$friend")
+
+                when {
+                    friend == null -> {
+                        // No friendship exists
+                        holder.cardFollow.visibility = View.VISIBLE
+                        holder.tvFollow.text = "Follow"
+                        Log.d("PostAdapter", "Friend not found. Showing 'Follow'.")
+                    }
+                    friend.status == "Pending" -> {
+                        // Friend request is pending
+                        holder.cardFollow.visibility = View.VISIBLE
+                        holder.tvFollow.text = "Requested"
+                        Log.d("PostAdapter", "Friend request is pending. Showing 'Requested'.")
+                    }
+                    friend.status == "Friend" -> {
+                        // Already friends
+                        holder.cardFollow.visibility = View.GONE
+                        Log.d("PostAdapter", "Already friends. Hiding cardFollow.")
+                    }
+                }
+            }
+
+            // Handle follow/unfollow click
+            holder.cardFollow.setOnClickListener {
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val friend = friendViewModel.getFriend(currentUserID, post.userID)
+                        if (friend == null) {
+                            // Send friend request
+                            val newFriend = Friend(
+                                friendID = UUID.randomUUID().toString(),
+                                requestUserID = currentUserID,
+                                receiveUserID = post.userID,
+                                status = "Pending",
+                                timeStamp = getCurrentTimestamp()
+                            )
+                            friendViewModel.addFriend(newFriend)
+                            holder.tvFollow.text = "Requested"
+                            Toast.makeText(context, "Friend request sent.", Toast.LENGTH_SHORT).show()
+                            Log.d("PostAdapter", "Friend request sent: $newFriend")
+                        } else if (friend.status == "Pending") {
+                            // Cancel friend request
+                            friendViewModel.deleteFriend(friend.friendID)
+                            holder.tvFollow.text = "Follow"
+                            Toast.makeText(context, "Friend request canceled.", Toast.LENGTH_SHORT).show()
+                            Log.d("PostAdapter", "Friend request canceled: friendID=${friend.friendID}")
+                        }
+                    } catch (e: Exception) {
+                        Log.e("PostAdapter", "Error handling follow action: ${e.message}", e)
+                        Toast.makeText(context, "Error handling follow action.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        } else {
+            Log.d("PostAdapter", "Post belongs to current user. Hiding cardFollow.")
+        }
+
+
+
 
         // Set post date and title
         holder.tvPostTitlePostHolder.text = post.postTitle
@@ -189,14 +267,14 @@ class PostAdapter(
         }
 
         //comment
-//        holder.commentPostHolder.setOnClickListener {
-//            val fragment = Detail()
-//            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-//            val transaction = fragmentManager.beginTransaction()
-//            transaction.replace(R.id.fragmentContainerView, fragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
-//        }
+        holder.cvProfilePostHolder.setOnClickListener {
+            val fragment = Profile()
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         // commentPostHolder click listener
         holder.commentPostHolder.setOnClickListener {
@@ -214,6 +292,34 @@ class PostAdapter(
         }
 
     }
+
+    private suspend fun handleFollowAction(post: Post, holder: PostViewHolder) {
+        val currentUserID = getCurrentUserID()
+        val friend = friendViewModel.getFriend(currentUserID, post.userID)
+
+        if (friend == null) {
+            // Add friend (send request)
+            val newFriend = Friend(
+                friendID = "0",
+                requestUserID = currentUserID,
+                receiveUserID = post.userID,
+                status = "Pending",
+                timeStamp = getCurrentTimestamp()
+            )
+            friendViewModel.addFriend(newFriend)
+
+            holder.tvFollow.text = "Requested"
+            Toast.makeText(context, "Friend request sent.", Toast.LENGTH_SHORT).show()
+
+        } else if (friend.status == "Pending") {
+            // Remove friend request
+            friendViewModel.deleteFriend(friend.friendID)
+
+            holder.tvFollow.text = "Follow"
+            Toast.makeText(context, "Friend request canceled.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     // Add click listener for lovePostHolder
     suspend fun handleLikeClick(post: Post, holder: PostViewHolder) {

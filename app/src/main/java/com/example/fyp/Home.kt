@@ -18,6 +18,7 @@ import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +32,7 @@ class Home : Fragment() {
     private lateinit var postViewModel: PostViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var postAdapter: PostAdapter
+    private lateinit var friendViewModel: FriendViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +49,13 @@ class Home : Fragment() {
         // Set up refresh listener
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
+
+                val fragment = Home()
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.replace(R.id.fragmentContainerView, fragment)
+                transaction?.addToBackStack(null)
+                transaction?.commit()
+
                 delay(2000) // Simulate loading or update your RecyclerView data
                 swipeRefreshLayout.isRefreshing = false
                 Toast.makeText(requireContext(), "Content refreshed", Toast.LENGTH_SHORT).show()
@@ -56,6 +65,7 @@ class Home : Fragment() {
         // Initialize ViewModels
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        friendViewModel = ViewModelProvider(this)[FriendViewModel::class.java]
 
         // Initialize RecyclerView
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
@@ -86,7 +96,8 @@ class Home : Fragment() {
             postCommentDAO = PostCommentDAO(),
             saveDAO = SaveDAO(),
             context = requireContext(),
-            postViewModel = postViewModel
+            postViewModel = postViewModel,
+            friendViewModel = friendViewModel
         )
 
         recyclerView.adapter = postAdapter
