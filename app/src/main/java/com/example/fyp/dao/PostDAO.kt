@@ -40,4 +40,17 @@ class PostDAO {
             }
         })
     }
+
+    suspend fun getPostByID(postID: String): Post? = suspendCancellableCoroutine { continuation ->
+        dbRef.child(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val post = snapshot.getValue(Post::class.java)
+                continuation.resume(post)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
 }

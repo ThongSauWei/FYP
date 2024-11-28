@@ -21,5 +21,9 @@ class PostRepository(private val postDao : PostDAO) {
         return postDao.getAllPost()
     }
 
+    suspend fun getPostByID(postID: String): Post? {
+        return postDao.getPostByID(postID)
+    }
+
 
 }

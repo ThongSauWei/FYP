@@ -2,6 +2,8 @@ package com.example.fyp.dataAdapter
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +57,6 @@ class PostAdapter(
 
     private lateinit var storageRef : StorageReference
 
-    // ViewHolder for individual post items
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNamePostHolder: TextView = itemView.findViewById(R.id.tvNamePostHolder)
         val tvDateTimePostHolder: TextView = itemView.findViewById(R.id.tvDateTimePostHolder)
@@ -87,7 +88,6 @@ class PostAdapter(
         val currentUserID = getCurrentUserID()
 
         // Set post date and title
-//        holder.tvDateTimePostHolder.text = post.postDateTime
         holder.tvPostTitlePostHolder.text = post.postTitle
 
         // Calculate and display relative time for postDateTime
@@ -107,14 +107,21 @@ class PostAdapter(
             }
         }
 
-        // Fetch and display images for the post
         CoroutineScope(Dispatchers.Main).launch {
             val images = postImageDAO.getImagesByPostID(post.postID)
             val imageUrls = images.map { it.postImage }
+            Log.d("PostAdapter", "Fetched Images for PostID: ${post.postID}: $imageUrls")
 
-            holder.viewPagerPostImages.adapter = ImageSliderAdapter(imageUrls)
+            val adapter = holder.viewPagerPostImages.adapter as? ImageSliderAdapter
+            if (adapter != null) {
+                adapter.updateImages(imageUrls)
+            } else {
+                holder.viewPagerPostImages.adapter = ImageSliderAdapter(imageUrls)
+            }
+
             setupIndicators(holder.indicatorContainer, imageUrls.size, holder.viewPagerPostImages)
         }
+
 
         // Fetch and display like count
         CoroutineScope(Dispatchers.Main).launch {
@@ -182,14 +189,30 @@ class PostAdapter(
         }
 
         //comment
+//        holder.commentPostHolder.setOnClickListener {
+//            val fragment = Detail()
+//            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+//            val transaction = fragmentManager.beginTransaction()
+//            transaction.replace(R.id.fragmentContainerView, fragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
+//        }
+
+        // commentPostHolder click listener
         holder.commentPostHolder.setOnClickListener {
             val fragment = Detail()
+            val bundle = Bundle()
+            bundle.putString("POST_ID", post.postID)  // Pass the postID to the fragment
+            fragment.arguments = bundle
+
+            // Start the fragment transaction
             val fragmentManager = (context as FragmentActivity).supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
     }
 
     // Add click listener for lovePostHolder

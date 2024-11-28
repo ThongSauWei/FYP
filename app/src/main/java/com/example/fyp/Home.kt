@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
@@ -21,7 +22,9 @@ import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.logging.Handler
 
 class Home : Fragment() {
 
@@ -38,6 +41,17 @@ class Home : Fragment() {
 
         // Set toolbar layout
         (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
+
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+
+        // Set up refresh listener
+        swipeRefreshLayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                delay(2000) // Simulate loading or update your RecyclerView data
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(requireContext(), "Content refreshed", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Initialize ViewModels
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
@@ -64,15 +78,15 @@ class Home : Fragment() {
 
         // Initialize RecyclerView Adapter with DAOs
         postAdapter = PostAdapter(
-            posts = listOf(), // Initially empty; will be populated below
+            posts = listOf(),
             userViewModel = userViewModel,
-            postImageDAO = PostImageDAO(storageRef, databaseRef), // Pass both storageRef and databaseRef
-            postCategoryDAO = PostCategoryDAO(),                  // No need for databaseRef here
-            likeDAO = LikeDAO(),                                  // No need for databaseRef here
-            postCommentDAO = PostCommentDAO(),                    // No need for databaseRef here
-            saveDAO = SaveDAO(),                                  // Add SaveDAO here
-            context = requireContext(),                            // Pass context as well
-            postViewModel = postViewModel                         // Pass the PostViewModel
+            postImageDAO = PostImageDAO(storageRef, databaseRef),
+            postCategoryDAO = PostCategoryDAO(),
+            likeDAO = LikeDAO(),
+            postCommentDAO = PostCommentDAO(),
+            saveDAO = SaveDAO(),
+            context = requireContext(),
+            postViewModel = postViewModel
         )
 
         recyclerView.adapter = postAdapter
@@ -80,10 +94,7 @@ class Home : Fragment() {
         // Fetch and Populate Posts
         lifecycleScope.launch {
             try {
-                // Get all posts from the ViewModel
                 val postList = postViewModel.getAllPosts()
-
-                // Update the adapter's posts data and refresh
                 postAdapter.updatePosts(postList)
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
@@ -92,4 +103,5 @@ class Home : Fragment() {
 
         return view
     }
+
 }
