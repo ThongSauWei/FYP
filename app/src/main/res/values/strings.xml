@@ -180,6 +180,8 @@
     <!-- Feedback -->
     <string name="feedback_title">Rate Of TARUMT Campus Hub</string>
 
+    <string name="follow">Follow</string>
+
     <!--    map-->
     <string name="tar_map">TARUMT Map</string>
 

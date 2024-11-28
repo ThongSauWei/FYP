@@ -34,6 +34,7 @@
     <color name="drawer">#242424</color>
     <color name="dialog_stroke">#C1C1C1</color>
     <color name="dialog">#FEFEFE</color>
+    <color name="post_follow">#2A2A2A</color>
 
 
 </resources>
