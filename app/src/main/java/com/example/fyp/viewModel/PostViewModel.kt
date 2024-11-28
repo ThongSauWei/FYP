@@ -26,6 +26,15 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         }
     }
 
+    // Method to get posts by a list of user IDs (for fetching posts of friends)
+    suspend fun getPostsByUserIDs(userIDs: List<String>): List<Post> {
+        val posts = mutableListOf<Post>()
+        for (userID in userIDs) {
+            posts.addAll(postRepository.getPostByUser(userID))
+        }
+        return posts
+    }
+
     suspend fun getPostByID(postID: String) : Post? {
         return postRepository.getPostByID(postID)
     }

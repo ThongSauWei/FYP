@@ -17,6 +17,10 @@ class PostRepository(private val postDao : PostDAO) {
         }
     }
 
+    suspend fun getPostByUser(userID : String) : List<Post> {
+        return postDao.getPostByUser(userID)
+    }
+
     suspend fun getAllPosts(): List<Post> {
         return postDao.getAllPost()
     }

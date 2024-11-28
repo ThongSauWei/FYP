@@ -11,7 +11,7 @@
         android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/post"
         app:cardCornerRadius="11dp"
         app:cardElevation="5dp"
@@ -236,22 +236,24 @@
                 android:id="@+id/cardFollow"
                 android:layout_width="65dp"
                 android:layout_height="27dp"
-                android:layout_marginStart="58dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="5dp"
                 app:cardBackgroundColor="@color/post_follow"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
                 app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
-                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder" >
+                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
+                app:layout_constraintVertical_bias="1.0">
 
-                <TextView
-                    android:id="@+id/tvFollow"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/abhayalibre_extrabold"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="Follow"
-                    android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/tvFollow"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/abhayalibre_extrabold"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:text="Follow"
+                                    android:textColor="@color/grey"
+                                    android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
 

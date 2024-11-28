@@ -417,16 +417,28 @@ class PostAdapter(
         refreshPosts()
     }
 
+//    private fun refreshPosts() {
+//        (context as? FragmentActivity)?.lifecycleScope?.launch {
+//            try {
+//                val updatedPosts = postViewModel.getAllPosts() // Fetch updated posts
+//                updatePosts(updatedPosts) // Update adapter
+//            } catch (e: Exception) {
+//                Toast.makeText(context, "Failed to refresh posts.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
     private fun refreshPosts() {
         (context as? FragmentActivity)?.lifecycleScope?.launch {
             try {
                 val updatedPosts = postViewModel.getAllPosts() // Fetch updated posts
-                updatePosts(updatedPosts) // Update adapter
+                updatePosts(updatedPosts)
             } catch (e: Exception) {
                 Toast.makeText(context, "Failed to refresh posts.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(context) // Use the passed context

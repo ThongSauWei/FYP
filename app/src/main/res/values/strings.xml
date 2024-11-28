@@ -197,6 +197,11 @@
     <string name="search_for_any_post_history">Search for any post history</string>
     <string name="search_post_history">Search post history</string>
 
+    <string-array name="filter_options">
+        <item>All</item>
+        <item>Follow</item>
+    </string-array>
+
 
     <array name="language_array">
         <item>English</item>
