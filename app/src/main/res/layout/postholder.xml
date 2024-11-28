@@ -7,6 +7,7 @@
     android:background="#0F0F0F">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardMain"
         android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

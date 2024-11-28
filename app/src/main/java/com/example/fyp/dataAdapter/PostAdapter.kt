@@ -79,6 +79,7 @@ class PostAdapter(
         val cardFollow: CardView = itemView.findViewById(R.id.cardFollow)
         val tvFollow: TextView = itemView.findViewById(R.id.tvFollow)
         val cvProfilePostHolder: CardView = itemView.findViewById(R.id.cvProfilePostHolder)
+        val cardMain: CardView = itemView.findViewById(R.id.cardMain)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -276,8 +277,31 @@ class PostAdapter(
             transaction.commit()
         }
 
+        holder.tvNamePostHolder.setOnClickListener {
+            val fragment = Profile()
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
         // commentPostHolder click listener
         holder.commentPostHolder.setOnClickListener {
+            val fragment = Detail()
+            val bundle = Bundle()
+            bundle.putString("POST_ID", post.postID)  // Pass the postID to the fragment
+            fragment.arguments = bundle
+
+            // Start the fragment transaction
+            val fragmentManager = (context as FragmentActivity).supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        holder.cardMain.setOnClickListener {
             val fragment = Detail()
             val bundle = Bundle()
             bundle.putString("POST_ID", post.postID)  // Pass the postID to the fragment
