@@ -4,6 +4,8 @@ import com.example.fyp.data.Post
 import com.google.firebase.database.*
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -23,23 +25,53 @@ class PostDAO {
         }
     }
 
-    suspend fun getAllPost(): List<Post> = suspendCancellableCoroutine { continuation ->
-        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val posts = mutableListOf<Post>()
-                if (snapshot.exists()) {
-                    for (postSnapshot in snapshot.children) {
-                        postSnapshot.getValue(Post::class.java)?.let { posts.add(it) }
-                    }
-                }
-                continuation.resume(posts)
-            }
+//    suspend fun getAllPost(): List<Post> = suspendCancellableCoroutine { continuation ->
+//        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val posts = mutableListOf<Post>()
+//                if (snapshot.exists()) {
+//                    for (postSnapshot in snapshot.children) {
+//                        postSnapshot.getValue(Post::class.java)?.let { posts.add(it) }
+//                    }
+//                }
+//                continuation.resume(posts)
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                continuation.resumeWithException(error.toException())
+//            }
+//        })
+//    }
+        suspend fun getAllPost(): List<Post> = suspendCancellableCoroutine { continuation ->
+            dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val posts = mutableListOf<Post>()
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
-            override fun onCancelled(error: DatabaseError) {
-                continuation.resumeWithException(error.toException())
-            }
-        })
-    }
+                    if (snapshot.exists()) {
+                        for (postSnapshot in snapshot.children) {
+                            postSnapshot.getValue(Post::class.java)?.let { posts.add(it) }
+                        }
+                    }
+
+                    // Sort the posts by postDateTime in descending order
+                    val sortedPosts = posts.sortedByDescending { post ->
+                        try {
+                            dateFormat.parse(post.postDateTime)?.time ?: 0L
+                        } catch (e: Exception) {
+                            0L
+                        }
+                    }
+
+                    continuation.resume(sortedPosts)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
+            })
+        }
+
 
     suspend fun getPostByUser(userID: String): List<Post> = suspendCancellableCoroutine { continuation ->
         dbRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -58,6 +90,19 @@ class PostDAO {
             }
         })
     }
+    suspend fun getPostByID(postID: String): Post? = suspendCancellableCoroutine { continuation ->
+        dbRef.child(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val post = snapshot.getValue(Post::class.java)
+                continuation.resume(post)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
+    
 
     fun deletePost(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
         // Remove the post

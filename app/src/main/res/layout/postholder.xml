@@ -7,10 +7,11 @@
     android:background="#0F0F0F">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:id="@+id/cardMain"
+        android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/post"
         app:cardCornerRadius="11dp"
         app:cardElevation="5dp"
@@ -43,17 +44,14 @@
                 android:id="@+id/tvDateTimePostHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/abhaya_libre"
                 android:text="10minutes ago"
                 android:textColor="@color/sub_word"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.277"
-                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
-                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
-                app:layout_constraintVertical_bias="0.181" />
+                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintTop_toBottomOf="@+id/lovePostHolder" />
 
             <ImageView
                 android:id="@+id/imgDropdownMenuPostItemProfile"
@@ -81,17 +79,6 @@
 
                 app:layout_constraintTop_toBottomOf="@+id/tvNamePostHolder" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/imgPostPostHolder"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="230dp"-->
-<!--                android:layout_marginTop="3dp"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:src="@drawable/post_image"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/separatorPostHolder" />-->
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPagerPostImages"
                 android:layout_width="match_parent"
@@ -112,70 +99,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/viewPagerPostImages" />
 
-
-
-            <!--            <ImageView-->
-<!--                android:id="@+id/imgPostPostHolder"-->
-<!--                android:layout_width="367dp"-->
-<!--                android:layout_height="230dp"-->
-<!--                android:layout_marginTop="3dp"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:src="@drawable/post_image"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/separatorPostHolder" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/option1PostHolder"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginStart="154dp"-->
-<!--                android:layout_marginTop="9dp"-->
-<!--                android:layout_marginEnd="12dp"-->
-<!--                android:layout_marginBottom="144dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/option2PostHolder"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/indicatorContainer"-->
-<!--                app:layout_constraintVertical_bias="0.192"-->
-<!--                app:srcCompat="@drawable/option1" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/option2PostHolder"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginTop="9dp"-->
-<!--                android:layout_marginBottom="144dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/indicatorContainer"-->
-<!--                app:layout_constraintVertical_bias="0.192"-->
-<!--                app:srcCompat="@drawable/option2" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/option3PostHolder"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginStart="2dp"-->
-<!--                android:layout_marginTop="9dp"-->
-<!--                android:layout_marginBottom="144dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.549"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/indicatorContainer"-->
-<!--                app:layout_constraintVertical_bias="0.192"-->
-<!--                app:srcCompat="@drawable/option2" />-->
-
             <TextView
                 android:id="@+id/tvPostTitlePostHolder"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="23dp"
                 android:layout_marginTop="13dp"
-                android:layout_marginBottom="117dp"
+                android:layout_marginBottom="131dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:justificationMode="inter_word"
                 android:text="Today is Assignment Day !!! aaaaaaaaaaaa aaaaaaaaa aaaaaaaa aaaa "
@@ -189,67 +119,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/indicatorContainer"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <!-- Categories -->
-
-            <!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/cardViewTypeHolder"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="224dp"-->
-<!--                android:layout_marginBottom="68dp"-->
-<!--                app:cardCornerRadius="7dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/tvPostTitlePostHolder"-->
-<!--                app:layout_constraintVertical_bias="0.444">-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/textViewType1"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@color/box"-->
-<!--                            android:fontFamily="@font/abhayalibre_medium"-->
-<!--                            android:gravity="center_vertical|center_horizontal"-->
-<!--                            android:text="@string/assignment"-->
-<!--                            android:textColor="@color/white" />-->
-
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/cardViewType1Holder"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginStart="26dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="78dp"-->
-<!--                android:layout_marginBottom="68dp"-->
-<!--                app:cardCornerRadius="7dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/cardViewTypeHolder"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/tvPostTitlePostHolder">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/textViewType2"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@color/box"-->
-<!--                    android:fontFamily="@font/abhayalibre_medium"-->
-<!--                    android:gravity="center_vertical|center_horizontal"-->
-<!--                    android:text="@string/assignment"-->
-<!--                    android:textColor="@color/white" />-->
-
-<!--            </androidx.cardview.widget.CardView>-->
-
             <LinearLayout
                 android:id="@+id/cardViewTypeHolder"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-6dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 android:orientation="horizontal"
                 app:cardCornerRadius="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -265,10 +140,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-8dp"
                 android:layout_marginEnd="5dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/numLovePostHolder"
                 app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewTypeHolder"
+                app:layout_constraintVertical_bias="0.473"
                 app:srcCompat="@drawable/love_border" />
 
             <TextView
@@ -323,19 +200,21 @@
                 android:id="@+id/bookmarkPostHolder"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="138dp"
+                android:layout_marginStart="170dp"
                 app:layout_constraintBottom_toBottomOf="@+id/sharePostHolder"
                 app:layout_constraintEnd_toEndOf="@+id/tvDateTimePostHolder"
+                app:layout_constraintHorizontal_bias="0.078"
                 app:layout_constraintStart_toEndOf="@+id/sharePostHolder"
                 app:layout_constraintTop_toTopOf="@+id/sharePostHolder"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/bookmark_border" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvProfilePostHolder"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="21dp"
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="100dp"
@@ -346,11 +225,35 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
-                            <ImageView
-                                android:id="@+id/profileUserImage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/post_image" />
+                                        <ImageView
+                                            android:id="@+id/profileUserImage"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:srcCompat="@drawable/post_image" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFollow"
+                android:layout_width="65dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="@color/post_follow"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
+                app:layout_constraintVertical_bias="1.0">
+
+                                <TextView
+                                    android:id="@+id/tvFollow"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/abhayalibre_extrabold"
+                                    android:gravity="center_vertical|center_horizontal"
+                                    android:text="Follow"
+                                    android:textColor="@color/grey"
+                                    android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
 

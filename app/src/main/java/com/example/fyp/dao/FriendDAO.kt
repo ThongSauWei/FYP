@@ -1,5 +1,6 @@
 package com.example.fyp.dao
 
+import android.util.Log
 import com.example.fyp.data.Friend
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,21 +25,45 @@ class FriendDAO {
         }
     }
 
+//    suspend fun addFriend(friend: Friend) {
+//        if (getFriend(friend.requestUserID, friend.receiveUserID) != null) {
+//
+//            friend.friendID = "F$nextID"
+//            nextID++
+//
+//            dbRef.child(friend.friendID).setValue(friend)
+//                .addOnCompleteListener {
+//
+//                }
+//                .addOnFailureListener {
+//
+//                }.await()
+//        }
+//    }
     suspend fun addFriend(friend: Friend) {
-        if (getFriend(friend.requestUserID, friend.receiveUserID) != null) {
+        Log.d("AddFriend", "Checking if the friend exists between ${friend.requestUserID} and ${friend.receiveUserID}")
 
+        // If the friend relationship doesn't exist, we proceed to add
+        if (getFriend(friend.requestUserID, friend.receiveUserID) == null) {
             friend.friendID = "F$nextID"
             nextID++
 
+            Log.d("AddFriend", "Adding friend with ID: ${friend.friendID}")
+
             dbRef.child(friend.friendID).setValue(friend)
-                .addOnCompleteListener {
-
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("AddFriend", "Friend added successfully")
+                    }
                 }
-                .addOnFailureListener {
-
+                .addOnFailureListener { exception ->
+                    Log.e("AddFriend", "Failed to add friend: ${exception.message}")
                 }.await()
+        } else {
+            Log.d("AddFriend", "Friendship already exists.")
         }
     }
+
 
     suspend fun getFriendList(userID: String): List<Friend> = withContext(Dispatchers.IO) {
 

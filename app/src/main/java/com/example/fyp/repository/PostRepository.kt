@@ -20,13 +20,14 @@ class PostRepository(private val postDao : PostDAO) {
         }
     }
 
+    suspend fun getPostByUser(userID : String) : List<Post> {
+        return postDao.getPostByUser(userID)
+    }
+
     suspend fun getAllPosts(): List<Post> {
         return postDao.getAllPost()
     }
 
-    suspend fun getPostByUser(userID : String) : List<Post> {
-        return postDao.getPostByUser(userID)
-    }
 
     fun deletePost(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
         postDao.deletePost(postID, onComplete)
@@ -42,6 +43,10 @@ class PostRepository(private val postDao : PostDAO) {
         postDao.deletePostWithAssociations(postID, postImageDAO, postCategoryDAO, postCommentDAO, onComplete)
     }
 
+
+    suspend fun getPostByID(postID: String): Post? {
+        return postDao.getPostByID(postID)
+    }
 
 
 }

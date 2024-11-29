@@ -180,6 +180,8 @@
     <!-- Feedback -->
     <string name="feedback_title">Rate Of TARUMT Campus Hub</string>
 
+    <string name="follow">Follow</string>
+
     <!--    map-->
     <string name="tar_map">TARUMT Map</string>
 
@@ -201,6 +203,12 @@
         <item>Male</item>
         <item>Female</item>
     </array>
+    
+    <string-array name="filter_options">
+        <item>All</item>
+        <item>Follow</item>
+    </string-array>
+
 
     <array name="language_array">
         <item>English</item>
