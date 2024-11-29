@@ -90,6 +90,16 @@ class Home : Fragment() {
             transaction?.commit()
         }
 
+//search
+        val searchImage = view.findViewById<ImageView>(R.id.searchImage)
+        searchImage.setOnClickListener {
+            val fragment = SearchPost()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
+
         // Initialize Firebase Database and Storage references
         val databaseRef = FirebaseDatabase.getInstance().reference
         val storageRef = FirebaseStorage.getInstance().reference
