@@ -143,6 +143,13 @@
         <item>删除</item>
     </array>
 
+    <string name="gender_label">性别</string>
+    <array name="gender_type">
+        <item>隐藏性别</item>
+        <item>男生</item>
+        <item>女生</item>
+    </array>
+
     <array name="problem_type">
         <item>无法添加朋友</item>
         <item>无法加入群组</item>

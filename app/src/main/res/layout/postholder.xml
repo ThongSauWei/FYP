@@ -59,7 +59,7 @@
                 android:layout_height="24dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:contentDescription="dropdown"
                 android:src="@drawable/bullet"
                 app:layout_constraintEnd_toStartOf="@id/tvDateTimePostHolder"

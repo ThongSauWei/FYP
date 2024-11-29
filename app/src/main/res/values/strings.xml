@@ -197,6 +197,13 @@
     <string name="search_for_any_post_history">Search for any post history</string>
     <string name="search_post_history">Search post history</string>
 
+    <string name="gender_label">Gender</string>
+    <array name="gender_type">
+        <item>Hide Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </array>
+    
     <string-array name="filter_options">
         <item>All</item>
         <item>Follow</item>

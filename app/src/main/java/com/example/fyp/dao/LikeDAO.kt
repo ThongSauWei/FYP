@@ -1,5 +1,6 @@
 package com.example.fyp.dao
 
+import android.util.Log
 import com.example.fyp.data.Like
 import com.google.firebase.database.*
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -32,6 +33,19 @@ class LikeDAO {
         })
     }
 
+    fun deleteLikesByPostID(postID: String) {
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (likeSnapshot in snapshot.children) {
+                    likeSnapshot.ref.removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("LikeDAO", "Failed to delete likes: ${error.message}")
+            }
+        })
+    }
 
     suspend fun saveLike(like: Like) = suspendCancellableCoroutine<Unit> { continuation ->
         // Generate the sequential likeID starting from 1000

@@ -95,6 +95,19 @@ class PostCategoryDAO {
         })
     }
 
+    fun deleteCategoriesByPostID(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        dbRef.orderByChild("postID").equalTo(postID).get().addOnSuccessListener { snapshot ->
+            val tasks = snapshot.children.map { it.ref.removeValue() }
+            Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
+                if (task.isSuccessful) onComplete(true, null)
+                else onComplete(false, task.exception)
+            }
+        }
+    }
+
+    fun deleteCategory(postCategoryID: String) {
+        dbRef.child(postCategoryID).removeValue()
+    }
 
 }
 

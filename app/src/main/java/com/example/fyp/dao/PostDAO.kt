@@ -90,7 +90,6 @@ class PostDAO {
             }
         })
     }
-
     suspend fun getPostByID(postID: String): Post? = suspendCancellableCoroutine { continuation ->
         dbRef.child(postID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -103,4 +102,44 @@ class PostDAO {
             }
         })
     }
+    
+
+    fun deletePost(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        // Remove the post
+        dbRef.child(postID).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onComplete(true, null) // Post deleted successfully
+            } else {
+                onComplete(false, task.exception) // Deletion failed
+            }
+        }
+    }
+    fun deletePostWithAssociations(
+        postID: String,
+        postImageDAO: PostImageDAO,
+        postCategoryDAO: PostCategoryDAO,
+        postCommentDAO: PostCommentDAO,
+        onComplete: (Boolean, Exception?) -> Unit
+    ) {
+        dbRef.child(postID).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Delete associated data
+                postImageDAO.deleteImagesByPostID(postID) { imageSuccess, _ ->
+                    postCategoryDAO.deleteCategoriesByPostID(postID) { categorySuccess, _ ->
+                        postCommentDAO.deleteCommentsByPostID(postID) { commentSuccess, _ ->
+                            if (imageSuccess && categorySuccess && commentSuccess) {
+                                onComplete(true, null) // All deletions successful
+                            } else {
+                                onComplete(false, Exception("Failed to delete some associations"))
+                            }
+                        }
+                    }
+                }
+            } else {
+                onComplete(false, task.exception)
+            }
+        }
+    }
+
+
 }
