@@ -173,6 +173,7 @@ class PostAdapter(
         val relativeTime = calculateRelativeTime(post.postDateTime)
         holder.tvDateTimePostHolder.text = relativeTime
 
+
         GlobalScope.launch(Dispatchers.Main) {
             val user = userViewModel.getUserByID(post.userID)
             holder.tvNamePostHolder.text = user?.username ?: "Unknown"

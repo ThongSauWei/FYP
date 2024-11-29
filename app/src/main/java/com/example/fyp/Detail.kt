@@ -7,13 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.fyp.dao.LikeDAO
@@ -24,8 +31,11 @@ import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Like
 import com.example.fyp.data.Post
 import com.example.fyp.data.PostCategory
+import com.example.fyp.data.PostComment
 import com.example.fyp.data.Save
+import com.example.fyp.dataAdapter.CommentAdapter
 import com.example.fyp.dataAdapter.ImageSliderAdapter
+import com.example.fyp.viewModel.PostCommentViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
@@ -36,6 +46,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -52,6 +64,8 @@ class Detail : Fragment() {
     private lateinit var likeDAO: LikeDAO
     private lateinit var saveDAO: SaveDAO
     private lateinit var storageRef: StorageReference
+    private lateinit var recyclerViewComment: RecyclerView
+    private lateinit var ttlComment: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,7 +103,126 @@ class Detail : Fragment() {
             Toast.makeText(requireContext(), "Post not found.", Toast.LENGTH_SHORT).show()
         }
 
+        recyclerViewComment = view.findViewById(R.id.recyclerViewComment)
+        ttlComment = view.findViewById(R.id.ttlComment)
+
+        // Initialize sendBtn and commentInput
+        val sendBtn: ImageView = view.findViewById(R.id.sendBtn)
+
+
+        //keyboard adjust side
+        val writeComment: EditText = view.findViewById(R.id.writeComment)
+        val recyclerViewComment: RecyclerView = view.findViewById(R.id.recyclerViewComment)
+
+// Adjust layout when the keyboard is visible
+        writeComment.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+
+                writeComment.text.clear()
+                // Scroll the ScrollView to make writeComment visible
+                view.post {
+                    view.findViewById<ScrollView>(R.id.scrollView2).smoothScrollTo(0, writeComment.top)
+                }
+            }
+        }
+
+
+// Adjust when the keyboard visibility changes
+        KeyboardVisibilityEvent.setEventListener(requireActivity()) { isOpen ->
+            val scrollView = view.findViewById<ScrollView>(R.id.scrollView2)
+            if (isOpen) {
+                // Add padding when keyboard opens
+                scrollView.setPadding(0, 0, 0, 900)
+            } else {
+                // Remove padding when keyboard closes
+                scrollView.setPadding(0, 0, 0, 0)
+            }
+        }
+
+
+
+
+
+
+        sendBtn.setOnClickListener {
+            val postID = arguments?.getString("POST_ID")
+            val commentText = writeComment.text.toString()
+
+            if (!commentText.isBlank() && postID != null) {
+                val postComment = PostComment(
+                    postCommentID = UUID.randomUUID().toString(),
+                    pcContent = commentText.trim(),
+                    pcDateTime = getCurrentTimestamp(),
+                    postID = postID,
+                    userID = getCurrentUserID()
+                )
+                addCommentToFirebase(postID, postComment)
+
+                // Clear input field
+                writeComment.text.clear()
+
+                val fragment = Detail()
+                val bundle = Bundle()
+                bundle.putString("POST_ID", postID)  // Pass the postID to the fragment
+                fragment.arguments = bundle
+
+                // Start the fragment transaction
+                val fragmentManager = (context as FragmentActivity).supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.fragmentContainerView, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            } else {
+                Toast.makeText(requireContext(), "Please enter a valid comment.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        // Set up RecyclerView
+        recyclerViewComment.layoutManager = LinearLayoutManager(activity)
+        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
+
         return view
+    }
+
+    private fun addCommentToFirebase(postID: String, postComment: PostComment) {
+        val postCommentViewModel = ViewModelProvider(this).get(PostCommentViewModel::class.java)
+        postCommentViewModel.addPostComment(postComment)
+        postCommentViewModel.addCommentSuccess.observe(viewLifecycleOwner, Observer { isSuccess ->
+            if (isSuccess) {
+                observeAndRefreshComments(postID)
+                Toast.makeText(requireContext(), "Comment added successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Failed to add comment. Please try again.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+
+
+    private fun observeAndRefreshComments(postID: String) {
+        lifecycleScope.launch {
+            try {
+                // Fetch and observe comments for the specified post ID
+                val postCommentViewModel = ViewModelProvider(this@Detail).get(PostCommentViewModel::class.java)
+                val userViewModel : UserViewModel =
+                    ViewModelProvider(this@Detail).get(UserViewModel::class.java)
+                postCommentViewModel.getPostComment(postID)
+                postCommentViewModel.postComments.observe(viewLifecycleOwner, Observer { comments ->
+                    // Update the RecyclerView adapter with the new list of comments
+                    val adapter = recyclerViewComment.adapter as CommentAdapter
+                    adapter.setViewModel(userViewModel)
+                    adapter.updateComments(comments)
+
+                    // Update the comment count TextView with the total count of comments
+                    ttlComment.text = "${comments.size} comments"
+                })
+            } catch (e: Exception) {
+                // Handle the exception
+                Log.e("JoinGroup", "Error observing comment count: ${e.message}")
+            }
+        }
     }
 
     private fun fetchPostDetails(postID: String, view: View) {
@@ -98,6 +231,8 @@ class Detail : Fragment() {
                 // Fetch post details
                 val post = postViewModel.getPostByID(postID)
                 Log.d("DetailFragment", "Fetched post: $post")
+
+                observeAndRefreshComments(postID)
 
                 post?.let { populateUI(it, view) }
                     ?: Toast.makeText(requireContext(), "Post not found.", Toast.LENGTH_SHORT).show()
@@ -127,6 +262,7 @@ class Detail : Fragment() {
         val lovePostHolder: ImageView = view.findViewById(R.id.lovePostHolder)
         val bookmarkPostHolder: ImageView = view.findViewById(R.id.bookmarkPostHolder)
         val sharePostHolder: ImageView = view.findViewById(R.id.sharePostHolder)
+        val recyclerViewComment : RecyclerView = view.findViewById(R.id.recyclerViewComment)
 
         // Populate user details
         lifecycleScope.launch {
@@ -256,12 +392,17 @@ class Detail : Fragment() {
                     )
                     likeDAO.saveLike(newLike)
                 }
+
                 lovePostHolder.setImageResource(
                     if (existingLike?.status == 1) R.drawable.baseline_favorite_24 else R.drawable.love_border
                 )
+
+                // Refresh the like count display
+                refreshPosts(post.postID)
             }
         }
     }
+
 
     private fun handleBookmarkClick(bookmarkPostHolder: ImageView, post: Post) {
         bookmarkPostHolder.setOnClickListener {
@@ -286,9 +427,27 @@ class Detail : Fragment() {
                 bookmarkPostHolder.setImageResource(
                     if (existingSave?.status == 1) R.drawable.bookmark_full else R.drawable.bookmark_border
                 )
+
+                refreshPosts(post.postID)
             }
         }
     }
+
+    private fun refreshPosts(postID: String) {
+        (context as? FragmentActivity)?.lifecycleScope?.launch {
+            try {
+                // Fetch updated like count for the specific post
+                val likeCount = likeDAO.getLikeCountByPostID(postID)
+
+                // Find the TextView and update its text
+                val numLovePostHolder: TextView? = view?.findViewById(R.id.numLovePostHolder)
+                numLovePostHolder?.text = likeCount.toString()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Failed to refresh like count.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     private fun handleShareClick(sharePostHolder: ImageView, post: Post) {
         sharePostHolder.setOnClickListener {

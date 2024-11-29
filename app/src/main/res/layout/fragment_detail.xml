@@ -93,92 +93,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/viewPagerPostImages" />
 
-            <!-- Pagination Dots -->
-<!--            <ImageView-->
-<!--                android:id="@+id/option1"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/viewPagerPostImages"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:srcCompat="@drawable/option1" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/option2"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/option1"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/option1"-->
-<!--                app:srcCompat="@drawable/option2" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/option3"-->
-<!--                android:layout_width="6dp"-->
-<!--                android:layout_height="6dp"-->
-<!--                android:layout_marginStart="16dp"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/option2"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/option2"-->
-<!--                app:srcCompat="@drawable/option2" />-->
-
-            <!-- Post Title -->
-
-            <!-- Post Description -->
-
-            <!-- Category -->
-
-            <!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/cardViewType"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginBottom="70dp"-->
-<!--                app:cardCornerRadius="7dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/postDesc"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/postDesc"-->
-<!--                app:layout_constraintVertical_bias="0.02">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tvType1"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@color/box"-->
-<!--                    android:fontFamily="@font/abhayalibre_medium"-->
-<!--                    android:gravity="center_vertical|center_horizontal"-->
-<!--                    android:text="@string/assignment"-->
-<!--                    android:textColor="@color/white" />-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/cardViewType1"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:layout_marginEnd="112dp"-->
-<!--                android:layout_marginBottom="17dp"-->
-<!--                app:cardCornerRadius="7dp"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/sharePostHolder"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="1.0"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/cardViewType"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/postDesc"-->
-<!--                app:layout_constraintVertical_bias="0">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tvType2"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:background="@color/box"-->
-<!--                    android:fontFamily="@font/abhayalibre_medium"-->
-<!--                    android:gravity="center_vertical|center_horizontal"-->
-<!--                    android:text="@string/assignment"-->
-<!--                    android:textColor="@color/white" />-->
-
-<!--            </androidx.cardview.widget.CardView>-->
-
             <TextView
                 android:id="@+id/tvPostTitlePostHolder"
                 android:layout_width="323dp"
@@ -367,8 +281,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/writeComment"
                 app:srcCompat="@drawable/baseline_send_24" />
 
-
-<!--            &lt;!&ndash; Comments Section &ndash;&gt;-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewComment"
                 android:layout_width="match_parent"
