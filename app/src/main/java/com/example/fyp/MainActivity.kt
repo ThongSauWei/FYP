@@ -61,6 +61,17 @@ class MainActivity : AppCompatActivity() {
 
                     true
                 }
+                R.id.nav_profile -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+
+                    val transaction = manager.beginTransaction()
+                    val fragment = Profile()
+                    transaction.replace(R.id.fragmentContainerView, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+
+                    true
+                }
                 R.id.nav_friend -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
 

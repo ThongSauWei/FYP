@@ -49,8 +49,19 @@ class PostSharedDAO {
         })
     }
 
+    fun deleteSharesByPostID(postID: String) {
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (shareSnapshot in snapshot.children) {
+                    shareSnapshot.ref.removeValue()
+                }
+            }
 
-
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("PostSharedDAO", "Failed to delete shares: ${error.message}")
+            }
+        })
+    }
 
 }
 

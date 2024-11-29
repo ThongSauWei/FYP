@@ -1,6 +1,9 @@
 package com.example.fyp.repository
 
+import com.example.fyp.dao.PostCategoryDAO
+import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostDAO
+import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.data.Post
 
 class PostRepository(private val postDao : PostDAO) {
@@ -20,6 +23,25 @@ class PostRepository(private val postDao : PostDAO) {
     suspend fun getAllPosts(): List<Post> {
         return postDao.getAllPost()
     }
+
+    suspend fun getPostByUser(userID : String) : List<Post> {
+        return postDao.getPostByUser(userID)
+    }
+
+    fun deletePost(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        postDao.deletePost(postID, onComplete)
+    }
+
+    fun deletePostWithAssociations(
+        postID: String,
+        postImageDAO: PostImageDAO,
+        postCategoryDAO: PostCategoryDAO,
+        postCommentDAO: PostCommentDAO,
+        onComplete: (Boolean, Exception?) -> Unit
+    ) {
+        postDao.deletePostWithAssociations(postID, postImageDAO, postCategoryDAO, postCommentDAO, onComplete)
+    }
+
 
 
 }

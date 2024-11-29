@@ -224,6 +224,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblCourseEditProfile" />
 
+            <TextView
+                android:id="@+id/lblGenderEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/gender_label"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ddlCourseEditProfile" />
+
+            <Spinner
+                android:id="@+id/ddlGenderEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:background="@drawable/contact_us_spinner_bg"
+                android:paddingStart="10dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:popupBackground="@drawable/contact_us_dropdown_bg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblGenderEditProfile" />
+
             <!-- Description Field -->
             <TextView
                 android:id="@+id/lblDescriptionEditProfile"
@@ -237,7 +266,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ddlCourseEditProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/ddlGenderEditProfile" />
 
             <EditText
                 android:id="@+id/txtDescriptionEditProfile"

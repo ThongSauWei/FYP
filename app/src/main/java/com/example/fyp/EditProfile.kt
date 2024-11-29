@@ -37,10 +37,13 @@ class EditProfile : Fragment() {
     private lateinit var txtBirthdayEditProfile: EditText
     private lateinit var txtDescriptionEditProfile: EditText
     private lateinit var spinnerCourseEditProfile: Spinner
+    private lateinit var spinnerGenderEditProfile : Spinner
     private lateinit var btnTickSaveEditProfile: ImageView
     private lateinit var imgProfile: ImageView
     private lateinit var saveButton: Button
     private lateinit var backButton: ImageView
+    private lateinit var genderArray: Array<String>
+
 
     private var selectedImageUri: Uri? = null
     private lateinit var storageRef: StorageReference
@@ -81,12 +84,18 @@ class EditProfile : Fragment() {
         saveButton = view.findViewById(R.id.btnSaveEditProfile)
         btnTickSaveEditProfile = view.findViewById(R.id.btnTickSaveEditProfile)
         backButton = view.findViewById(R.id.btnBackEditProfile)
+        spinnerGenderEditProfile = view.findViewById(R.id.ddlGenderEditProfile)
 
         storageRef = FirebaseStorage.getInstance().reference
         courseArray = resources.getStringArray(R.array.course)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, courseArray)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCourseEditProfile.adapter = adapter
+
+        genderArray = resources.getStringArray(R.array.gender_type)
+        val genderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genderArray)
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerGenderEditProfile.adapter = genderAdapter
     }
 
     private fun initViewModels() {
@@ -100,8 +109,12 @@ class EditProfile : Fragment() {
         txtPhoneNoEditProfile.setText(user.userMobileNo)
         txtBirthdayEditProfile.setText(user.userDOB)
         txtDescriptionEditProfile.setText(profile.userBio)
+
         val courseIndex = courseArray.indexOf(profile.userCourse)
         spinnerCourseEditProfile.setSelection(if (courseIndex != -1) courseIndex else 0)
+
+        val genderIndex = genderArray.indexOf(profile.userGender).takeIf { it != -1 } ?: 0
+        spinnerGenderEditProfile.setSelection(genderIndex)
 
         val profileRef = storageRef.child("imageProfile").child("${user.userID}.png")
         profileRef.downloadUrl.addOnSuccessListener { uri ->
@@ -155,8 +168,10 @@ class EditProfile : Fragment() {
         )
 
         val updatedProfile = currentProfile.copy(
+            userID = currentUser.userID, // Ensure userID is included
             userBio = txtDescriptionEditProfile.text.toString(),
-            userCourse = spinnerCourseEditProfile.selectedItem.toString()
+            userCourse = spinnerCourseEditProfile.selectedItem.toString(),
+            userGender = spinnerGenderEditProfile.selectedItem.toString()
         )
 
         lifecycleScope.launch {

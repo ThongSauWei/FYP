@@ -1,5 +1,6 @@
 package com.example.fyp.dao
 
+import android.util.Log
 import com.google.firebase.database.*
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -19,4 +20,20 @@ class LikeDAO {
             }
         })
     }
+
+    fun deleteLikesByPostID(postID: String) {
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (likeSnapshot in snapshot.children) {
+                    likeSnapshot.ref.removeValue()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("LikeDAO", "Failed to delete likes: ${error.message}")
+            }
+        })
+    }
+
+
 }

@@ -22,13 +22,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fyp.dao.LikeDAO
+import com.example.fyp.dao.PostCategoryDAO
+import com.example.fyp.dao.PostCommentDAO
+import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.ProfileDAO
 import com.squareup.picasso.Picasso
 import com.example.fyp.data.Post
+import com.example.fyp.dataAdapter.PostAdapter
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
@@ -55,12 +61,15 @@ class Profile : Fragment() {
     private lateinit var DOBProfile: TextView
     private lateinit var courseProfile: TextView
     private lateinit var userBIOProfile: TextView
-    private lateinit var ttlGroupProfile: TextView
+    private lateinit var ttlPostsProfile: TextView
     private lateinit var ttlFriendProfile: TextView
     private lateinit var languageProfile: TextView
-    private lateinit var lblGroupClick: TextView
+    private lateinit var lblPostsClick: TextView
     private lateinit var lblFriendClick: TextView
     private lateinit var linearLayoutProfile: LinearLayout
+    private lateinit var genderProfile: TextView
+    private lateinit var imageGender: ImageView
+
 
     private val imagePickRequestCode = 1000
     private val backgroundPickRequestCode = 2000
@@ -70,18 +79,20 @@ class Profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        (activity as MainActivity).setToolbar(R.layout.toolbar_with_profile, R.color.profile_color)
+        (activity as MainActivity).setToolbar(R.layout.toolbar, R.color.profile_color)
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         nameProfile = view.findViewById(R.id.tvNameProfile)
         DOBProfile = view.findViewById(R.id.tvDOBProfile)
         courseProfile = view.findViewById(R.id.tvCoursesProfile)
         userBIOProfile = view.findViewById(R.id.tvBioProfile)
-        ttlGroupProfile = view.findViewById(R.id.tvPostsProfile)
+        ttlPostsProfile = view.findViewById(R.id.tvPostsProfile)
         ttlFriendProfile = view.findViewById(R.id.tvFriendsProfile)
         languageProfile = view.findViewById(R.id.tvLanguages)
-        lblGroupClick = view.findViewById(R.id.lblPostsProfile)
+        lblPostsClick = view.findViewById(R.id.lblPostsProfile)
         lblFriendClick = view.findViewById(R.id.lblFriendsProfile)
+        genderProfile = view.findViewById(R.id.tvGenderProfile)
+        imageGender = view.findViewById(R.id.imageGender)
 
         btnSettingProfile = view.findViewById(R.id.imgSettingsProfile)
         changeImageClick = view.findViewById(R.id.changeImage)
@@ -97,12 +108,11 @@ class Profile : Fragment() {
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
 
         parentFragmentManager.setFragmentResultListener("ProfileUpdatedKey", this) { _, _ ->
-            loadProfilePicture()
-            loadProfileBackground()
+            setupProfileInfo(currentUserID) // Refresh profile info
         }
 
-        loadProfileBackground()
         loadProfilePicture()
+        loadProfileBackground()
         onResume()
 
         recyclerView = view.findViewById(R.id.recyclerViewProfilePost)
@@ -184,34 +194,65 @@ class Profile : Fragment() {
     private fun setupProfileInfo(userID: String) {
         val userViewModel: UserViewModel =
             ViewModelProvider(this).get(UserViewModel::class.java)
-        val profileViewModel: ProfileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-        /*val postViewModel: PostViewModel =
-            ViewModelProvider(this).get(PostViewModel::class.java)*/
+        val postViewModel: PostViewModel =
+            ViewModelProvider(this).get(PostViewModel::class.java)
 
         lifecycleScope.launch {
             val user = userViewModel.getUserByID(userID)!!
             val profile = profileViewModel.getProfile(userID)
             val totalFriend = friendViewModel.getFriendList(userID).size
-            /*postList = postViewModel.getPostByUser(userID) // Get all posts by user
-            val totalPosts = postList.size // Count total posts*/
 
+            // Fetch user's posts
+            postList = postViewModel.getPostByUser(userID)
+            val totalPosts = postList.size
+
+            // Populate UI fields
             nameProfile.text = user.username
             DOBProfile.text = user.userDOB
             courseProfile.text = profile?.userCourse ?: ""
             userBIOProfile.text = profile?.userBio ?: ""
-            languageProfile.text = profile?.userChosenLanguage ?: ""
             ttlFriendProfile.text = totalFriend.toString()
-            /*ttlGroupProfile.text = totalPosts.toString() */// Set post count
+            ttlPostsProfile.text = totalPosts.toString()
+            genderProfile.text = profile?.userGender ?: ""
 
-            /*if (postList.isNotEmpty()) {
-                val adapter = PostAdapter(postList)
-                adapter.setViewModel(userViewModel)
+            // Show appropriate gender icon
+            if (profile?.userGender == "Female") {
+                imageGender.setImageResource(R.drawable.baseline_female_24)
+                imageGender.visibility = View.VISIBLE
+            } else if(profile?.userGender == "Male"){
+                imageGender.setImageResource(R.drawable.baseline_male_24)
+                imageGender.visibility = View.VISIBLE
+            } else {
+                // Handle "Hide Gender" case or when gender is null
+                imageGender.visibility = View.INVISIBLE // Completely hide the icon
+                genderProfile.visibility = View.INVISIBLE // Completely hide the text
+
+            }
+
+            if (totalPosts == 0) {
+                scCreatePost.visibility = View.VISIBLE
+            } else {
+                scCreatePost.visibility = View.INVISIBLE // Hide the button
+            }
+
+            // Populate RecyclerView
+            if (postList.isNotEmpty()) {
+                val adapter = PostAdapter(
+                    posts = postList,
+                    userViewModel = userViewModel,
+                    postImageDAO = PostImageDAO(
+                        FirebaseStorage.getInstance().reference,
+                        FirebaseDatabase.getInstance().reference
+                    ),
+                    postCategoryDAO = PostCategoryDAO(),
+                    likeDAO = LikeDAO(),
+                    postCommentDAO = PostCommentDAO(),
+                    isProfileMode = true // Custom flag for profile-specific logic
+                )
                 recyclerView.adapter = adapter
-            }*/
+            }
         }
     }
-
 
     private fun loadProfileBackground() {
         val userID = SaveSharedPreference.getUserID(requireContext())
@@ -228,15 +269,15 @@ class Profile : Fragment() {
                     }
 
                     override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                        Toast.makeText(requireContext(), "Failed to load background image.", Toast.LENGTH_SHORT).show()
+                        val defaultColor = resources.getColor(R.color.profile_color, null) // Get the default color
+                        val linearLayoutProfile = view?.findViewById<LinearLayout>(R.id.linearLayoutProfile)
+                        linearLayoutProfile?.setBackgroundColor(defaultColor) // Set the background color to default
                     }
 
                     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                         // Placeholder logic (optional)
                     }
                 })
-            } else {
-                Toast.makeText(requireContext(), "Failed to load background URL.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -247,18 +288,24 @@ class Profile : Fragment() {
         val userID = SaveSharedPreference.getUserID(requireContext())
         val ref = storageRef.child("imageProfile").child("$userID.png")
 
+        val imageView = view?.findViewById<ImageView>(R.id.imgProfileProfile) // Declare imageView outside
         ref.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val imageUrl = task.result.toString()
-                val imageView = view?.findViewById<ImageView>(R.id.imgProfileProfile)
                 imageView?.let {
-                    Picasso.get().load(imageUrl).into(it)
+                    Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(R.drawable.nullprofile) // Placeholder while loading
+                        .error(R.drawable.nullprofile) // Default if loading fails
+                        .into(it)
                 }
             } else {
-                Toast.makeText(requireContext(), "Failed to load profile picture", Toast.LENGTH_SHORT).show()
+                // Set default image if no profile image exists
+                imageView?.setImageResource(R.drawable.nullprofile)
             }
         }
     }
+
 
     private fun pickBackgroundImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)

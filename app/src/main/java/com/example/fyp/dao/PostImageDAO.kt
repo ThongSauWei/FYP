@@ -127,4 +127,20 @@ class PostImageDAO(
             }
         })
     }
+
+    fun deleteImagesByPostID(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        dbRef.orderByChild("postID").equalTo(postID).get().addOnSuccessListener { snapshot ->
+            val tasks = snapshot.children.map { it.ref.removeValue() }
+            Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
+                if (task.isSuccessful) onComplete(true, null)
+                else onComplete(false, task.exception)
+            }
+        }
+    }
+
+    fun deleteImage(postImageID: String) {
+        dbRef.child(postImageID).removeValue()
+    }
+
+
 }
