@@ -40,6 +40,8 @@
     <string name="problem_type">Problem Type</string>
     <string name="description">Description</string>
     <string name="submit">Submit</string>
+    <string name="success_contactus">Success to send!</string>
+    <string name="success_contactus_text">Your message has been sent successfully. We will reply you as soon as possible.</string>
 
     <string name="add_a_title">Enter a Title...</string>
     <string name="type_something_to_describe">Enter Description here ....</string>

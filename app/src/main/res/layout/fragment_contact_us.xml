@@ -8,31 +8,11 @@
     android:background="@color/background"
     tools:context=".ContactUs">
 
-    <!-- Profile Image -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewProfileContactUs"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="20dp"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imgProfileContactUs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/nullprofile"
-            android:scaleType="centerCrop" />
-    </androidx.cardview.widget.CardView>
-
     <!-- Contact Us Title -->
     <TextView
         android:id="@+id/tvContactUs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="156dp"
+        android:layout_height="48dp"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/caveat"
         android:text="Contact Us"
@@ -76,6 +56,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/name"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:textColor="@color/white"
@@ -92,7 +73,7 @@
                 android:inputType="textPersonName"
                 android:padding="10dp"
                 android:fontFamily="@font/abhayalibre_semibold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
 
             <!-- Email -->
@@ -120,7 +101,7 @@
                 android:inputType="textEmailAddress"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:padding="10dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
 
             <!-- Mobile Number -->
@@ -148,7 +129,7 @@
                 android:layout_marginEnd="20dp"
                 android:padding="10dp"
                 android:fontFamily="@font/abhayalibre_semibold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
 
             <!-- Problem Type -->
@@ -174,6 +155,7 @@
                 android:paddingStart="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:textColor="@color/black"
                 android:popupBackground="@drawable/contact_us_dropdown_bg" />
 
             <!-- Description -->
@@ -202,7 +184,7 @@
                 android:padding="16dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/abhayalibre_semibold"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
 
             <!-- Submit Button -->

@@ -33,6 +33,9 @@
     <string name="problem_type">问题类型</string>
     <string name="description">描述</string>
     <string name="submit">提交</string>
+    <string name="success_contactus">成功发送！</string>
+    <string name="success_contactus_text">您的信息已成功发送。我们会尽快给你答复。</string>
+
     <string name="add_a_title">添加标题…</string>
     <string name="type_something_to_describe">输入一些内容进行描述…</string>
     <string name="select_a_category">选择类别</string>

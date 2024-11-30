@@ -15,7 +15,7 @@ import com.example.fyp.viewModel.UserViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
-class EmailNewPassword : Fragment() {
+class EmailNewPassword : Fragment()  {
 
     private lateinit var newPassword: EditText
     private lateinit var confirmPassword: EditText
@@ -50,6 +50,7 @@ class EmailNewPassword : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Invalid or expired token.", Toast.LENGTH_SHORT).show()
                     activity?.supportFragmentManager?.popBackStack()
+                    goBackSignIn()
                 }
             }
         } else {
@@ -75,7 +76,7 @@ class EmailNewPassword : Fragment() {
                                 userViewModel.updateUser(user)
                                 userViewModel.deleteToken(email) {}
                                 Toast.makeText(requireContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show()
-                                navigateToLogin()
+                                activity?.supportFragmentManager?.popBackStack()
                             } else {
                                 Toast.makeText(requireContext(), "Failed to update password!", Toast.LENGTH_SHORT).show()
                             }
@@ -93,8 +94,8 @@ class EmailNewPassword : Fragment() {
         }
     }
 
-    private fun navigateToLogin() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
+    private fun goBackSignIn(){
+        val transaction = activity?.supportFragmentManager?.beginTransaction()//after success go to home
         val fragment = SignIn()
         transaction?.replace(R.id.fragmentContainerView, fragment)
         transaction?.addToBackStack(null)

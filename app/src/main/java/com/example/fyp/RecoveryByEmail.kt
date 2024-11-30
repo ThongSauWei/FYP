@@ -38,28 +38,37 @@ class RecoveryByEmail : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.email_recovery, container, false)
+        initializeUIComponents(view)
+        setupListeners()
+        return view
+    }
 
+    // Initialize UI components
+    private fun initializeUIComponents(view: View) {
         inputEmail = view.findViewById(R.id.txtPasswordRecoveryByEmail)
         btnSubmit = view.findViewById(R.id.btnSubmitPasswordRecoveryByEmail)
         backBtn = view.findViewById(R.id.btnExitPasswordRecoveryByEmail)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        backBtn.setOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
-        }
-
-        btnSubmit.setOnClickListener {
-            val email = inputEmail.text.toString().trim()
-            if (email.isNotEmpty()) {
-                sendPasswordRecoveryEmail(email)
-            } else {
-                inputEmail.error = "Email cannot be empty!"
-            }
-        }
-
-        return view
     }
 
+    // Set up button listeners
+    private fun setupListeners() {
+        backBtn.setOnClickListener { activity?.supportFragmentManager?.popBackStack() }
+        btnSubmit.setOnClickListener { handlePasswordRecovery() }
+    }
+
+    // Handle password recovery
+    private fun handlePasswordRecovery() {
+        val email = inputEmail.text.toString().trim()
+
+        if (email.isNotEmpty()) {
+            sendPasswordRecoveryEmail(email)
+        } else {
+            inputEmail.error = "Email cannot be empty!"
+        }
+    }
+
+    // Send password recovery email
     private fun sendPasswordRecoveryEmail(email: String) {
         userViewModel.viewModelScope.launch {
             val user = userViewModel.getUserByEmail(email)
@@ -70,40 +79,66 @@ class RecoveryByEmail : Fragment() {
                 userViewModel.saveToken(email, token, expirationTime) { isSuccess ->
                     if (isSuccess) {
                         val resetLink = "$appBaseUrl/resetpassword?email=$email&token=$token"
-                        val emailContent = """
-                            <p>Dear ${user.username},</p>
-                            <p>We hope this message finds you well.</p>
-                            <p>You are receiving this email because we received a request to reset your password for your TARUMT Campus Hub account.</p>
-                            <p>If you made this request, please click the link below to reset your password:</p>
-                            <p><a href="$resetLink">Reset Password</a></p>
-                            <p>If you did not request this, you can safely ignore this email. Your password will remain unchanged.</p>
-                            <p>For security reasons, this link will expire in 10 minutes.</p>
-                            <p>If you have any questions or concerns, please do not hesitate to contact us at erika_fung26@outlook.com.</p>
-                            <p>Thank you for using TARUMT Campus Hub.</p>
-                            <p>Best regards,</p>
-                            <p>The TARUMT Campus Hub Team</p>
-                        """.trimIndent()
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val response = sendEmailViaSendGrid(email, emailContent)
-                            CoroutineScope(Dispatchers.Main).launch {
-                                if (response) {
-                                    showEmailValidationDialog()
-                                } else {
-                                    Toast.makeText(requireContext(), "Failed to send email.", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
+                        val emailContent = generateEmailContent(user.username, resetLink)
+                        sendEmail(email, emailContent)
                     } else {
-                        Toast.makeText(requireContext(), "Failed to save token. Try again.", Toast.LENGTH_SHORT).show()
+                        showToast("Failed to save token. Try again.")
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Email not found!", Toast.LENGTH_SHORT).show()
+                showToast("Email not found!")
             }
         }
     }
 
+    // Generate email content
+    private fun generateEmailContent(username: String, resetLink: String): String {
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333333; }
+                    .container { max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9; }
+                    .header { background-color: #4CAF50; color: white; text-align: center; padding: 10px; font-size: 18px; border-radius: 8px 8px 0 0; }
+                    .section { margin-bottom: 20px; }
+                    .footer { text-align: center; color: #666; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">Password Recovery</div>
+                    <div class="section">
+                        <p>Dear $username,</p>
+                        <p>We received a request to reset your password for your TARUMT Campus Hub account.</p>
+                        <p><a href="$resetLink">Click here to reset your password</a></p>
+                        <p><strong>Note:</strong> This link will expire in 10 minutes.</p>
+                    </div>
+                    <div class="footer">
+                        <p>If you didn't request this, please ignore this email. Your password will remain unchanged.</p>
+                        <p>For further assistance, contact <a href="mailto:erika_fung26@outlook.com">erika_fung26@outlook.com</a>.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        """.trimIndent()
+    }
+
+    // Send email using SendGrid
+    private fun sendEmail(toEmail: String, content: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = sendEmailViaSendGrid(toEmail, content)
+            CoroutineScope(Dispatchers.Main).launch {
+                if (response) {
+                    showEmailValidationDialog()
+                } else {
+                    showToast("Failed to send email.")
+                }
+            }
+        }
+    }
+
+    // SendGrid API request
     private fun sendEmailViaSendGrid(toEmail: String, content: String): Boolean {
         val client = OkHttpClient()
         val jsonBody = JSONObject()
@@ -111,16 +146,12 @@ class RecoveryByEmail : Fragment() {
         jsonBody.put("personalizations", JSONArray().apply {
             put(JSONObject().apply {
                 put("to", JSONArray().apply {
-                    put(JSONObject().apply {
-                        put("email", toEmail)
-                    })
+                    put(JSONObject().apply { put("email", toEmail) })
                 })
             })
         })
 
-        jsonBody.put("from", JSONObject().apply {
-            put("email", "erika_fung26@outlook.com") // Replace with verified sender email
-        })
+        jsonBody.put("from", JSONObject().apply { put("email", "erika_fung26@outlook.com") })
         jsonBody.put("subject", "Password Recovery")
         jsonBody.put("content", JSONArray().apply {
             put(JSONObject().apply {
@@ -136,34 +167,35 @@ class RecoveryByEmail : Fragment() {
             .post(body)
             .build()
 
-        client.newCall(request).execute().use { response ->
-            return response.isSuccessful
-        }
+        return client.newCall(request).execute().use { response -> response.isSuccessful }
     }
 
+    // Show email validation dialog
     private fun showEmailValidationDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_email_recovery, null)
-
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setCancelable(false)
             .create()
 
-        val closeBtn = dialogView.findViewById<ImageView>(R.id.imgCloseDeleteFriendDialog)
-        val okayBtn = dialogView.findViewById<AppCompatButton>(R.id.btnYesDeleteFriendDialog)
-
-        closeBtn.setOnClickListener {
+        dialogView.findViewById<ImageView>(R.id.imgCloseDeleteFriendDialog)?.setOnClickListener {
             dialog.dismiss()
         }
 
-        okayBtn.setOnClickListener {
+        dialogView.findViewById<AppCompatButton>(R.id.btnYesDeleteFriendDialog)?.setOnClickListener {
             dialog.dismiss()
         }
 
         dialog.show()
     }
 
+    // Generate random token
     private fun generateRandomToken(): String {
         return java.util.UUID.randomUUID().toString()
+    }
+
+    // Show toast message
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

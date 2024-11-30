@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogRecoveryByEmail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgSuccessContactUs"
+        android:layout_width="135dp"
+        android:layout_height="118dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/success_tick" />
+
+    <ImageView
+        android:id="@+id/imgCloseDeleteFriendDialog"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_close_24" />
+
+    <TextView
+        android:id="@+id/tvSuccessContactUs"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:gravity="center_horizontal"
+        android:text="@string/success_contactus"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imgSuccessContactUs"
+        app:layout_constraintStart_toStartOf="@+id/imgSuccessContactUs"
+        app:layout_constraintTop_toBottomOf="@+id/imgSuccessContactUs" />
+
+    <TextView
+        android:id="@+id/tvNoteSuccessContactUs"
+        android:layout_width="281dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/success_contactus_text"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/tvSuccessContactUs"
+        app:layout_constraintStart_toStartOf="@+id/tvSuccessContactUs"
+        app:layout_constraintTop_toBottomOf="@+id/tvSuccessContactUs" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewBtnYesSuccessContactUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNoteSuccessContactUs">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnYesSuccessContactUs"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:background="@color/button_grey"
+            android:fontFamily="@font/caveat"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
