@@ -28,9 +28,6 @@ class PostCategoryViewModel(application : Application) : AndroidViewModel(applic
         }
     }
 
-//    suspend fun getPostByCategory(category: String): List<Post> {
-//        return postCategoryRepository.getPostByCategory(category)
-//    }
     suspend fun getPostByCategory(category: String): List<Post> {
         Log.d("PostCategoryViewModel", "Fetching posts for category: $category")
         val posts = postCategoryRepository.getPostByCategory(category)

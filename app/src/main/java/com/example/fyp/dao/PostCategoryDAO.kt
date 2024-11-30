@@ -106,6 +106,43 @@ class PostCategoryDAO {
         }
     }
 
+//    suspend fun getPostByCategory(category: String): List<Post> = suspendCancellableCoroutine { continuation ->
+//        val postIDs = mutableSetOf<String>() // To store unique post IDs
+//        dbRef.orderByChild("category").equalTo(category).addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.exists()) {
+//                    // Collect postIDs linked to the given category
+//                    for (postCategorySnapshot in snapshot.children) {
+//                        postCategorySnapshot.child("postID").getValue(String::class.java)?.let { postIDs.add(it) }
+//                    }
+//
+//                    if (postIDs.isNotEmpty()) {
+//                        // Fetch posts for the collected postIDs
+//                        val postRef = FirebaseDatabase.getInstance().getReference("Post")
+//                        val posts = mutableListOf<Post>()
+//                        val tasks = postIDs.map { postID ->
+//                            postRef.child(postID).get().addOnSuccessListener { postSnapshot ->
+//                                postSnapshot.getValue(Post::class.java)?.let { posts.add(it) }
+//                            }
+//                        }
+//
+//                        Tasks.whenAllComplete(tasks).addOnCompleteListener {
+//                            continuation.resume(posts) // Return the fetched posts
+//                        }
+//                    } else {
+//                        continuation.resume(emptyList()) // No posts found for this category
+//                    }
+//                } else {
+//                    continuation.resume(emptyList()) // No matching category entries
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                continuation.resumeWithException(error.toException())
+//            }
+//        })
+//    }
+
     suspend fun getPostByCategory(category: String): List<Post> = suspendCancellableCoroutine { continuation ->
         val postIDs = mutableSetOf<String>() // To store unique post IDs
         dbRef.orderByChild("category").equalTo(category).addListenerForSingleValueEvent(object : ValueEventListener {
