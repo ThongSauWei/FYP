@@ -1,10 +1,13 @@
 package com.example.fyp
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,17 +16,20 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
+import com.example.fyp.viewModel.UserViewModel
 import com.google.android.material.navigation.NavigationView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toolbarContainer: FrameLayout
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-    private lateinit var progressBar : ProgressBar
-    private lateinit var navigationView : NavigationView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var navigationView: NavigationView
     private val manager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +37,29 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         AndroidThreeTen.init(this)
+
+        // Check if the activity was started with a deep link
+        val intent = intent
+        val data = intent.data
+
+        if (data != null && data.path == "/resetpassword") {
+            val email = data.getQueryParameter("email")
+            val token = data.getQueryParameter("token")
+
+            if (!email.isNullOrEmpty() && !token.isNullOrEmpty()) {
+                // Navigate to the NewPasswordEmail fragment
+                val fragment = EmailNewPassword()
+                val bundle = Bundle()
+                bundle.putString("email", email)
+                bundle.putString("token", token)
+                fragment.arguments = bundle
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, fragment)
+                    .commit()
+            }
+        }
+
 
         // Apply system bar insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -220,4 +249,5 @@ class MainActivity : AppCompatActivity() {
         toolbarContainer.removeAllViews()
         toolbarContainer.visibility = View.GONE
     }
+
 }

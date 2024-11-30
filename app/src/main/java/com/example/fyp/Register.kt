@@ -85,7 +85,9 @@ class Register : Fragment() {
                             userMobileNo = phoneNo,
                             userDOB = birthday,
                             password = password,
-                            securityQuestion = securityQuestion
+                            securityQuestion = securityQuestion,
+                            token = "",
+                            timeOfToken = 0L
                         )
 
                         userViewModel.addUser(user)

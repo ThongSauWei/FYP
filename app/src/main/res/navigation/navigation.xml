@@ -154,4 +154,14 @@
         android:name="com.example.fyp.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/recoveryByEmail2"
+        android:name="com.example.fyp.RecoveryByEmail"
+        android:label="email_recovery"
+        tools:layout="@layout/email_recovery" />
+    <fragment
+        android:id="@+id/emailNewPassword"
+        android:name="com.example.fyp.EmailNewPassword"
+        android:label="newpassword_email"
+        tools:layout="@layout/newpassword_email" />
 </navigation>

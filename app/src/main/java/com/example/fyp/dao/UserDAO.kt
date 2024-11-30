@@ -196,4 +196,79 @@ class UserDAO {
 
         return userID
     }
+
+    fun saveToken(email: String, token: String, expirationTime: Long, callback: (Boolean) -> Unit) {
+        dbRef.orderByChild("email").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val userID = userSnapshot.key
+                            if (userID != null) {
+                                dbRef.child(userID).updateChildren(
+                                    mapOf("token" to token, "timeOfToken" to expirationTime)
+                                ).addOnSuccessListener { callback(true) }
+                                    .addOnFailureListener { callback(false) }
+                                return
+                            }
+                        }
+                    }
+                    callback(false)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(false)
+                }
+            })
+    }
+
+    fun validateToken(email: String, token: String, callback: (Boolean) -> Unit) {
+        dbRef.orderByChild("email").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val storedToken = userSnapshot.child("token").value as? String
+                            val timeOfToken = userSnapshot.child("timeOfToken").value as? Long
+                            if (storedToken == token && timeOfToken != null && timeOfToken > System.currentTimeMillis()) {
+                                callback(true)
+                            } else {
+                                callback(false)
+                            }
+                        }
+                    } else {
+                        callback(false)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(false)
+                }
+            })
+    }
+
+    fun deleteToken(email: String, callback: (Boolean) -> Unit) {
+        dbRef.orderByChild("email").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val userID = userSnapshot.key
+                            if (userID != null) {
+                                dbRef.child(userID).updateChildren(
+                                    mapOf("token" to null, "timeOfToken" to null)
+                                ).addOnSuccessListener { callback(true) }
+                                    .addOnFailureListener { callback(false) }
+                                return
+                            }
+                        }
+                    }
+                    callback(false)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(false)
+                }
+            })
+    }
 }

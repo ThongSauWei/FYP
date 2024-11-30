@@ -50,4 +50,16 @@ class UserRepository(private val userDAO: UserDAO) {
         val digest = md.digest(bytes)
         return digest.fold("", { str, it -> str + "%02x".format(it) })
     }
+
+    fun saveToken(email: String, token: String, expirationTime: Long, callback: (Boolean) -> Unit) {
+        userDAO.saveToken(email, token, expirationTime, callback)
+    }
+
+    fun validateToken(email: String, token: String, callback: (Boolean) -> Unit) {
+        userDAO.validateToken(email, token, callback)
+    }
+
+    fun deleteToken(email: String, callback: (Boolean) -> Unit) {
+        userDAO.deleteToken(email, callback)
+    }
 }
