@@ -55,6 +55,21 @@ class FilterPost : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_filter_post, container, false)
 
+        //toolbar setting
+        (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
+        val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
+        titleTextView?.text = ""
+
+        val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
+        navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
+        navIcon?.setOnClickListener { activity?.onBackPressed() } // Set click behavior
+
+        val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
+        btnNotification?.visibility = View.GONE
+
+        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
+        btnSearchToolbarWithAnnouce?.visibility = View.GONE
+
         // Example categories mapping
         val categoryMap = mapOf(
             R.id.bussCard to "Business",
