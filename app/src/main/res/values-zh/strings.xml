@@ -6,7 +6,9 @@
     <string name="underlined_sign_up"><u>注册</u></string>
     <string name="underlined_forget_password"><u>忘记密码？</u></string>
     <string name="underlined_sign_in"><u>登录</u></string>
-    <string name="underlined_contact_us"><u>联系我们</u></string>
+    <string name="underlined_contact_us"><u>联系我们?</u></string>
+    <string name="underlined_recover_by_email"><u>邮件恢复</u></string>
+    <string name="email_recovery_title">邮件验证恢复</string>
     <string name="hello_blank_fragment">你好空白片段</string>
     <string name="confirm_delete_haha">确认删除 Haha？</string>
     <string name="yes">是的</string>
@@ -117,6 +119,11 @@
     <string name="profile_menu">个人主页</string>
     <string name="sign_out_menu">登出</string>
     <string name="course_profile">课程</string>
+
+    <string name="check_email">请检查你的邮件</string>
+    <string name="recovery_msg">通过电子邮件验证恢复您的密码</string>
+    <string name="ok">好的</string>
+
 
     <!-- sample -->
     <string name="email_sample">abc-xx21@student.tarc.edu.my</string>

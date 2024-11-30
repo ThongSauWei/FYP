@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/passwordRecoveryPage"
+    android:id="@+id/recoveryByEmailPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".NewPassword">
+    tools:context=".RecoveryByEmail">
 
     <!-- Back Button Icon -->
     <ImageView
-        android:id="@+id/btnExitNewPassword"
+        android:id="@+id/btnExitPasswordRecoveryByEmail"
         android:layout_width="28dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
@@ -23,95 +23,67 @@
     <!-- Logo -->
 
     <TextView
-        android:id="@+id/tvTitleNewPassword"
+        android:id="@+id/tvTitlePasswordRecoveryByEmail"
         android:layout_width="248dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/btnExitNewPassword"
+        android:layout_alignBaseline="@id/btnExitPasswordRecoveryByEmail"
         android:layout_marginStart="25dp"
         android:layout_marginTop="50dp"
-        android:layout_toEndOf="@+id/btnExitNewPassword"
+        android:layout_toEndOf="@+id/btnExitPasswordRecoveryByEmail"
         android:fontFamily="@font/caveat"
-        android:text="@string/new_password_title"
+        android:text="@string/email_recovery_title"
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/imgLogoPasswordRecovery"
+        android:id="@+id/imgLogoPasswordRecoveryByEmail"
         android:layout_width="350dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnExitNewPassword"
+        android:layout_below="@id/btnExitPasswordRecoveryByEmail"
         android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/tarumt_logo" />
 
     <!-- Email Label -->
     <TextView
-        android:id="@+id/lblNewPassword"
+        android:id="@+id/lblEmailPasswordRecoveryByEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgLogoPasswordRecovery"
+        android:layout_below="@id/imgLogoPasswordRecoveryByEmail"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/abhayalibre_semibold"
-        android:text="@string/new_password"
+        android:text="@string/prc_email"
         android:textColor="@color/white"
         android:textSize="19sp" />
 
     <!-- Email Input Field -->
     <EditText
-        android:id="@+id/txtNewPassword"
+        android:id="@+id/txtPasswordRecoveryByEmail"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@id/lblNewPassword"
+        android:layout_below="@id/lblEmailPasswordRecoveryByEmail"
         android:layout_marginTop="5dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/edittext_background"
-        android:hint="@string/new_password"
+        android:hint="@string/prc_email"
         android:fontFamily="@font/abhayalibre_semibold"
-        android:inputType="textPassword"
+        android:inputType="textEmailAddress"
         android:padding="10dp"
         android:textColor="@color/black"
         android:textColorHint="@color/grey" />
 
-    <!-- Security Question Label -->
-    <TextView
-        android:id="@+id/lblConfirmPasswordNewPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtNewPassword"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/abhayalibre_semibold"
-        android:text="@string/confirm_password_title"
-        android:textColor="@color/white"
-        android:textSize="19sp" />
 
-    <!-- Security Question Input Field -->
-    <EditText
-        android:id="@+id/txtConfirmPasswordNewPassword"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@id/lblConfirmPasswordNewPassword"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/edittext_background"
-        android:hint="@string/confirm_password_title"
-        android:fontFamily="@font/abhayalibre_semibold"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/grey" />
 
     <!-- Submit Button -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewBtnNewPassword"
+        android:id="@+id/cardViewBtnSubmitPasswordRecoveryByEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtConfirmPasswordNewPassword"
+        android:layout_below="@id/txtPasswordRecoveryByEmail"
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"
@@ -120,7 +92,7 @@
         app:cardBackgroundColor="@color/button_grey">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSubmitNewPassword"
+            android:id="@+id/btnSubmitPasswordRecoveryByEmail"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@drawable/button_bg"
@@ -132,4 +104,5 @@
             android:textSize="24sp"
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

@@ -7,7 +7,9 @@ data class User (
     val userMobileNo : String,
     val userDOB : String,
     var password : String,
-    val securityQuestion : String
+    val securityQuestion : String,
+    var token : String,
+    var timeOfToken: Long = 0L
 ) {
-    constructor() : this("", "", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "", "",0L)
 }

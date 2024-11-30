@@ -27,6 +27,7 @@ import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.ProfileDAO
+import com.example.fyp.dao.SaveDAO
 import com.squareup.picasso.Picasso
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
@@ -196,6 +197,10 @@ class Profile : Fragment() {
             ViewModelProvider(this).get(UserViewModel::class.java)
         val postViewModel: PostViewModel =
             ViewModelProvider(this).get(PostViewModel::class.java)
+        val friendViewModel: FriendViewModel =
+            ViewModelProvider(this).get(FriendViewModel::class.java)
+
+        val saveDAO = SaveDAO() // Initialize SaveDAO
 
         lifecycleScope.launch {
             val user = userViewModel.getUserByID(userID)!!
@@ -219,14 +224,13 @@ class Profile : Fragment() {
             if (profile?.userGender == "Female") {
                 imageGender.setImageResource(R.drawable.baseline_female_24)
                 imageGender.visibility = View.VISIBLE
-            } else if(profile?.userGender == "Male"){
+            } else if (profile?.userGender == "Male") {
                 imageGender.setImageResource(R.drawable.baseline_male_24)
                 imageGender.visibility = View.VISIBLE
             } else {
                 // Handle "Hide Gender" case or when gender is null
                 imageGender.visibility = View.INVISIBLE // Completely hide the icon
                 genderProfile.visibility = View.INVISIBLE // Completely hide the text
-
             }
 
             if (totalPosts == 0) {
@@ -247,6 +251,10 @@ class Profile : Fragment() {
                     postCategoryDAO = PostCategoryDAO(),
                     likeDAO = LikeDAO(),
                     postCommentDAO = PostCommentDAO(),
+                    saveDAO = saveDAO, // Pass the SaveDAO instance
+                    context = requireContext(), // Pass the context
+                    postViewModel = postViewModel, // Pass the PostViewModel instance
+                    friendViewModel = friendViewModel, // Pass the FriendViewModel instance
                     isProfileMode = true // Custom flag for profile-specific logic
                 )
                 recyclerView.adapter = adapter
