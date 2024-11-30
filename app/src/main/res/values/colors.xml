@@ -35,6 +35,9 @@
     <color name="dialog_stroke">#C1C1C1</color>
     <color name="dialog">#FEFEFE</color>
     <color name="post_follow">#2A2A2A</color>
+    <color name="selected_category">#5AD2FA</color>
+    <color name="background_selected">#193A45</color>
+
 
 
 </resources>

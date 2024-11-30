@@ -97,8 +97,8 @@ class FilterPost : Fragment() {
                     textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 } else {
                     selectedCategories.add(categoryName)
-                    card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_selected))
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.selected_category))
                 }
             }
         }
@@ -168,9 +168,9 @@ class FilterPost : Fragment() {
         }
 
         // Select the clicked card
-        selectedCardView?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+        selectedCardView?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_selected))
         val selectedTextView = cardToTextViewMap[cardId]?.let { view?.findViewById<TextView>(it) }
-        selectedTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        selectedTextView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.selected_category))
 
         val currentTime = System.currentTimeMillis()
         selectedDateRange = Pair(
