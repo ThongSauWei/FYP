@@ -395,6 +395,17 @@ class CreatePost : Fragment() {
 
                 // Notify user of success
                 Toast.makeText(requireContext(), "Post created successfully!", Toast.LENGTH_SHORT).show()
+
+                // Pass success message to the Home fragment
+                val homeFragment = Home()
+                val bundle = Bundle()
+                bundle.putString("successMessage", "Post created successfully!")
+                homeFragment.arguments = bundle
+
+                // Replace the current fragment with the Home fragment
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                fragmentTransaction?.replace(R.id.fragmentContainerView, homeFragment)
+                fragmentTransaction?.commit()
             } else {
                 // Notify user of failure
                 Toast.makeText(requireContext(), "Failed to create post: ${exception?.message}", Toast.LENGTH_SHORT).show()

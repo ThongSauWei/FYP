@@ -18,8 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.fyp.dao.FriendDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.PostSharedDAO
+import com.example.fyp.dao.UserDAO
 import com.example.fyp.data.Post
 import com.example.fyp.data.User
 import com.example.fyp.dataAdapter.FriendAdapter
@@ -33,6 +35,7 @@ import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -45,6 +48,7 @@ class RestrictedUser : Fragment() {
     private lateinit var postCategoryViewModel: PostCategoryViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RestrictedUserAdapter
+    private val friendDAO = FriendDAO()
 
     private var userList : ArrayList<User> = arrayListOf()
     private val profileList : ArrayList<Profile> = arrayListOf()
@@ -99,11 +103,10 @@ class RestrictedUser : Fragment() {
 
         // Sample data
         val sampleUsers = mutableListOf(
-            RestrictedUser("Ali", "U1000", false),
+            RestrictedUser("Ali", "U10001", false),
             RestrictedUser("Adam", "U1001", true),
             RestrictedUser("Alice", "U1002", false)
         )
-
 
 // Set adapter
         adapter = RestrictedUserAdapter(sampleUsers) { user ->
@@ -112,14 +115,40 @@ class RestrictedUser : Fragment() {
         }
         recyclerView.adapter = adapter
 
-
-//        fetchData().observe(viewLifecycleOwner, Observer { isDataFetched ->
-//            if (isDataFetched) {
-//                (activity as MainActivity).hideProgressBar()
-//            }
-//        })
+        fetchFriends()
 
         return view
+    }
+
+    private fun fetchFriends() {
+        val userID = getCurrentUserID() // Get the current user's ID
+        lifecycleScope.launch(Dispatchers.Main) {
+            try {
+                val friends = friendDAO.getFriendList(userID)
+                val friendUsers = mutableListOf<com.example.fyp.dataAdapter.RestrictedUser>()
+
+                friends.forEach { friend ->
+                    val friendUserID =
+                        if (friend.requestUserID == userID) friend.receiveUserID else friend.requestUserID
+
+                    val userDAO = UserDAO()
+                    val user = userDAO.getUserByID(friendUserID) // Fetch user details
+                    val userName = user?.username ?: "Unknown User"
+
+                    friendUsers.add(
+                        com.example.fyp.dataAdapter.RestrictedUser(
+                            name = userName,
+                            isSelected = false,
+                            userID = friendUserID
+                        )
+                    )
+                }
+
+                adapter.updateData(friendUsers)
+            } catch (e: Exception) {
+                Log.e("fetchFriends", "Error fetching friends: ${e.message}")
+            }
+        }
     }
 
     // Assuming the userList is part of the adapter
@@ -183,7 +212,6 @@ class RestrictedUser : Fragment() {
                     }
                 }
 
-
                 // Show success message and navigate back to the Home fragment
                 Toast.makeText(requireContext(), "Post created successfully!", Toast.LENGTH_SHORT).show()
 
@@ -203,67 +231,7 @@ class RestrictedUser : Fragment() {
         }
     }
 
-
-
-
-    // Save data to PostShared
-    private fun saveToPostShared(postID: String, userID: String) {
-        val postSharedDAO = PostSharedDAO()
-        postSharedDAO.addSharedPost(postID, userID) { success, exception ->
-            if (success) {
-                Log.d("PostShared", "Post shared successfully.")
-            } else {
-                Log.e("PostShared", "Failed to share post: ${exception?.message}")
-            }
-        }
-    }
-
-//    private fun fetchData() : LiveData<Boolean> {
-//        val isDataFetched = MutableLiveData<Boolean>()
-//
-//        val userViewModel : UserViewModel =
-//            ViewModelProvider(this).get(UserViewModel::class.java)
-//        val friendViewModel: FriendViewModel =
-//            ViewModelProvider(this).get(FriendViewModel::class.java)
-//        val profileViewModel: ProfileViewModel =
-//            ViewModelProvider(this).get(ProfileViewModel::class.java)
-//
-//        val userID = getCurrentUserID()
-//
-//        lifecycleScope.launch {
-//
-//            friendViewModel.friendList.observe(viewLifecycleOwner, Observer { friendList ->
-//
-//                userList.clear()
-//                profileList.clear()
-//
-//                lifecycleScope.launch {
-//
-//                    for (friend in friendList) {
-//                        val friendID =
-//                            if (friend.requestUserID == userID) friend.receiveUserID else friend.requestUserID
-//                        val user = userViewModel.getUserByID(friendID)
-//                        userList.add(user!!)
-//                        val userProfile = profileViewModel.getProfile(user.userID)
-//                        profileList.add(userProfile!!)
-//                    }
-//
-//                    val adapter = RestrictedUserAdapter()
-//                    adapter.setUserList(userList)
-//                    recyclerView.adapter = adapter
-//
-//                    isDataFetched.value = true
-//                }
-//            })
-//        }
-//
-//        return isDataFetched
-//    }
-
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(requireContext())
     }
-
-
-
 }
