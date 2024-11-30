@@ -242,6 +242,16 @@ class MainActivity : AppCompatActivity() {
         navIcon.setOnClickListener {
             openDrawer()  // This will open the drawer
         }
+
+        // Handle notification button click
+        val btnNotification: ImageView = toolbar.findViewById(R.id.btnNotification)
+        btnNotification.setOnClickListener {
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = Annoucement() // Or start AnnouncementActivity if you're using an activity
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
 
