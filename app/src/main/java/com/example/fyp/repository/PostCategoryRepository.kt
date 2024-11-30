@@ -1,6 +1,7 @@
 package com.example.fyp.repository
 
 import com.example.fyp.dao.PostCategoryDAO
+import com.example.fyp.data.Post
 
 class PostCategoryRepository(private val postCategoryDAO: PostCategoryDAO) {
 
@@ -9,4 +10,9 @@ class PostCategoryRepository(private val postCategoryDAO: PostCategoryDAO) {
             onComplete(success, exception)
         }
     }
+
+    suspend fun getPostByCategory(category: String): List<Post> {
+        return postCategoryDAO.getPostByCategory(category)
+    }
+
 }

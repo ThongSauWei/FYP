@@ -45,6 +45,10 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         return postRepository.getPostByID(postID)
     }
 
+    suspend fun searchPost(searchText : String) : List<Post> {
+        return postRepository.searchPost(searchText)
+    }
+
     suspend fun getAllPosts(): List<Post> {
         return postRepository.getAllPosts()
     }

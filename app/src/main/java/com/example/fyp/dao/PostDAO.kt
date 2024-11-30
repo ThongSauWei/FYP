@@ -3,11 +3,14 @@ package com.example.fyp.dao
 import com.example.fyp.data.Post
 import com.google.firebase.database.*
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class PostDAO {
     private val dbRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Post")
@@ -22,6 +25,35 @@ class PostDAO {
                     onComplete(null, task.exception)
                 }
             }
+        }
+    }
+
+    suspend fun searchPost(searchText : String) : List<Post> = withContext(Dispatchers.IO) {
+        return@withContext suspendCoroutine { continuation ->
+
+            val postList = ArrayList<Post>()
+
+            dbRef.orderByChild("postTitle")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (postSnapshot in snapshot.children) {
+                                val postTitle = postSnapshot.child("postTitle").getValue(String::class.java)!!
+                                if (postTitle.startsWith(searchText, true)) {
+                                    val post = postSnapshot.getValue(Post::class.java)
+                                    postList.add(post!!)
+                                }
+                            }
+                        }
+
+                        continuation.resume(postList)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+
+                })
         }
     }
 

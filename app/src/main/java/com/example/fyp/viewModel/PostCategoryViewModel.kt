@@ -1,6 +1,7 @@
 package com.example.fyp.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fyp.dao.PostCategoryDAO
@@ -26,6 +27,15 @@ class PostCategoryViewModel(application : Application) : AndroidViewModel(applic
             }
         }
     }
+
+    suspend fun getPostByCategory(category: String): List<Post> {
+        Log.d("PostCategoryViewModel", "Fetching posts for category: $category")
+        val posts = postCategoryRepository.getPostByCategory(category)
+        Log.d("PostCategoryViewModel", "Fetched ${posts.size} posts for category: $category")
+        return posts
+    }
+
+
 
 
 

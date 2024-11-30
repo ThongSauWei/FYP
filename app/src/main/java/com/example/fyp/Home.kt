@@ -1,6 +1,7 @@
 package com.example.fyp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
+import com.example.fyp.dao.PostDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
@@ -29,6 +32,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.logging.Filter
 import java.util.logging.Handler
 
 class Home : Fragment() {
@@ -37,6 +43,8 @@ class Home : Fragment() {
     private lateinit var postAdapter: PostAdapter
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout // Declare here
+    private val postCategoryDAO = PostCategoryDAO()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,6 +92,25 @@ class Home : Fragment() {
         val btnAddHome = view.findViewById<ImageView>(R.id.btnAddPost)
         btnAddHome.setOnClickListener {
             val fragment = CreatePost()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
+
+//search
+        val searchImage = view.findViewById<ImageView>(R.id.searchImage)
+        searchImage.setOnClickListener {
+            val fragment = SearchPost()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
+
+        val filterImage = view.findViewById<ImageView>(R.id.filterImage)
+        filterImage.setOnClickListener {
+            val fragment = FilterPost()
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             transaction?.replace(R.id.fragmentContainerView, fragment)
             transaction?.addToBackStack(null)
@@ -149,8 +176,132 @@ class Home : Fragment() {
             }
         })
 
+        // Handle received filters from FilterPost
+        val selectedCategories = arguments?.getStringArrayList("selectedCategories") ?: arrayListOf()
+        val selectedDateRange = arguments?.getSerializable("selectedDateRange") as? Pair<Long?, Long?>
+        Log.d("Home", "Received Categories: $selectedCategories")
+        Log.d("Home", "Received Date Range: $selectedDateRange")
+
+        if (selectedCategories.isNotEmpty() || selectedDateRange != null) {
+            fetchFilteredPosts(selectedCategories, selectedDateRange)
+        } else {
+            fetchPosts(isFollow = false) // Default: Show all posts
+        }
+
+        val dateRange = arguments?.getSerializable("selectedDateRange") as? Pair<Long?, Long?>
+        val startDate = dateRange?.first
+        val endDate = dateRange?.second
+
+        lifecycleScope.launch {
+            try {
+                // Fetch all posts
+                val allPosts = postViewModel.getAllPosts()
+
+                // Define a date format matching your `postDateTime` format
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+                // Log the input parameters
+                Log.d("Home", "Filtering posts with Date Range: Start = $startDate, End = $endDate")
+
+                // Filter posts based on the date range
+                val filteredPosts = allPosts.filter { post ->
+                    try {
+                        Log.d("Home", "Processing post with postDateTime: ${post.postDateTime}")
+
+                        // Parse postDateTime to a timestamp
+                        val postTimestamp = dateFormat.parse(post.postDateTime)?.time
+                        Log.d("Home", "Parsed postDateTime to timestamp: $postTimestamp")
+
+                        // Check if the post matches the filtering criteria
+                        val matchesStartDate = startDate == null || (postTimestamp != null && postTimestamp >= startDate)
+                        val matchesEndDate = endDate == null || (postTimestamp != null && postTimestamp <= endDate)
+
+                        Log.d(
+                            "Home",
+                            "Post matchesStartDate: $matchesStartDate, matchesEndDate: $matchesEndDate"
+                        )
+
+                        postTimestamp != null && matchesStartDate && matchesEndDate
+                    } catch (e: Exception) {
+                        Log.e("Home", "Error parsing postDateTime: ${post.postDateTime}", e)
+                        false // Exclude posts with invalid date format
+                    }
+                }
+
+                // Log the filtered results
+                Log.d("Home", "Filtered Posts Count: ${filteredPosts.size}")
+
+                // Update the adapter with filtered posts
+                postAdapter.updatePosts(filteredPosts)
+            } catch (e: Exception) {
+                Log.e("Home", "Failed to filter posts", e)
+                Toast.makeText(requireContext(), "Failed to filter posts", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+
+        // Fetch and filter posts
+//        lifecycleScope.launch {
+//            try {
+//                val postList = fetchFilteredPosts(selectedCategories, selectedDateRange)
+//                postAdapter.updatePosts(postList)
+//            } catch (e: Exception) {
+//                Toast.makeText(requireContext(), "Failed to load filtered posts", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+
+
         return view
     }
+
+    // Function to fetch filtered posts
+    private fun fetchFilteredPosts(categories: List<String>, dateRange: Pair<Long?, Long?>?) {
+        lifecycleScope.launch {
+            try {
+                // Log the filtering process
+                Log.d("Home", "Fetching filtered posts...")
+                Log.d("Home", "Categories: $categories, Date Range: $dateRange")
+
+                val allPosts = postViewModel.getAllPosts()
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+                val filteredPosts = mutableListOf<Post>()
+
+                for (post in allPosts) {
+                    // Fetch categories for the current post
+                    val postCategories = postCategoryDAO.getCategoriesByPostID(post.postID)
+
+                    val postTimestamp = try {
+                        dateFormat.parse(post.postDateTime)?.time
+                    } catch (e: Exception) {
+                        Log.e("Home", "Error parsing post date: ${post.postDateTime}", e)
+                        null
+                    }
+
+                    val matchesCategory = categories.isEmpty() || postCategories.any { it.category in categories }
+                    val matchesDate = dateRange == null || (
+                            postTimestamp != null &&
+                                    (dateRange.first?.let { postTimestamp >= it } ?: true) &&
+                                    (dateRange.second?.let { postTimestamp <= it } ?: true)
+                            )
+
+                    if (matchesCategory && matchesDate) {
+                        filteredPosts.add(post)
+                    }
+                }
+
+                Log.d("Home", "Filtered Posts Count: ${filteredPosts.size}")
+                postAdapter.updatePosts(filteredPosts)
+            } catch (e: Exception) {
+                Log.e("Home", "Failed to load filtered posts", e)
+                Toast.makeText(requireContext(), "Failed to load filtered posts", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
 
     private fun fetchPosts(isFollow: Boolean) {
         lifecycleScope.launch {

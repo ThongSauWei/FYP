@@ -83,7 +83,6 @@ class PostAdapter(
         val bookmarkPostHolder: ImageView = itemView.findViewById(R.id.bookmarkPostHolder)
         val sharePostHolder: ImageView = itemView.findViewById(R.id.sharePostHolder)
         val commentPostHolder: ImageView = itemView.findViewById(R.id.commentPostHolder)
-        // Follow button views
         val cardFollow: CardView = itemView.findViewById(R.id.cardFollow)
         val tvFollow: TextView = itemView.findViewById(R.id.tvFollow)
         val cvProfilePostHolder: CardView = itemView.findViewById(R.id.cvProfilePostHolder)
@@ -95,7 +94,6 @@ class PostAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.postholder, parent, false)
 
         storageRef = FirebaseStorage.getInstance().getReference()
-//        postViewModel = ViewModelProvider(viewModelStoreOwner)[PostViewModel::class.java] // Use viewModelStoreOwner
 
 
         return PostViewHolder(view)
@@ -115,8 +113,6 @@ class PostAdapter(
         } else {
             holder.imgDropdownMenu.visibility = View.GONE
         }
-
-
 
         // By default, hide the cardFollow button
         holder.cardFollow.visibility = View.GONE
@@ -183,9 +179,6 @@ class PostAdapter(
             Log.d("PostAdapter", "Post belongs to current user. Hiding cardFollow.")
         }
 
-
-
-
         // Set post date and title
         holder.tvPostTitlePostHolder.text = post.postTitle
 
@@ -220,7 +213,6 @@ class PostAdapter(
 
             setupIndicators(holder.indicatorContainer, imageUrls.size, holder.viewPagerPostImages)
         }
-
 
         // Fetch and display like count
         CoroutineScope(Dispatchers.Main).launch {
@@ -275,7 +267,6 @@ class PostAdapter(
                 handleBookmarkClick(post, holder)
             }
         }
-
 
         //share
         holder.sharePostHolder.setOnClickListener {
@@ -401,7 +392,6 @@ class PostAdapter(
         refreshPosts()
     }
 
-
     suspend fun handleBookmarkClick(post: Post, holder: PostViewHolder) {
         val currentUserID = getCurrentUserID()
 
@@ -437,17 +427,6 @@ class PostAdapter(
         refreshPosts()
     }
 
-//    private fun refreshPosts() {
-//        (context as? FragmentActivity)?.lifecycleScope?.launch {
-//            try {
-//                val updatedPosts = postViewModel.getAllPosts() // Fetch updated posts
-//                updatePosts(updatedPosts) // Update adapter
-//            } catch (e: Exception) {
-//                Toast.makeText(context, "Failed to refresh posts.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
     private fun refreshPosts() {
         (context as? FragmentActivity)?.lifecycleScope?.launch {
             try {
@@ -459,7 +438,6 @@ class PostAdapter(
         }
     }
 
-
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(context) // Use the passed context
     }
@@ -469,7 +447,6 @@ class PostAdapter(
         return sdf.format(Date())
     }
 
-    // Function to dynamically create CardView elements for categories
     private fun populateCategories(holder: PostViewHolder, categories: List<PostCategory>) {
         holder.cardViewTypeHolder.removeAllViews() // Clear any existing categories
 
@@ -483,10 +460,6 @@ class PostAdapter(
             holder.cardViewTypeHolder.addView(cardView)
         }
     }
-
-    // Show dropdown menu
-
-
 
     // Show dropdown menu
     private fun showDropdownMenu(view: View, post: Post) {
@@ -511,13 +484,9 @@ class PostAdapter(
         popupMenu.show()
     }
 
-
-
-
     private fun editPost(post: Post) {
 
     }
-
 
     private fun deletePost(context: Context, post: Post) {
         val postID = post.postID
@@ -589,7 +558,6 @@ class PostAdapter(
         }
     }
 
-
     private fun showDeleteConfirmation(context: Context, post: Post) {
         AlertDialog.Builder(context)
             .setTitle("Delete Post")
@@ -628,7 +596,6 @@ class PostAdapter(
             "Unknown time"
         }
     }
-
 
     // Setup indicators for ViewPager2
     private fun setupIndicators(indicatorContainer: LinearLayout, size: Int, viewPager: ViewPager2) {

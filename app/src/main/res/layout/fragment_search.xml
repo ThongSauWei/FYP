@@ -27,7 +27,7 @@
                 android:text="@string/study_with_other_study_partner"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/tvTitleSearchFriend"
+                app:layout_constraintStart_toStartOf="@+id/txtSearchSearchFriend"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -112,6 +112,7 @@
                         android:layout_width="60dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -119,11 +120,10 @@
                             android:id="@+id/tvAll"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/white"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/all_category"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/white" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -131,6 +131,7 @@
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -138,7 +139,6 @@
                             android:id="@+id/tvBuss"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/business"
@@ -150,6 +150,7 @@
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -157,7 +158,6 @@
                             android:id="@+id/tvSci"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/sci"
@@ -168,6 +168,7 @@
                         android:id="@+id/artCard"
                         android:layout_width="110dp"
                         android:layout_height="30dp"
+                        app:cardBackgroundColor="@color/box"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
@@ -176,7 +177,6 @@
                             android:id="@+id/tvArt"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/art"
@@ -187,6 +187,7 @@
                         android:id="@+id/itCard"
                         android:layout_width="70dp"
                         android:layout_height="30dp"
+                        app:cardBackgroundColor="@color/box"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
@@ -195,7 +196,6 @@
                             android:id="@+id/tvIt"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/it"
@@ -207,6 +207,7 @@
                         android:layout_width="90dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -214,7 +215,6 @@
                             android:id="@+id/tvSport"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/sport"
@@ -225,6 +225,7 @@
                         android:id="@+id/langCard"
                         android:layout_width="90dp"
                         android:layout_height="30dp"
+                        app:cardBackgroundColor="@color/box"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
@@ -233,7 +234,6 @@
                             android:id="@+id/tvLang"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/lang"
@@ -245,6 +245,7 @@
                         android:layout_width="100dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -252,7 +253,6 @@
                             android:id="@+id/tvAss"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/assignment"
@@ -264,6 +264,7 @@
                         android:layout_width="90dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/box"
                         app:cardCornerRadius="7dp"
                         app:cardElevation="5dp">
 
@@ -271,7 +272,6 @@
                             android:id="@+id/tvRevision"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/box"
                             android:fontFamily="@font/abhayalibre_medium"
                             android:gravity="center_vertical|center_horizontal"
                             android:text="@string/revision"
@@ -294,16 +294,52 @@
                 app:layout_constraintStart_toStartOf="@+id/cardViewBtnSearchPost"
                 app:layout_constraintTop_toBottomOf="@+id/horizontalScroll" />
 
+<!--            <TextView-->
+<!--                android:id="@+id/noPostsTextView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:gravity="center"-->
+<!--                android:text="No Post Found"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="16sp"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tvSuggestFriendsSearchFriend" />-->
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewFriendSearchFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="70dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSuggestFriendsSearchFriend"
                 tools:listitem="@layout/postholder" />
+
+            <TextView
+                android:id="@+id/noPostsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:text="No Post Found"
+                android:textColor="@color/tab_unused"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/recyclerViewFriendSearchFriend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.44"
+                app:layout_constraintStart_toStartOf="@+id/tvSuggestFriendsSearchFriend"
+                app:layout_constraintTop_toBottomOf="@+id/tvSuggestFriendsSearchFriend"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

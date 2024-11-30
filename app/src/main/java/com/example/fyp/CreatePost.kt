@@ -115,7 +115,7 @@ class CreatePost : Fragment() {
 
         // Customize toolbar appearance
         val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
-        titleTextView?.text = "Create Post"
+        titleTextView?.text = "CREATE POST"
 
         val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
         navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
