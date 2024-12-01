@@ -84,19 +84,48 @@ class AnnoucementDAO {
         userAnnRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userAnnouncements = mutableListOf<UserAnnouncement>()
+                val totalChildren = snapshot.childrenCount.toInt()
+                var processedChildren = 0
+
+                if (totalChildren == 0) {
+                    // No children, return immediately
+                    onComplete(userAnnouncements)
+                    return
+                }
+
                 for (child in snapshot.children) {
                     val userAnnouncement = child.getValue(UserAnnouncement::class.java)
-                    userAnnouncement?.let { userAnnouncements.add(it) }
+                    if (userAnnouncement?.announcementID != null) {
+                        dbRef.child(userAnnouncement.announcementID).get().addOnCompleteListener { task ->
+                            processedChildren++
+                            if (task.isSuccessful) {
+                                val announcement = task.result.getValue(Announcement::class.java)
+                                if (announcement?.announcementStatus == 1) {
+                                    userAnnouncements.add(userAnnouncement)
+                                }
+                            }
+                            // Check if all children are processed
+                            if (processedChildren == totalChildren) {
+                                onComplete(userAnnouncements)
+                            }
+                        }
+                    } else {
+                        // Increment processedChildren for invalid userAnnouncement
+                        processedChildren++
+                        if (processedChildren == totalChildren) {
+                            onComplete(userAnnouncements)
+                        }
+                    }
                 }
-                Log.d("AnnoucementDAO", "User Announcements: $userAnnouncements")
-                onComplete(userAnnouncements)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("AnnoucementDAO", "Error fetching UserAnnouncements.", error.toException())
+                onComplete(emptyList()) // Return an empty list on error
             }
         })
     }
+
 
     // Fetch announcements by their IDs
     fun getAnnouncementsByIds(announcementIDs: List<String>, onComplete: (List<Announcement>) -> Unit) {
@@ -106,12 +135,49 @@ class AnnoucementDAO {
             val announcements = mutableListOf<Announcement>()
             for (task in tasks) {
                 if (task.isSuccessful) {
-                    task.result?.getValue(Announcement::class.java)?.let { announcements.add(it) }
+                    val announcement = task.result?.getValue(Announcement::class.java)
+                    // Only include announcements with status == 1
+                    if (announcement?.announcementStatus == 1) {
+                        announcements.add(announcement)
+                    }
                 }
             }
             Log.d("AnnoucementDAO", "Fetched Announcements by IDs: $announcements")
             onComplete(announcements)
         }
     }
+
+
+    fun deleteAnnouncement(announcementID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        // Update announcementStatus to 0 in the Announcement table
+        dbRef.child(announcementID).child("announcementStatus").setValue(0)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Optionally, you can also update related UserAnnouncement if needed
+                    userAnnRef.orderByChild("announcementID").equalTo(announcementID)
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val updateTasks = snapshot.children.map { child ->
+                                    child.ref.child("status").setValue(0) // Assuming UserAnnouncement also has a status field
+                                }
+
+                                Tasks.whenAllComplete(updateTasks).addOnCompleteListener {
+                                    onComplete(true, null)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e("AnnoucementDAO", "Error updating UserAnnouncement status.", error.toException())
+                                onComplete(false, error.toException())
+                            }
+                        })
+                } else {
+                    Log.e("AnnoucementDAO", "Error updating Announcement status.", task.exception)
+                    onComplete(false, task.exception)
+                }
+            }
+    }
+
+
 }
 

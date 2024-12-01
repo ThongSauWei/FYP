@@ -1,6 +1,5 @@
 package com.example.fyp
 
-//import android.graphics.pdf.models.ListItem
 import com.example.fyp.models.ListItem
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +10,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Header
 import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.dao.PostImageDAO
-import com.example.fyp.data.Announcement
 import com.example.fyp.dataAdapter.AnnoucementAdapter
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -76,10 +73,6 @@ class Annoucement : Fragment() {
         }
     }
 
-
-
-
-
     private fun getDatePart(dateTime: String): String {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -90,8 +83,6 @@ class Annoucement : Fragment() {
             dateTime // Return original if parsing fails
         }
     }
-
-
 
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(requireContext())
@@ -136,8 +127,4 @@ class Annoucement : Fragment() {
             return dateTime // Return original if parsing fails
         }
     }
-
-
-
-
 }

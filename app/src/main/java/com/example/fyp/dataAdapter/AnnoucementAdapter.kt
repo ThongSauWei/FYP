@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fyp.R
 import com.example.fyp.dao.PostImageDAO
-import com.example.fyp.data.Announcement
 import com.example.fyp.data.UserAnnouncement
+import com.example.fyp.dialog.DeleteAnnDialog
 import com.example.fyp.models.ListItem
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.DataSnapshot
@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -91,6 +90,7 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
         private val tvTime: TextView = itemView.findViewById(R.id.tvTime)
         private val profileImage: ImageView = itemView.findViewById(R.id.imageView11)
         private val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
+        private val imageDel: ImageView = itemView.findViewById(R.id.imageDel)
 
         private lateinit var storageRef: StorageReference
         private lateinit var userAnnRef: DatabaseReference
@@ -130,6 +130,13 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                                     tvTypeTitle.text = "Unknown user liked your post"  // In case user data is not available
                                 }
                             }
+
+                            imageDel.setOnClickListener {
+                                val deleteDialog = DeleteAnnDialog()
+                                deleteDialog.announcementID = item.announcement.announcementID
+                                deleteDialog.show((itemView.context as AppCompatActivity).supportFragmentManager, "DeleteAnnDialog")
+                            }
+
 
                             // Get the postID from UserAnnouncement
                             val postID = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)?.postID
