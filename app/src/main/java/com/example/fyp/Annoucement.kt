@@ -8,12 +8,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Header
 import com.example.fyp.dao.AnnoucementDAO
+import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.data.Announcement
 import com.example.fyp.dataAdapter.AnnoucementAdapter
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -24,6 +29,8 @@ class Annoucement : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AnnoucementAdapter
     private val annoucementDAO = AnnoucementDAO()
+    private lateinit var postImageDAO: PostImageDAO
+    private lateinit var storageRef: StorageReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +40,10 @@ class Annoucement : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        val databaseRef = FirebaseDatabase.getInstance().reference
+        this.storageRef = FirebaseStorage.getInstance().reference
+
+        postImageDAO = PostImageDAO(storageRef, databaseRef)
         // Fetch and display data
         loadAnnouncements()
 
@@ -46,8 +57,11 @@ class Annoucement : Fragment() {
             val announcementIDs = userAnnouncements.map { it.announcementID }
 
             annoucementDAO.getAnnouncementsByIds(announcementIDs) { announcements ->
-                // Group announcements by the date part only
-                val groupedItems = announcements.groupBy { announcement ->
+                // Filter out announcements with type "Friend Request"
+                val filteredAnnouncements = announcements.filter { it.announcementType != "Friend Request" }
+
+                // Group the remaining announcements by date
+                val groupedItems = filteredAnnouncements.groupBy { announcement ->
                     getDatePart(announcement.announcementDate) // Group by date only
                 }.flatMap { (date, announcementsForDate) ->
                     // Create a header for the date and add all announcements for that date
@@ -55,11 +69,16 @@ class Annoucement : Fragment() {
                             announcementsForDate.map { ListItem.AnnouncementItem(it) } // Add items
                 }
 
-                adapter = AnnoucementAdapter(groupedItems)
+                // Pass the activity context and postImageDAO to the adapter
+                adapter = AnnoucementAdapter(groupedItems, requireActivity() as AppCompatActivity, postImageDAO)
                 recyclerView.adapter = adapter
             }
         }
     }
+
+
+
+
 
     private fun getDatePart(dateTime: String): String {
         return try {
