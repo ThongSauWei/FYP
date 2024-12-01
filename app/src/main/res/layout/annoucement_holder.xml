@@ -7,22 +7,35 @@
     android:layout_height="wrap_content"
     android:background="@color/background">
 
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/abhayalibre_extrabold"
+        android:justificationMode="inter_word"
+        android:text="@string/today"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/cardViewProfile"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewProfile"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         app:cardCornerRadius="100dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tvDay">
 
-            <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/post_image" />
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/post_image" />
     </androidx.cardview.widget.CardView>
 
     <ImageView
@@ -31,13 +44,13 @@
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/tvTypeTitle"
         app:layout_constraintTop_toTopOf="@+id/cardViewProfile"
         app:layout_constraintVertical_bias="0.681"
         app:srcCompat="@drawable/baseline_delete_24" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tvTypeTitle"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -50,10 +63,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"
         app:layout_constraintStart_toEndOf="@+id/cardViewProfile"
         app:layout_constraintTop_toTopOf="@+id/cardViewProfile"
-        app:layout_constraintVertical_bias="0.576" />
+        app:layout_constraintVertical_bias="0.545" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -61,21 +74,21 @@
         android:text="@string/time_ago"
         android:textColor="@color/profile_background"
         android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="@+id/tvTypeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTypeTitle" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="263dp"
-        android:layout_height="85dp"
+        android:layout_height="100dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="20dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/tvTypeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/post_image" />
 
