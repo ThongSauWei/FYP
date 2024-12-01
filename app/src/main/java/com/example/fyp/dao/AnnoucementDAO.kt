@@ -12,7 +12,7 @@ class AnnoucementDAO {
     private val userAnnRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("UserAnnouncement")
 
     // Method to add an announcement and link it with the user
-    fun addAnnouncement(announcement: Announcement, userID: String, onComplete: (Boolean, Exception?) -> Unit) {
+    fun addAnnouncement(announcement: Announcement, userID: String, senderUserID: String, postID: String, onComplete: (Boolean, Exception?) -> Unit) {
         // Fetch the last announcement ID from the database and increment it
         dbRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -40,9 +40,12 @@ class AnnoucementDAO {
                 // Generate a new userAnnouncementID
                 val newUserAnnouncementID = "UA" + newAnnouncementID.substring(1)
 
+                // Create the UserAnnouncement object with senderUserID and postID
                 val userAnnouncement = UserAnnouncement(
                     userAnnID = newUserAnnouncementID,  // Unique userAnnouncementID (UA1000, UA1001, etc.)
                     userID = userID,
+                    senderUserID = senderUserID,  // The user who performed the action
+                    postID = postID,  // The ID of the post
                     announcementID = newAnnouncementID
                 )
 
@@ -75,6 +78,7 @@ class AnnoucementDAO {
         })
     }
 
+
     // Fetch announcements by user ID
     fun getUserAnnouncementsByUserID(userID: String, onComplete: (List<UserAnnouncement>) -> Unit) {
         userAnnRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -94,13 +98,9 @@ class AnnoucementDAO {
         })
     }
 
-
     // Fetch announcements by their IDs
-    // AnnoucementDAO.kt
     fun getAnnouncementsByIds(announcementIDs: List<String>, onComplete: (List<Announcement>) -> Unit) {
-        val tasks = announcementIDs.map { id ->
-            dbRef.child(id).get()
-        }
+        val tasks = announcementIDs.map { id -> dbRef.child(id).get() }
 
         Tasks.whenAllComplete(tasks).addOnCompleteListener {
             val announcements = mutableListOf<Announcement>()
@@ -113,5 +113,5 @@ class AnnoucementDAO {
             onComplete(announcements)
         }
     }
-
 }
+
