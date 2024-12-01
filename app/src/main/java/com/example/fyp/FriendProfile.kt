@@ -86,6 +86,7 @@ class FriendProfile : Fragment() {
         separator = view.findViewById(R.id.separatorFriendProfile)
 
         val friendUserID = arguments?.getString("friendUserID")!!
+        postList = arguments?.getParcelableArrayList<Post>("postList") ?: emptyList()
 
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
 
