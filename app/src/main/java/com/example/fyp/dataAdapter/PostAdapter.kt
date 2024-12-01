@@ -282,24 +282,7 @@ class PostAdapter(
             context.startActivity(Intent.createChooser(shareIntent, "Share post via"))
         }
 
-        //comment
-//        holder.cvProfilePostHolder.setOnClickListener {
-//            val fragment = Profile()
-//            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-//            val transaction = fragmentManager.beginTransaction()
-//            transaction.replace(R.id.fragmentContainerView, fragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
-//        }
-
-//        holder.tvNamePostHolder.setOnClickListener {
-//            val fragment = Profile()
-//            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-//            val transaction = fragmentManager.beginTransaction()
-//            transaction.replace(R.id.fragmentContainerView, fragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
-//        }
+        //link to FriendProfile
         holder.cvProfilePostHolder.setOnClickListener {
             val activity = context as? AppCompatActivity
             activity?.let {
@@ -318,8 +301,23 @@ class PostAdapter(
             }
         }
 
+        holder.tvNamePostHolder.setOnClickListener {
+            val activity = context as? AppCompatActivity
+            activity?.let {
+                val transaction = it.supportFragmentManager.beginTransaction()
+                val fragment = FriendProfile()
 
+                val bundle = Bundle()
+                bundle.putString("friendUserID", post.userID) // Pass the userID to FriendProfile
+                bundle.putParcelableArrayList("postList", ArrayList(posts)) // Pass the postList
 
+                fragment.arguments = bundle
+
+                transaction.replace(R.id.fragmentContainerView, fragment)
+                transaction.addToBackStack(null) // Optional: Adds this fragment to the back stack
+                transaction.commit()
+            }
+        }
 
         // commentPostHolder click listener
         holder.commentPostHolder.setOnClickListener {
