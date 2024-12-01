@@ -14,7 +14,7 @@
     <string name="recovery_msg">Recovery your password by email validation</string>
     <string name="ok">OK</string>
 
-    <string name="confirm_delete_haha">Confirm Delete Haha?</string>
+    <string name="confirm_delete_haha">Confirm Delete Friends?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
@@ -69,7 +69,11 @@
     <string name="InnerChatTyping">Typing...</string>
     <string name="requested">Requested</string>
     <string name="unfriend">Unfriend</string>
+    <string name="friend_request_sent">Friend Request Sent</string>
+    <string name="friend_removed">Friend Removed</string>
 
+    <string name="map">Map</string>
+    <string name="history">History</string>
     <string name="post">Post</string>
     <string name="view_post">View Post</string>
     <string name="invite_friends_to_join">Invite Friends to Join</string>

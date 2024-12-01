@@ -94,7 +94,7 @@
         app:layout_constraintTop_toTopOf="@+id/cardViewProfileFriendHolder">
 
         <ImageView
-            android:id="@+id/btnActionFriendHolder"
+            android:id="@+id/btnDelActionFriendHolder"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="@color/background"

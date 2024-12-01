@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 class FriendDAO {
     private val dbRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Friend")
 
-    private var nextID = 100
+    private var nextID = 1000
 
     init {
         GlobalScope.launch {
@@ -133,7 +133,7 @@ class FriendDAO {
     }
 
     private suspend fun getNextID(): Int {
-        var friendID = 100
+        var friendID = 1000
         val snapshot = dbRef.orderByKey().limitToLast(1).get().await()
 
         if (snapshot.exists()) {
@@ -145,4 +145,46 @@ class FriendDAO {
 
         return friendID
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var friend: Friend? = null
+                for (friendSnapshot in snapshot.children) {
+                    val requestUserID = friendSnapshot.child("requestUserID").getValue(String::class.java)
+                    val receiveUserID = friendSnapshot.child("receiveUserID").getValue(String::class.java)
+
+                    if ((requestUserID == userID1 && receiveUserID == userID2) ||
+                        (requestUserID == userID2 && receiveUserID == userID1)
+                    ) {
+                        friend = friendSnapshot.getValue(Friend::class.java)
+                        break
+                    }
+                }
+                callback(friend)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
+    }
+
+
 }

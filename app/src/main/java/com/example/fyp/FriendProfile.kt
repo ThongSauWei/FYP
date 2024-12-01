@@ -1,5 +1,6 @@
 package com.example.fyp
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -48,9 +49,11 @@ class FriendProfile : Fragment() {
     private lateinit var tvCourse: TextView
     private lateinit var tvBio: TextView
     private lateinit var btnAdd: AppCompatButton
+    private lateinit var btnRequest: AppCompatButton
+    private lateinit var btnUnfriend: AppCompatButton
     private lateinit var btnMessage: AppCompatButton
     private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutBackground: View // Background view
+    private lateinit var layoutBackground: View
 
     private val storageRef = FirebaseStorage.getInstance().getReference()
     private lateinit var friendViewModel: FriendViewModel
@@ -71,6 +74,15 @@ class FriendProfile : Fragment() {
         currentUserID = SaveSharedPreference.getUserID(requireContext())
         friendUserID = arguments?.getString("friendUserID") ?: ""
 
+        // Navigate to Profile if friendUserID matches currentUserID
+        if (friendUserID == currentUserID) {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, Profile())
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+            return null
+        }
+
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
@@ -84,16 +96,17 @@ class FriendProfile : Fragment() {
         tvCourse = view.findViewById(R.id.tvCoursesFriendProfile)
         tvBio = view.findViewById(R.id.tvBioFriendProfile)
         btnAdd = view.findViewById(R.id.btnAddFriendFriendProfile)
+        btnRequest = view.findViewById(R.id.btnRequestFriendFriendProfile)
+        btnUnfriend = view.findViewById(R.id.btnUnfriendFriendProfile)
         btnMessage = view.findViewById(R.id.btnMessageFriendProfile)
-        layoutBackground = view.findViewById(R.id.linearLayoutFriendProfile) // Background layout
+        layoutBackground = view.findViewById(R.id.linearLayoutFriendProfile)
         recyclerView = view.findViewById(R.id.recyclerViewPostFriendProfile)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
         setupFriendProfile()
-        setupAddButton()
-        setupMessageButton()
+        setupButtons()
 
         return view
     }
@@ -115,9 +128,8 @@ class FriendProfile : Fragment() {
             tvCourse.text = profile?.userCourse
             tvBio.text = profile?.userBio
 
-            val saveDAO = SaveDAO() // Initialize SaveDAO
+            val saveDAO = SaveDAO()
 
-            // Populate posts
             if (postList.isNotEmpty()) {
                 val adapter = PostAdapter(
                     posts = postList,
@@ -129,70 +141,30 @@ class FriendProfile : Fragment() {
                     postCategoryDAO = PostCategoryDAO(),
                     likeDAO = LikeDAO(),
                     postCommentDAO = PostCommentDAO(),
-                    saveDAO = saveDAO, // Pass the SaveDAO instance
-                    context = requireContext(), // Pass the context
-                    postViewModel = postViewModel, // Pass the PostViewModel instance
-                    friendViewModel = friendViewModel, // Pass the FriendViewModel instance
-                    isProfileMode = false // Profile mode for friend
+                    saveDAO = saveDAO,
+                    context = requireContext(),
+                    postViewModel = postViewModel,
+                    friendViewModel = friendViewModel,
+                    isProfileMode = false
                 )
                 recyclerView.adapter = adapter
             }
         }
     }
 
-    private fun loadProfilePicture(userID: String) {
-        val ref = storageRef.child("imageProfile").child("$userID.png")
-        ref.downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val imageUrl = task.result.toString()
-                Picasso.get()
-                    .load(imageUrl)
-                    .placeholder(R.drawable.nullprofile) // Placeholder image
-                    .error(R.drawable.nullprofile) // Error image
-                    .into(imgProfile)
+    private fun setupButtons() {
+        friendViewModel.observeFriendStatus(currentUserID, friendUserID) { friend ->
+            btnAdd.visibility = View.GONE
+            btnRequest.visibility = View.GONE
+            btnUnfriend.visibility = View.GONE
+            btnMessage.visibility = View.VISIBLE // Always show the Message button
 
-                // Set click listener to display the image in a dialog
-                imgProfile.setOnClickListener {
-                    showImageInDialog(imageUrl)
-                }
-            } else {
-                imgProfile.setImageResource(R.drawable.nullprofile) // Default image
-            }
-        }
-    }
+            // Navigate to chat regardless of friend status
+            btnMessage.setOnClickListener { navigateToInnerChat() }
 
-    private fun loadBackgroundImage(userID: String) {
-        val ref = storageRef.child("userBackgroundImage").child("$userID.png")
-        ref.downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val imageUrl = task.result.toString()
-                Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                        val drawable = BitmapDrawable(resources, bitmap)
-                        layoutBackground.background = drawable // Set background
-                    }
-
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                        layoutBackground.setBackgroundColor(
-                            requireContext().getColor(R.color.profile_color)
-                        )
-                    }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                })
-            } else {
-                layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
-            }
-        }
-    }
-
-    private fun setupAddButton() {
-        lifecycleScope.launch {
-            val friend = friendViewModel.getFriend(currentUserID, friendUserID)
-
-            when {
-                friend == null -> {
-                    btnAdd.text = "Add Friend"
+            when (friend?.status) {
+                null -> {
+                    btnAdd.visibility = View.VISIBLE
                     btnAdd.setOnClickListener {
                         val newFriend = Friend(
                             friendID = "0",
@@ -203,63 +175,134 @@ class FriendProfile : Fragment() {
                         )
                         friendViewModel.addFriend(newFriend)
                         Toast.makeText(requireContext(), "Friend request sent.", Toast.LENGTH_SHORT).show()
-                        setupAddButton()
                     }
                 }
-                friend.status == "Pending" && friend.receiveUserID == currentUserID -> {
-                    btnAdd.text = "Accept"
-                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
-                    btnAdd.setOnClickListener {
-                        friend.status = "Friend"
-                        friendViewModel.updateFriend(friend)
-                        Toast.makeText(requireContext(), "Friend request accepted.", Toast.LENGTH_SHORT).show()
-                        setupAddButton()
-                    }
+                "Pending" -> {
+                    btnRequest.visibility = View.VISIBLE
+                    btnRequest.isClickable = false
                 }
-                friend.status == "Pending" -> {
-                    btnAdd.text = "Requested"
-                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
-                    btnAdd.isClickable = false
+                "Friend" -> {
+                    btnUnfriend.visibility = View.VISIBLE
+                    btnUnfriend.setOnClickListener { showDeleteFriendDialog(friend) }
                 }
-                friend.status == "Friend" -> {
-                    btnAdd.text = "Unfriend"
-                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.red_button))
+                "Rejected" -> {
+                    btnAdd.visibility = View.VISIBLE
                     btnAdd.setOnClickListener {
-                        friendViewModel.deleteFriend(friend.friendID)
-                        Toast.makeText(requireContext(), "Friend removed.", Toast.LENGTH_SHORT).show()
-                        setupAddButton()
+                        val newFriend = Friend(
+                            friendID = "0",
+                            requestUserID = currentUserID,
+                            receiveUserID = friendUserID,
+                            status = "Pending",
+                            timeStamp = getCurrentTimestamp()
+                        )
+                        friendViewModel.addFriend(newFriend)
+                        Toast.makeText(requireContext(), "Friend request sent.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
     }
 
-    private fun setupMessageButton() {
-        btnMessage.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            val fragment = InnerChat()
-            val bundle = Bundle()
-            bundle.putString("friendUserID", friendUserID)
-            fragment.arguments = bundle
-            transaction?.replace(R.id.fragmentContainerView, fragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+    private fun navigateToInnerChat() {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        val fragment = InnerChat() // Assuming InnerChat is a Fragment
+        val bundle = Bundle()
+
+        // Pass the friendUserID to the InnerChat fragment
+        bundle.putString("friendUserID", friendUserID)
+        fragment.arguments = bundle
+
+        // Navigate to the InnerChat fragment
+        transaction?.replace(R.id.fragmentContainerView, fragment)
+        transaction?.addToBackStack(null)
+        transaction?.commit()
+    }
+
+    private fun showDeleteFriendDialog(friend: Friend) {
+        // Inflate the custom layout
+        val dialogView = layoutInflater.inflate(R.layout.delete_friend_dialog, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView) // Set the custom layout as the dialog content
+            .setCancelable(false) // Prevent dismissing by clicking outside the dialog
+            .create()
+
+        // Find views in the dialog layout
+        val btnYes = dialogView.findViewById<AppCompatButton>(R.id.btnYesDeleteFriendDialog)
+        val btnNo = dialogView.findViewById<AppCompatButton>(R.id.btnNoDeleteFriendDialog)
+        val closeDialog = dialogView.findViewById<ImageView>(R.id.imgCloseDeleteFriendDialog)
+
+        // Handle "Yes" button click
+        btnYes.setOnClickListener {
+            friendViewModel.deleteFriend(friend.friendID)
+            Toast.makeText(requireContext(), getString(R.string.friend_removed), Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        // Handle "No" button click
+        btnNo.setOnClickListener {
+            dialog.dismiss() // Simply dismiss the dialog
+        }
+
+        // Handle close button click
+        closeDialog.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Show the dialog
+        dialog.show()
+    }
+
+
+
+    private fun loadProfilePicture(userID: String) {
+        val ref = storageRef.child("imageProfile/$userID.png")
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(R.drawable.nullprofile)
+                    .error(R.drawable.nullprofile)
+                    .into(imgProfile)
+                imgProfile.setOnClickListener { showImageInDialog(imageUrl) }
+            } else {
+                imgProfile.setImageResource(R.drawable.nullprofile)
+            }
+        }
+    }
+
+    private fun loadBackgroundImage(userID: String) {
+        val ref = storageRef.child("userBackgroundImage/$userID.png")
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                        layoutBackground.background = BitmapDrawable(resources, bitmap)
+                    }
+
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                })
+            } else {
+                layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
+            }
         }
     }
 
     private fun showImageInDialog(imageUrl: String) {
         val dialog = android.app.Dialog(requireContext())
-        dialog.setContentView(R.layout.dialog_image_view) // Ensure this layout exists
+        dialog.setContentView(R.layout.dialog_image_view)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
         val closeButton = dialog.findViewById<ImageButton>(R.id.closeFullImageButton)
 
         Picasso.get().load(imageUrl).into(imageView)
-
-        closeButton.setOnClickListener {
-            dialog.dismiss()
-        }
+        closeButton.setOnClickListener { dialog.dismiss() }
 
         dialog.show()
     }

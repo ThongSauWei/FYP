@@ -61,4 +61,16 @@ class FriendViewModel(application : Application) : AndroidViewModel(application)
             _friendList.postValue(newList)
         }
     }
+
+
+
+
+
+
+
+
+    fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
+        friendRepository.observeFriendStatus(userID1, userID2, callback)
+    }
+
 }
