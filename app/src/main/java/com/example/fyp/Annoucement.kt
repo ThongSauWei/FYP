@@ -1,5 +1,7 @@
 package com.example.fyp
 
+//import android.graphics.pdf.models.ListItem
+import com.example.fyp.models.ListItem
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,17 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Header
 import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.data.Announcement
 import com.example.fyp.dataAdapter.AnnoucementAdapter
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class Annoucement : Fragment() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AnnoucementAdapter
-    private val announcementsList = mutableListOf<Announcement>()
-    private val annoucementDAO = AnnoucementDAO() // Assuming you will implement DAO methods
+    private val annoucementDAO = AnnoucementDAO()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,85 +33,92 @@ class Annoucement : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-//        addAnnouncement()
-
-        // Call the function to fetch and display data
+        // Fetch and display data
         loadAnnouncements()
 
         return view
     }
 
-//    private fun loadAnnouncements() {
-//        val currentUserID = getCurrentUserID()
-//
-//        // Step 1: Get all user announcements for the current user
-//        annoucementDAO.getUserAnnouncementsByUserID(currentUserID) { userAnnouncements ->
-//            // Log the user announcements data to verify
-//            Log.d("AnnoucementFragment", "User Announcements: $userAnnouncements")
-//
-//            // Step 2: For each user announcement, get the detailed announcement data
-//            val announcementIDs = userAnnouncements.map { it.announcementID }
-//
-//            // Step 3: Fetch announcements based on the announcementIDs
-//            annoucementDAO.getAnnouncementsByIds(announcementIDs) { announcements ->
-//                // Log the announcements data to verify
-//                Log.d("AnnoucementFragment", "Fetched Announcements: $announcements")
-//
-//                // Step 4: Set data to adapter and notify RecyclerView
-//                announcementsList.clear()
-//                announcementsList.addAll(announcements)
-//                adapter = AnnoucementAdapter(announcementsList, currentUserID)
-//                recyclerView.adapter = adapter
-//            }
-//        }
-//    }
-private fun loadAnnouncements() {
-    val currentUserID = getCurrentUserID()
+    private fun loadAnnouncements() {
+        val currentUserID = getCurrentUserID()
 
-    annoucementDAO.getUserAnnouncementsByUserID(currentUserID) { userAnnouncements ->
-        Log.d("AnnoucementFragment", "User Announcements: $userAnnouncements")
+        annoucementDAO.getUserAnnouncementsByUserID(currentUserID) { userAnnouncements ->
+            val announcementIDs = userAnnouncements.map { it.announcementID }
 
-        val announcementIDs = userAnnouncements.map { it.announcementID }
+            annoucementDAO.getAnnouncementsByIds(announcementIDs) { announcements ->
+                // Group announcements by the date part only
+                val groupedItems = announcements.groupBy { announcement ->
+                    getDatePart(announcement.announcementDate) // Group by date only
+                }.flatMap { (date, announcementsForDate) ->
+                    // Create a header for the date and add all announcements for that date
+                    listOf(ListItem.Header(getFormattedDate(date))) + // Add header
+                            announcementsForDate.map { ListItem.AnnouncementItem(it) } // Add items
+                }
 
-        annoucementDAO.getAnnouncementsByIds(announcementIDs) { announcements ->
-            Log.d("AnnoucementFragment", "Fetched Announcements: $announcements")
-
-            announcementsList.clear()
-            announcementsList.addAll(announcements)
-            adapter = AnnoucementAdapter(announcementsList, currentUserID)
-            recyclerView.adapter = adapter
+                adapter = AnnoucementAdapter(groupedItems)
+                recyclerView.adapter = adapter
+            }
         }
     }
-}
 
+    private fun getDatePart(dateTime: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val parsedDate = inputFormat.parse(dateTime)
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate!!)
+        } catch (e: Exception) {
+            Log.e("Annoucement", "Error parsing date: $dateTime", e)
+            dateTime // Return original if parsing fails
+        }
+    }
 
-
-
-//    private fun addAnnouncement() {
-//        val currentUserID = getCurrentUserID()  // Get the current user's ID
-//
-//        // Create an announcement object
-//        val newAnnouncement = Announcement(
-//            announcementID = "",  // This will be filled in automatically
-//            announcementType = "Friend Request",  // Type of announcement
-//            announcementDate = "2024-12-01",  // Date of the announcement
-//            announcementStatus = 1  // Status (1 for active, 0 for inactive)
-//        )
-//
-//        // Add the new announcement and link it to the user
-//        annoucementDAO.addAnnouncement(newAnnouncement, currentUserID) { success, exception ->
-//            if (success) {
-//                // The announcement was added successfully, so load the announcements
-//                loadAnnouncements()
-//            } else {
-//                // Handle the failure case
-//                Log.e("AnnoucementFragment", "Failed to add announcement", exception)
-//            }
-//        }
-//    }
 
 
     private fun getCurrentUserID(): String {
-        return SaveSharedPreference.getUserID(requireContext())  // Assuming SaveSharedPreference is your utility class
+        return SaveSharedPreference.getUserID(requireContext())
     }
+
+    private fun getFormattedDate(dateTime: String): String {
+        try {
+            // Try to parse the date and time (full format)
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            var parsedDate: Date? = null
+            try {
+                parsedDate = inputFormat.parse(dateTime)
+            } catch (e: Exception) {
+                // If parsing with time fails, try parsing just the date part
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                parsedDate = dateFormat.parse(dateTime)
+            }
+
+            // If parsedDate is null, return the original string as a fallback
+            if (parsedDate == null) {
+                return dateTime
+            }
+
+            // Get today's date in yyyy-MM-dd format
+            val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+            // Get yesterday's date in yyyy-MM-dd format
+            val yesterdayCalendar = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
+            val yesterday = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(yesterdayCalendar.time)
+
+            // Format the parsed date as per the requirement
+            val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate)
+
+            // Compare with today and yesterday
+            return when (formattedDate) {
+                today -> "Today"
+                yesterday -> "Yesterday"
+                else -> SimpleDateFormat("dd MMM", Locale.getDefault()).format(parsedDate)
+            }
+        } catch (e: Exception) {
+            Log.e("Annoucement", "Error parsing date: $dateTime", e)
+            return dateTime // Return original if parsing fails
+        }
+    }
+
+
+
+
 }

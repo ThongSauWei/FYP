@@ -76,7 +76,6 @@ class AnnoucementDAO {
     }
 
     // Fetch announcements by user ID
-    // AnnoucementDAO.kt
     fun getUserAnnouncementsByUserID(userID: String, onComplete: (List<UserAnnouncement>) -> Unit) {
         userAnnRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
