@@ -25,21 +25,7 @@ class FriendDAO {
         }
     }
 
-//    suspend fun addFriend(friend: Friend) {
-//        if (getFriend(friend.requestUserID, friend.receiveUserID) != null) {
-//
-//            friend.friendID = "F$nextID"
-//            nextID++
-//
-//            dbRef.child(friend.friendID).setValue(friend)
-//                .addOnCompleteListener {
-//
-//                }
-//                .addOnFailureListener {
-//
-//                }.await()
-//        }
-//    }
+
     suspend fun addFriend(friend: Friend) {
         Log.d("AddFriend", "Checking if the friend exists between ${friend.requestUserID} and ${friend.receiveUserID}")
 

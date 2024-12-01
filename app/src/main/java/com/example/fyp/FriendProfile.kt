@@ -6,35 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fyp.dao.LikeDAO
+import com.example.fyp.dao.PostCategoryDAO
+import com.example.fyp.dao.PostCommentDAO
+import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Friend
 import com.example.fyp.data.Post
+import com.example.fyp.dataAdapter.PostAdapter
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class FriendProfile : Fragment() {
-    private val storageRef: StorageReference = FirebaseStorage.getInstance().getReference()
-
-    private lateinit var friendViewModel: FriendViewModel
-
     private lateinit var imgProfile: ImageView
     private lateinit var tvName: TextView
     private lateinit var tvPost: TextView
@@ -42,205 +42,159 @@ class FriendProfile : Fragment() {
     private lateinit var tvDOB: TextView
     private lateinit var tvCourse: TextView
     private lateinit var tvBio: TextView
-    private lateinit var separator: View
     private lateinit var btnAdd: AppCompatButton
-    private lateinit var layout: ConstraintLayout
+    private lateinit var btnMessage: AppCompatButton
+    private lateinit var recyclerView: RecyclerView
+
+    private val storageRef = FirebaseStorage.getInstance().getReference()
+    private lateinit var friendViewModel: FriendViewModel
+    private lateinit var postViewModel: PostViewModel
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var currentUserID: String
-
+    private lateinit var friendUserID: String
     private lateinit var postList: List<Post>
-
-    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_friend_profile, container, false)
 
-        (activity as MainActivity).setToolbar(R.layout.toolbar_with_profile, R.color.profile_color)
-
-        if (arguments?.getString("friendUserID").isNullOrEmpty()) {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            val fragment = SearchFriend()
-
-            val bundle = Bundle()
-            bundle.putString("NoSuchFriend", "No such friend")
-            fragment.arguments = bundle
-
-            transaction?.replace(R.id.fragmentContainerView, fragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
-        }
-
         currentUserID = SaveSharedPreference.getUserID(requireContext())
+        friendUserID = arguments?.getString("friendUserID") ?: ""
+
+        friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
+        postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         imgProfile = view.findViewById(R.id.imgProfileFriendProfile)
         tvName = view.findViewById(R.id.tvNameFriendProfile)
-        tvPost = view.findViewById(R.id.tvPostsProfile) // Changed "group" to "post"
+        tvPost = view.findViewById(R.id.tvPostsProfile)
         tvFriend = view.findViewById(R.id.tvFriendsFriendProfile)
         tvDOB = view.findViewById(R.id.tvDOBFriendProfile)
         tvCourse = view.findViewById(R.id.tvCoursesFriendProfile)
         tvBio = view.findViewById(R.id.tvBioFriendProfile)
-        separator = view.findViewById(R.id.separatorFriendProfile)
-
-        val friendUserID = arguments?.getString("friendUserID")!!
-
-        friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
-
+        btnAdd = view.findViewById(R.id.btnAddFriendFriendProfile)
+        btnMessage = view.findViewById(R.id.btnMessageFriendProfile)
         recyclerView = view.findViewById(R.id.recyclerViewPostFriendProfile)
-        profileSetup(friendUserID)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        layout = view.findViewById(R.id.layoutFriendProfile)
-
-        btnAdd = view.findViewById(R.id.btnAddFriendFriendProfile)
-        val btnMessage: AppCompatButton = view.findViewById(R.id.btnMessageFriendProfile)
-
-        btnMessage.setOnClickListener {
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            val fragment = InnerChat()
-
-            val bundle = Bundle()
-            bundle.putString("friendUserID", friendUserID)
-            fragment.arguments = bundle
-
-            transaction?.replace(R.id.fragmentContainerView, fragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
-        }
+        setupFriendProfile()
+        setupAddButton()
+        setupMessageButton()
 
         return view
     }
 
-    private fun profileSetup(userID: String) {
-        val userViewModel: UserViewModel =
-            ViewModelProvider(this).get(UserViewModel::class.java)
-        val profileViewModel: ProfileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-        /*val postViewModel: PostViewModel =
-            ViewModelProvider(this).get(PostViewModel::class.java)*/
-
+    private fun setupFriendProfile() {
         lifecycleScope.launch {
-            val friend = userViewModel.getUserByID(userID)!!
-            val profile = profileViewModel.getProfile(userID)!!
-            val totalFriend = friendViewModel.getFriendList(userID).size
-            //postList = postViewModel.getPostByUser(userID) // Get posts instead of groups
+            val user = userViewModel.getUserByID(friendUserID)
+            val profile = profileViewModel.getProfile(friendUserID)
+            val totalFriends = friendViewModel.getFriendList(friendUserID).size
+            postList = postViewModel.getPostByUser(friendUserID)
 
-            val ref = storageRef.child("imageProfile").child(friend.userID + ".png")
-            ref.downloadUrl
-                .addOnCompleteListener {
-                    Glide.with(imgProfile).load(it.result.toString()).into(imgProfile)
-                }
+            // Populate UI
+            Glide.with(imgProfile).load(storageRef.child("imageProfile/$friendUserID.png")).into(imgProfile)
+            tvName.text = user?.username
+            tvPost.text = postList.size.toString()
+            tvFriend.text = totalFriends.toString()
+            tvDOB.text = user?.userDOB
+            tvCourse.text = profile?.userCourse
+            tvBio.text = profile?.userBio
 
-            tvName.text = friend.username
-            tvPost.text = postList.size.toString() // Display total number of posts
-            tvFriend.text = totalFriend.toString()
-            tvDOB.text = friend.userDOB
-            tvCourse.text = profile.userCourse
-            tvBio.text = profile.userBio
+            val saveDAO = SaveDAO() // Initialize SaveDAO
 
-            buttonSetup(currentUserID, userID)
-
-            /*if (postList.isNotEmpty()) {
-                val adapter = PostAdapter(postList)
-                adapter.setViewModel(userViewModel)
+            // Populate posts
+            if (postList.isNotEmpty()) {
+                val adapter = PostAdapter(
+                    posts = postList,
+                    userViewModel = userViewModel,
+                    postImageDAO = PostImageDAO(
+                        FirebaseStorage.getInstance().reference,
+                        FirebaseDatabase.getInstance().reference
+                    ),
+                    postCategoryDAO = PostCategoryDAO(),
+                    likeDAO = LikeDAO(),
+                    postCommentDAO = PostCommentDAO(),
+                    saveDAO = saveDAO, // Pass the SaveDAO instance
+                    context = requireContext(), // Pass the context
+                    postViewModel = postViewModel, // Pass the PostViewModel instance
+                    friendViewModel = friendViewModel, // Pass the FriendViewModel instance
+                    isProfileMode = true // Custom flag for profile-specific logic
+                )
                 recyclerView.adapter = adapter
-
-            } else {
-                noPostSetup()
-            }*/
+            }
         }
     }
 
-    private fun buttonSetup(userID: String, friendUserID: String) {
+    private fun setupAddButton() {
         lifecycleScope.launch {
-            val friend = friendViewModel.getFriend(userID, friendUserID)
+            val friend = friendViewModel.getFriend(currentUserID, friendUserID)
 
-            var onClickListener: (View) -> Unit = {}
-
-            if (friend != null) {
-                when (friend.status) {
-                    "Pending", "Blocked", "Friend" -> {
-                        if (friend.status == "Pending" && friend.receiveUserID == currentUserID) {
-                            btnAdd.text = "Accept"
-
-                            onClickListener = {
-                                val updatedFriend =
-                                    Friend(friend.friendID, friend.requestUserID, friend.receiveUserID, "Friend", getCurrentTimestamp())
-                                friendViewModel.updateFriend(updatedFriend)
-                            }
-
-                        } else {
-                            btnAdd.text = friend.status
-                            btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
-                            btnAdd.isClickable = false
-                        }
-                    }
-                    "Blocking" -> {
-                        btnAdd.text = "Unblock"
-
-                        onClickListener = {
-                            val updatedFriend =
-                                Friend(friend.friendID, friend.requestUserID, friend.receiveUserID, "Friend", getCurrentTimestamp())
-                            friendViewModel.updateFriend(updatedFriend)
-                        }
-                    }
-                    else -> {
-
+            when {
+                friend == null -> {
+                    // Not friends
+                    btnAdd.text = "Add Friend"
+                    btnAdd.setOnClickListener {
+                        val newFriend = Friend(
+                            friendID = "0",
+                            requestUserID = currentUserID,
+                            receiveUserID = friendUserID,
+                            status = "Pending",
+                            timeStamp = getCurrentTimestamp()
+                        )
+                        friendViewModel.addFriend(newFriend)
+                        Toast.makeText(requireContext(), "Friend request sent.", Toast.LENGTH_SHORT).show()
+                        setupAddButton()
                     }
                 }
-            } else {
-                onClickListener = {
-                    val newFriend = Friend("0", userID, friendUserID, "Pending", getCurrentTimestamp())
-
-                    friendViewModel.addFriend(newFriend)
+                friend.status == "Pending" && friend.receiveUserID == currentUserID -> {
+                    // Request received
+                    btnAdd.text = "Accept"
+                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
+                    btnAdd.setOnClickListener {
+                        friend.status = "Friend"
+                        friendViewModel.updateFriend(friend)
+                        Toast.makeText(requireContext(), "Friend request accepted.", Toast.LENGTH_SHORT).show()
+                        setupAddButton()
+                    }
+                }
+                friend.status == "Pending" -> {
+                    // Request sent
+                    btnAdd.text = "Requested"
+                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
+                    btnAdd.isClickable = false
+                }
+                friend.status == "Friend" -> {
+                    // Already friends
+                    btnAdd.text = "Unfriend"
+                    btnAdd.setBackgroundColor(requireContext().getColor(R.color.red_button))
+                    btnAdd.setOnClickListener {
+                        friendViewModel.deleteFriend(friend.friendID)
+                        Toast.makeText(requireContext(), "Friend removed.", Toast.LENGTH_SHORT).show()
+                        setupAddButton()
+                    }
                 }
             }
-
-            btnAdd.setOnClickListener(onClickListener)
         }
     }
 
-    private fun noPostSetup() {
-        val tvNoPost = TextView(requireContext())
-        tvNoPost.id = View.generateViewId()
-        tvNoPost.text = "User has No Posts"
-        tvNoPost.typeface = ResourcesCompat.getFont(requireContext(), R.font.abhayalibre_semibold)
-        tvNoPost.setTextColor(requireContext().getColor(R.color.white))
-        tvNoPost.textSize = 30f
-
-        layout.addView(tvNoPost)
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(layout)
-
-        constraintSet.connect(
-            tvNoPost.id,
-            ConstraintSet.TOP,
-            separator.id,
-            ConstraintSet.BOTTOM,
-            150
-        )
-
-        constraintSet.connect(
-            tvNoPost.id,
-            ConstraintSet.START,
-            layout.id,
-            ConstraintSet.START
-        )
-
-        constraintSet.connect(
-            tvNoPost.id,
-            ConstraintSet.END,
-            layout.id,
-            ConstraintSet.END
-        )
-
-        // apply the constraints to the layout
-        constraintSet.applyTo(layout)
+    private fun setupMessageButton() {
+        btnMessage.setOnClickListener {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            val fragment = InnerChat()
+            val bundle = Bundle()
+            bundle.putString("friendUserID", friendUserID)
+            fragment.arguments = bundle
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
     }
 
     private fun getCurrentTimestamp(): String {

@@ -74,6 +74,7 @@
         app:layout_constraintBottom_toBottomOf="@id/cardViewProfileFriendHolder">
 
         <LinearLayout
+            android:id="@+id/AddFriendLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -93,10 +94,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/abhayalibre_semibold"
-                android:text="Add Buddies"
+                android:text="@string/add_friend"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/RequestedFriendLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@color/grey"
+            android:visibility="gone"
+            android:clickable="false">
+
+            <ImageView
+                android:id="@+id/imgRequestFriendIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/requested_friendholder_tick"
+                android:layout_marginEnd="8dp"
+                android:clickable="false"/>
+
+            <TextView
+                android:id="@+id/tvRequestFriendText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="@string/requested"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
     </androidx.cardview.widget.CardView>
 
     <!-- Separator -->

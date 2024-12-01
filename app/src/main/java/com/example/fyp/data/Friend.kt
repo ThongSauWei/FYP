@@ -4,7 +4,7 @@ data class Friend(
     var friendID: String,
     val receiveUserID: String,
     val requestUserID: String,
-    val status: String,
+    var status: String,
     val timeStamp: String
 ) {
     constructor() : this("", "", "", "", "")
