@@ -25,17 +25,12 @@ class FriendRepository(private val friendDao : FriendDAO) {
         friendDao.deleteFriend(friendID)
     }
 
-
-
-
-
-
-
-
-
-
     fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
         friendDao.observeFriendStatus(userID1, userID2, callback)
+    }
+
+    suspend fun getFriendByID(friendID: String): Friend? {
+        return friendDao.getFriendByID(friendID)
     }
 
 }

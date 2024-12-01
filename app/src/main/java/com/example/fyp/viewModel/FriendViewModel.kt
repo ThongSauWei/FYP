@@ -11,6 +11,7 @@ import com.example.fyp.repository.FriendRepository
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FriendViewModel(application : Application) : AndroidViewModel(application) {
     private val friendRepository : FriendRepository
@@ -62,15 +63,15 @@ class FriendViewModel(application : Application) : AndroidViewModel(application)
         }
     }
 
-
-
-
-
-
-
-
     fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
         friendRepository.observeFriendStatus(userID1, userID2, callback)
+    }
+
+    suspend fun checkFriendDeleted(friendID: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val snapshot = friendRepository.getFriendByID(friendID) // Add this in FriendRepository
+            snapshot == null // If null, it was successfully deleted
+        }
     }
 
 }

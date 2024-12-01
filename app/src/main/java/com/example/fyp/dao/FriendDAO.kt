@@ -101,13 +101,18 @@ class FriendDAO {
 
     fun deleteFriend(friendID: String) {
         dbRef.child(friendID).removeValue()
-            .addOnCompleteListener {
-
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("DeleteFriend", "Successfully deleted friend with ID: $friendID")
+                } else {
+                    Log.e("DeleteFriend", "Failed to delete friend: ${task.exception?.message}")
+                }
             }
-            .addOnFailureListener {
-
+            .addOnFailureListener { exception ->
+                Log.e("DeleteFriend", "Error deleting friend: ${exception.message}")
             }
     }
+
 
     suspend fun getFriend(userID_1: String, userID_2: String): Friend? {
         var friend: Friend? = null
@@ -158,6 +163,35 @@ class FriendDAO {
             }
         }
         return@withContext pendingRequests
+    }
+
+    fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var friend: Friend? = null
+                for (friendSnapshot in snapshot.children) {
+                    val requestUserID = friendSnapshot.child("requestUserID").getValue(String::class.java)
+                    val receiveUserID = friendSnapshot.child("receiveUserID").getValue(String::class.java)
+
+                    if ((requestUserID == userID1 && receiveUserID == userID2) ||
+                        (requestUserID == userID2 && receiveUserID == userID1)
+                    ) {
+                        friend = friendSnapshot.getValue(Friend::class.java)
+                        break
+                    }
+                }
+                callback(friend)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
+    }
+
+    suspend fun getFriendByID(friendID: String): Friend? {
+        val snapshot = dbRef.child(friendID).get().await()
+        return if (snapshot.exists()) snapshot.getValue(Friend::class.java) else null
     }
 
 

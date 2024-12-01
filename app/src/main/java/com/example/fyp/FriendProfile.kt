@@ -36,7 +36,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -219,36 +221,35 @@ class FriendProfile : Fragment() {
     }
 
     private fun showDeleteFriendDialog(friend: Friend) {
-        // Inflate the custom layout
         val dialogView = layoutInflater.inflate(R.layout.delete_friend_dialog, null)
         val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView) // Set the custom layout as the dialog content
-            .setCancelable(false) // Prevent dismissing by clicking outside the dialog
+            .setView(dialogView)
+            .setCancelable(false)
             .create()
 
-        // Find views in the dialog layout
         val btnYes = dialogView.findViewById<AppCompatButton>(R.id.btnYesDeleteFriendDialog)
         val btnNo = dialogView.findViewById<AppCompatButton>(R.id.btnNoDeleteFriendDialog)
         val closeDialog = dialogView.findViewById<ImageView>(R.id.imgCloseDeleteFriendDialog)
 
-        // Handle "Yes" button click
         btnYes.setOnClickListener {
+            // Delete friend and await confirmation
             friendViewModel.deleteFriend(friend.friendID)
-            Toast.makeText(requireContext(), getString(R.string.friend_removed), Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            lifecycleScope.launch {
+                val friendDeleted = withContext(Dispatchers.IO) {
+                    friendViewModel.checkFriendDeleted(friend.friendID) // Add this method to verify deletion
+                }
+                if (friendDeleted) {
+                    Toast.makeText(requireContext(), getString(R.string.friend_removed), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_friend_not_removed), Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
         }
 
-        // Handle "No" button click
-        btnNo.setOnClickListener {
-            dialog.dismiss() // Simply dismiss the dialog
-        }
+        btnNo.setOnClickListener { dialog.dismiss() }
+        closeDialog.setOnClickListener { dialog.dismiss() }
 
-        // Handle close button click
-        closeDialog.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        // Show the dialog
         dialog.show()
     }
 
