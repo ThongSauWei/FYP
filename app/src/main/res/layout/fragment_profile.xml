@@ -155,7 +155,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="@string/post"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvDOBProfile"
                 app:layout_constraintEnd_toEndOf="@+id/tvPostsProfile"
                 app:layout_constraintStart_toStartOf="@+id/tvPostsProfile" />
@@ -167,7 +167,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="@string/profile_friends"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/lblPostsProfile"
                 app:layout_constraintEnd_toEndOf="@+id/tvFriendsProfile"
                 app:layout_constraintStart_toStartOf="@+id/tvFriendsProfile" />
@@ -180,7 +180,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text=""
                 android:textColor="@color/blue"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/tvDOBProfile"
                 app:layout_constraintTop_toBottomOf="@+id/tvDOBProfile" />
 
@@ -193,7 +193,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="English"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@+id/lblPostsProfile"
                 app:layout_constraintTop_toBottomOf="@+id/lblPostsProfile" />
@@ -206,7 +206,7 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text=""
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tvCoursesProfile"
                 app:layout_constraintTop_toBottomOf="@+id/tvCoursesProfile" />

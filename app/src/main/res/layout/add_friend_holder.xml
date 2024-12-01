@@ -131,8 +131,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
-
     <!-- Separator -->
     <View
         android:id="@+id/separatorFriendHolder"

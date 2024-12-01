@@ -68,6 +68,7 @@
     <string name="all">ALL</string>
     <string name="InnerChatTyping">Typing...</string>
     <string name="requested">Requested</string>
+    <string name="unfriend">Unfriend</string>
 
     <string name="post">Post</string>
     <string name="view_post">View Post</string>

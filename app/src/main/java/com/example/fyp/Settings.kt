@@ -41,16 +41,16 @@ class Settings : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerLanguageSettings.adapter = adapter
 
-        // Load saved language and set the spinner selection
+        /*// Load saved language and set the spinner selection
         val savedLanguage = SaveSharedPreference.getLanguage(requireContext())
         spinnerLanguageSettings.setSelection(if (savedLanguage == "zh") 1 else 0)
-
+*/
         // Back button functionality
         btnBackSettings.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        // Save selected language and restart activity
+        /*// Save selected language and restart activity
         btnSaveSettings.setOnClickListener {
             val selectedLanguage = spinnerLanguageSettings.selectedItem.toString()
             val languageCode = if (selectedLanguage == "中文") "zh" else "en"
@@ -58,7 +58,7 @@ class Settings : Fragment() {
 
             // Restart the activity to apply the new language
             activity?.recreate()
-        }
+        }*/
 
         // About Us button click
         btnAboutUs.setOnClickListener {

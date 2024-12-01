@@ -1,9 +1,13 @@
 package com.example.fyp
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,6 +34,7 @@ import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,6 +50,7 @@ class FriendProfile : Fragment() {
     private lateinit var btnAdd: AppCompatButton
     private lateinit var btnMessage: AppCompatButton
     private lateinit var recyclerView: RecyclerView
+    private lateinit var layoutBackground: View // Background view
 
     private val storageRef = FirebaseStorage.getInstance().getReference()
     private lateinit var friendViewModel: FriendViewModel
@@ -79,13 +85,7 @@ class FriendProfile : Fragment() {
         tvBio = view.findViewById(R.id.tvBioFriendProfile)
         btnAdd = view.findViewById(R.id.btnAddFriendFriendProfile)
         btnMessage = view.findViewById(R.id.btnMessageFriendProfile)
-        separator = view.findViewById(R.id.separatorFriendProfile)
-
-        val friendUserID = arguments?.getString("friendUserID")!!
-        postList = arguments?.getParcelableArrayList<Post>("postList") ?: emptyList()
-
-        friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
-
+        layoutBackground = view.findViewById(R.id.linearLayoutFriendProfile) // Background layout
         recyclerView = view.findViewById(R.id.recyclerViewPostFriendProfile)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -106,7 +106,8 @@ class FriendProfile : Fragment() {
             postList = postViewModel.getPostByUser(friendUserID)
 
             // Populate UI
-            Glide.with(imgProfile).load(storageRef.child("imageProfile/$friendUserID.png")).into(imgProfile)
+            loadProfilePicture(friendUserID)
+            loadBackgroundImage(friendUserID)
             tvName.text = user?.username
             tvPost.text = postList.size.toString()
             tvFriend.text = totalFriends.toString()
@@ -132,9 +133,55 @@ class FriendProfile : Fragment() {
                     context = requireContext(), // Pass the context
                     postViewModel = postViewModel, // Pass the PostViewModel instance
                     friendViewModel = friendViewModel, // Pass the FriendViewModel instance
-                    isProfileMode = true // Custom flag for profile-specific logic
+                    isProfileMode = false // Profile mode for friend
                 )
                 recyclerView.adapter = adapter
+            }
+        }
+    }
+
+    private fun loadProfilePicture(userID: String) {
+        val ref = storageRef.child("imageProfile").child("$userID.png")
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(R.drawable.nullprofile) // Placeholder image
+                    .error(R.drawable.nullprofile) // Error image
+                    .into(imgProfile)
+
+                // Set click listener to display the image in a dialog
+                imgProfile.setOnClickListener {
+                    showImageInDialog(imageUrl)
+                }
+            } else {
+                imgProfile.setImageResource(R.drawable.nullprofile) // Default image
+            }
+        }
+    }
+
+    private fun loadBackgroundImage(userID: String) {
+        val ref = storageRef.child("userBackgroundImage").child("$userID.png")
+        ref.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                        val drawable = BitmapDrawable(resources, bitmap)
+                        layoutBackground.background = drawable // Set background
+                    }
+
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        layoutBackground.setBackgroundColor(
+                            requireContext().getColor(R.color.profile_color)
+                        )
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                })
+            } else {
+                layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
             }
         }
     }
@@ -145,7 +192,6 @@ class FriendProfile : Fragment() {
 
             when {
                 friend == null -> {
-                    // Not friends
                     btnAdd.text = "Add Friend"
                     btnAdd.setOnClickListener {
                         val newFriend = Friend(
@@ -161,7 +207,6 @@ class FriendProfile : Fragment() {
                     }
                 }
                 friend.status == "Pending" && friend.receiveUserID == currentUserID -> {
-                    // Request received
                     btnAdd.text = "Accept"
                     btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
                     btnAdd.setOnClickListener {
@@ -172,13 +217,11 @@ class FriendProfile : Fragment() {
                     }
                 }
                 friend.status == "Pending" -> {
-                    // Request sent
                     btnAdd.text = "Requested"
                     btnAdd.setBackgroundColor(requireContext().getColor(R.color.light_grey))
                     btnAdd.isClickable = false
                 }
                 friend.status == "Friend" -> {
-                    // Already friends
                     btnAdd.text = "Unfriend"
                     btnAdd.setBackgroundColor(requireContext().getColor(R.color.red_button))
                     btnAdd.setOnClickListener {
@@ -202,6 +245,23 @@ class FriendProfile : Fragment() {
             transaction?.addToBackStack(null)
             transaction?.commit()
         }
+    }
+
+    private fun showImageInDialog(imageUrl: String) {
+        val dialog = android.app.Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_image_view) // Ensure this layout exists
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
+        val closeButton = dialog.findViewById<ImageButton>(R.id.closeFullImageButton)
+
+        Picasso.get().load(imageUrl).into(imageView)
+
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun getCurrentTimestamp(): String {
