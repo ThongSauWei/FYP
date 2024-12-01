@@ -38,6 +38,7 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
 
     private val TYPE_HEADER = 0
     private val TYPE_ANNOUNCEMENT = 1
+    private val TYPE_FRIEND = 2
 
     private lateinit var storageRef: StorageReference
     private lateinit var userAnnRef: DatabaseReference
@@ -51,11 +52,15 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
+        return when (val item = items[position]) {
             is ListItem.Header -> TYPE_HEADER
             is ListItem.AnnouncementItem -> TYPE_ANNOUNCEMENT
+            is ListItem.FriendItem -> TYPE_FRIEND // Handle FriendItem
+            else -> throw IllegalArgumentException("Unknown item type: $item") // Optional else case
         }
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_HEADER) {
@@ -72,8 +77,11 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
         when (val item = items[position]) {
             is ListItem.Header -> (holder as HeaderViewHolder).bind(item)
             is ListItem.AnnouncementItem -> (holder as AnnouncementViewHolder).bind(item)
+            else -> throw IllegalArgumentException("Unknown item type at position $position")
+//            is ListItem.FriendItem -> (holder as FriendViewHolder).bind(item)  // This should work now
         }
     }
+
 
     override fun getItemCount(): Int = items.size
 

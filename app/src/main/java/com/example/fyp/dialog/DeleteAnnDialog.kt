@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.fyp.Annoucement
+import com.example.fyp.Home
 import com.example.fyp.R
 import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.viewModel.FriendViewModel
@@ -36,6 +38,11 @@ class DeleteAnnDialog : DialogFragment() {
                         if (success) {
                             context?.let {
                                 Toast.makeText(it, "Announcement status updated successfully", Toast.LENGTH_SHORT).show()
+                                val fragment = Annoucement()
+                                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                                transaction?.replace(R.id.fragmentContainerView, fragment)
+                                transaction?.addToBackStack(null)
+                                transaction?.commit()
                             }
                             dismiss() // Safely dismiss the dialog
                         } else {

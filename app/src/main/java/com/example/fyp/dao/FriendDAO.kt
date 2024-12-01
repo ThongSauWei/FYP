@@ -145,4 +145,20 @@ class FriendDAO {
 
         return friendID
     }
+
+    suspend fun getPendingFriendRequests(receiveUserID: String): List<Friend> = withContext(Dispatchers.IO) {
+        val pendingRequests = mutableListOf<Friend>()
+        val snapshot = dbRef.orderByChild("receiveUserID").equalTo(receiveUserID).get().await()
+        if (snapshot.exists()) {
+            for (friendSnapshot in snapshot.children) {
+                val friend = friendSnapshot.getValue(Friend::class.java)
+                if (friend != null && friend.status == "Pending") {
+                    pendingRequests.add(friend)
+                }
+            }
+        }
+        return@withContext pendingRequests
+    }
+
+
 }
