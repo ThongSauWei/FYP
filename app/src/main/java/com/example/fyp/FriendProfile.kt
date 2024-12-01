@@ -79,6 +79,13 @@ class FriendProfile : Fragment() {
         tvBio = view.findViewById(R.id.tvBioFriendProfile)
         btnAdd = view.findViewById(R.id.btnAddFriendFriendProfile)
         btnMessage = view.findViewById(R.id.btnMessageFriendProfile)
+        separator = view.findViewById(R.id.separatorFriendProfile)
+
+        val friendUserID = arguments?.getString("friendUserID")!!
+        postList = arguments?.getParcelableArrayList<Post>("postList") ?: emptyList()
+
+        friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
+
         recyclerView = view.findViewById(R.id.recyclerViewPostFriendProfile)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

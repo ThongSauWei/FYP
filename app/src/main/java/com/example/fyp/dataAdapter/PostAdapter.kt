@@ -15,13 +15,16 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.fyp.Detail
+import com.example.fyp.FriendProfile
 import com.example.fyp.MainActivity
 import com.example.fyp.Profile
 import com.example.fyp.R
@@ -68,6 +71,7 @@ class PostAdapter(
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     private lateinit var storageRef : StorageReference
+    private lateinit var fragmentManager : FragmentManager
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNamePostHolder: TextView = itemView.findViewById(R.id.tvNamePostHolder)
@@ -278,23 +282,41 @@ class PostAdapter(
             context.startActivity(Intent.createChooser(shareIntent, "Share post via"))
         }
 
-        //comment
+        //link to FriendProfile
         holder.cvProfilePostHolder.setOnClickListener {
-            val fragment = Profile()
-            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            val activity = context as? AppCompatActivity
+            activity?.let {
+                val transaction = it.supportFragmentManager.beginTransaction()
+                val fragment = FriendProfile()
+
+                val bundle = Bundle()
+                bundle.putString("friendUserID", post.userID) // Pass the userID to FriendProfile
+                bundle.putParcelableArrayList("postList", ArrayList(posts)) // Pass the postList
+
+                fragment.arguments = bundle
+
+                transaction.replace(R.id.fragmentContainerView, fragment)
+                transaction.addToBackStack(null) // Optional: Adds this fragment to the back stack
+                transaction.commit()
+            }
         }
 
         holder.tvNamePostHolder.setOnClickListener {
-            val fragment = Profile()
-            val fragmentManager = (context as FragmentActivity).supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentContainerView, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            val activity = context as? AppCompatActivity
+            activity?.let {
+                val transaction = it.supportFragmentManager.beginTransaction()
+                val fragment = FriendProfile()
+
+                val bundle = Bundle()
+                bundle.putString("friendUserID", post.userID) // Pass the userID to FriendProfile
+                bundle.putParcelableArrayList("postList", ArrayList(posts)) // Pass the postList
+
+                fragment.arguments = bundle
+
+                transaction.replace(R.id.fragmentContainerView, fragment)
+                transaction.addToBackStack(null) // Optional: Adds this fragment to the back stack
+                transaction.commit()
+            }
         }
 
         // commentPostHolder click listener
