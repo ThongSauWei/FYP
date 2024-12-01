@@ -53,6 +53,7 @@
     <string name="category">类别</string>
     <string name="learning_style">学习风格</string>
     <string name="add_friend">添加朋友</string>
+    <string name="unfriend">取消好友</string>
     <string name="message">消息</string>
     <string name="post">帖子</string>
     <string name="friends">朋友</string>
@@ -160,6 +161,12 @@
         <item>男生</item>
         <item>女生</item>
     </array>
+
+    <string-array name="filter_options">
+        <item>全部</item>
+        <item>关注</item>
+    </string-array>
+
 
     <array name="problem_type">
         <item>无法添加朋友</item>
