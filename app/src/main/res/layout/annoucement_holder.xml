@@ -27,7 +27,7 @@
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageDel"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
         android:layout_marginBottom="20dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/imageDel"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvTypeTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvTime"

@@ -1,6 +1,6 @@
 package com.example.fyp
 
-//import android.graphics.pdf.models.ListItem
+import android.content.Intent
 import com.example.fyp.models.ListItem
 import android.os.Bundle
 import android.util.Log
@@ -8,13 +8,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Header
 import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.dao.PostImageDAO
-import com.example.fyp.data.Announcement
 import com.example.fyp.dataAdapter.AnnoucementAdapter
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -37,6 +38,22 @@ class Annoucement : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_annoucement, container, false)
+
+        (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
+        // Customize toolbar appearance
+        val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
+        titleTextView?.text = "ANNOUNCEMENT"
+
+        val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
+        navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
+        navIcon?.setOnClickListener { activity?.onBackPressed() } // Set click behavior
+
+        val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
+        btnNotification?.visibility = View.GONE
+
+        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
+        btnSearchToolbarWithAnnouce?.visibility = View.GONE
+
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -46,6 +63,25 @@ class Annoucement : Fragment() {
         postImageDAO = PostImageDAO(storageRef, databaseRef)
         // Fetch and display data
         loadAnnouncements()
+
+
+        val cardViewRequest = view.findViewById<CardView>(R.id.cardViewProfile)
+        val tvFriendRequest = view.findViewById<TextView>(R.id.textView9)
+        val tvApproveRequest = view.findViewById<TextView>(R.id.textView11)
+
+        // Define a common click listener
+        val navigateToFriendRequest = View.OnClickListener {
+            val fragment = FriendRequest()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
+
+        // Set the listener to all the views
+        cardViewRequest.setOnClickListener(navigateToFriendRequest)
+        tvFriendRequest.setOnClickListener(navigateToFriendRequest)
+        tvApproveRequest.setOnClickListener(navigateToFriendRequest)
 
         return view
     }
@@ -76,10 +112,6 @@ class Annoucement : Fragment() {
         }
     }
 
-
-
-
-
     private fun getDatePart(dateTime: String): String {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -90,8 +122,6 @@ class Annoucement : Fragment() {
             dateTime // Return original if parsing fails
         }
     }
-
-
 
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(requireContext())
@@ -136,8 +166,4 @@ class Annoucement : Fragment() {
             return dateTime // Return original if parsing fails
         }
     }
-
-
-
-
 }

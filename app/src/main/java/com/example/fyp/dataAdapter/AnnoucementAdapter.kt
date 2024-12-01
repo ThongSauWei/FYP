@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fyp.R
 import com.example.fyp.dao.PostImageDAO
-import com.example.fyp.data.Announcement
 import com.example.fyp.data.UserAnnouncement
+import com.example.fyp.dialog.DeleteAnnDialog
 import com.example.fyp.models.ListItem
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.DataSnapshot
@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -39,6 +38,7 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
 
     private val TYPE_HEADER = 0
     private val TYPE_ANNOUNCEMENT = 1
+    private val TYPE_FRIEND = 2
 
     private lateinit var storageRef: StorageReference
     private lateinit var userAnnRef: DatabaseReference
@@ -52,11 +52,15 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
+        return when (val item = items[position]) {
             is ListItem.Header -> TYPE_HEADER
             is ListItem.AnnouncementItem -> TYPE_ANNOUNCEMENT
+            is ListItem.FriendItem -> TYPE_FRIEND // Handle FriendItem
+            else -> throw IllegalArgumentException("Unknown item type: $item") // Optional else case
         }
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_HEADER) {
@@ -73,8 +77,11 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
         when (val item = items[position]) {
             is ListItem.Header -> (holder as HeaderViewHolder).bind(item)
             is ListItem.AnnouncementItem -> (holder as AnnouncementViewHolder).bind(item)
+            else -> throw IllegalArgumentException("Unknown item type at position $position")
+//            is ListItem.FriendItem -> (holder as FriendViewHolder).bind(item)  // This should work now
         }
     }
+
 
     override fun getItemCount(): Int = items.size
 
@@ -91,6 +98,7 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
         private val tvTime: TextView = itemView.findViewById(R.id.tvTime)
         private val profileImage: ImageView = itemView.findViewById(R.id.imageView11)
         private val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
+        private val imageDel: ImageView = itemView.findViewById(R.id.imageDel)
 
         private lateinit var storageRef: StorageReference
         private lateinit var userAnnRef: DatabaseReference
@@ -130,6 +138,13 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                                     tvTypeTitle.text = "Unknown user liked your post"  // In case user data is not available
                                 }
                             }
+
+                            imageDel.setOnClickListener {
+                                val deleteDialog = DeleteAnnDialog()
+                                deleteDialog.announcementID = item.announcement.announcementID
+                                deleteDialog.show((itemView.context as AppCompatActivity).supportFragmentManager, "DeleteAnnDialog")
+                            }
+
 
                             // Get the postID from UserAnnouncement
                             val postID = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)?.postID

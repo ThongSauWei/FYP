@@ -146,44 +146,18 @@ class FriendDAO {
         return friendID
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    fun observeFriendStatus(userID1: String, userID2: String, callback: (Friend?) -> Unit) {
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var friend: Friend? = null
-                for (friendSnapshot in snapshot.children) {
-                    val requestUserID = friendSnapshot.child("requestUserID").getValue(String::class.java)
-                    val receiveUserID = friendSnapshot.child("receiveUserID").getValue(String::class.java)
-
-                    if ((requestUserID == userID1 && receiveUserID == userID2) ||
-                        (requestUserID == userID2 && receiveUserID == userID1)
-                    ) {
-                        friend = friendSnapshot.getValue(Friend::class.java)
-                        break
-                    }
+    suspend fun getPendingFriendRequests(receiveUserID: String): List<Friend> = withContext(Dispatchers.IO) {
+        val pendingRequests = mutableListOf<Friend>()
+        val snapshot = dbRef.orderByChild("receiveUserID").equalTo(receiveUserID).get().await()
+        if (snapshot.exists()) {
+            for (friendSnapshot in snapshot.children) {
+                val friend = friendSnapshot.getValue(Friend::class.java)
+                if (friend != null && friend.status == "Pending") {
+                    pendingRequests.add(friend)
                 }
-                callback(friend)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
+        }
+        return@withContext pendingRequests
     }
 
 
