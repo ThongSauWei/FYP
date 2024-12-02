@@ -50,7 +50,7 @@ class EmailNewPassword : Fragment()  {
                 } else {
                     Toast.makeText(requireContext(), "Invalid or expired token.", Toast.LENGTH_SHORT).show()
                     activity?.supportFragmentManager?.popBackStack()
-                    goBackSignIn()
+                    goBackRecoveryByEmail()
                 }
             }
         } else {
@@ -77,6 +77,7 @@ class EmailNewPassword : Fragment()  {
                                 userViewModel.deleteToken(email) {}
                                 Toast.makeText(requireContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show()
                                 activity?.supportFragmentManager?.popBackStack()
+                                goBackSignIn()
                             } else {
                                 Toast.makeText(requireContext(), "Failed to update password!", Toast.LENGTH_SHORT).show()
                             }
@@ -94,7 +95,17 @@ class EmailNewPassword : Fragment()  {
         }
     }
 
-    private fun goBackSignIn(){
+    private fun goBackRecoveryByEmail()
+    {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()//after success go to home
+        val fragment = RecoveryByEmail()
+        transaction?.replace(R.id.fragmentContainerView, fragment)
+        transaction?.addToBackStack(null)
+        transaction?.commit()
+    }
+
+    private fun goBackSignIn()
+    {
         val transaction = activity?.supportFragmentManager?.beginTransaction()//after success go to home
         val fragment = SignIn()
         transaction?.replace(R.id.fragmentContainerView, fragment)
