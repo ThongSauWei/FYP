@@ -13,11 +13,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FriendViewModel(application : Application) : AndroidViewModel(application) {
-    private val friendRepository : FriendRepository
+class FriendViewModel(application: Application) : AndroidViewModel(application) {
+    private val friendRepository: FriendRepository
 
     private val _friendList = MutableLiveData<List<Friend>>()
-    val friendList : LiveData<List<Friend>> get() = _friendList
+    val friendList: LiveData<List<Friend>> get() = _friendList
 
     private val userID = SaveSharedPreference.getUserID(application.applicationContext)
 
@@ -27,29 +27,30 @@ class FriendViewModel(application : Application) : AndroidViewModel(application)
         fetchFriendList()
     }
 
-    fun addFriend(friend : Friend) {
+    fun addFriend(friend: Friend) {
         viewModelScope.launch(Dispatchers.IO) {
             if (friendRepository.getFriend(friend.requestUserID, friend.receiveUserID) == null) {
                 friendRepository.addFriend(friend)
+                fetchFriendList() // Refresh the friend list after adding
             }
         }
     }
 
-    suspend fun getFriendList(userID : String) : List<Friend> {
+    suspend fun getFriendList(userID: String): List<Friend> {
         return friendRepository.getFriendList(userID)
     }
 
-    suspend fun getFriend(userID_1 : String, userID_2 : String) : Friend? {
+    suspend fun getFriend(userID_1: String, userID_2: String): Friend? {
         return friendRepository.getFriend(userID_1, userID_2)
     }
 
-    fun updateFriend(friend : Friend) {
+    fun updateFriend(friend: Friend) {
         viewModelScope.launch(Dispatchers.IO) {
             friendRepository.updateFriend(friend)
         }
     }
 
-    fun deleteFriend(friendID : String) {
+    fun deleteFriend(friendID: String) {
         viewModelScope.launch(Dispatchers.IO) {
             friendRepository.deleteFriend(friendID)
             fetchFriendList()
@@ -73,5 +74,4 @@ class FriendViewModel(application : Application) : AndroidViewModel(application)
             snapshot == null // If null, it was successfully deleted
         }
     }
-
 }

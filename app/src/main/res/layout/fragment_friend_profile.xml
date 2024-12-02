@@ -67,6 +67,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardViewFriendProfile" />
 
             <TextView
+                android:id="@+id/tvGenderFriendProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/abhaya_libre"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="@+id/tvNameFriendProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvNameFriendProfile" />
+
+            <ImageView
+                android:id="@+id/imageFriendGender"
+                android:layout_width="26dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_male_24"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGenderFriendProfile"
+                app:layout_constraintStart_toEndOf="@+id/tvGenderFriendProfile"
+                app:layout_constraintTop_toTopOf="@+id/tvGenderFriendProfile"
+                android:visibility="invisible"/>
+
+            <TextView
                 android:id="@+id/tvPostsProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
@@ -75,7 +98,7 @@
                 android:text="0"
                 android:textSize="20sp"
                 android:textColor="@color/white"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tvNameFriendProfile"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvGenderFriendProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -100,8 +123,8 @@
                 android:text="2003-11-21"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/tvNameFriendProfile"
-                app:layout_constraintTop_toBottomOf="@+id/tvNameFriendProfile" />
+                app:layout_constraintStart_toStartOf="@+id/tvGenderFriendProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvGenderFriendProfile" />
 
             <TextView
                 android:id="@+id/lblPostsProfile"

@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardViewProfileFriendHolder"
         app:layout_constraintStart_toStartOf="@+id/tvNameFriendHolder" />
 
-    <!-- Message Action Button -->
+    <!--&lt;!&ndash; Message Action Button &ndash;&gt;
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewMessageFriendHolder"
         android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cardViewProfileFriendHolder"
             app:srcCompat="@drawable/green_msg" />
-    </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>-->
 
     <!-- Remove Friend Action Button -->
     <androidx.cardview.widget.CardView

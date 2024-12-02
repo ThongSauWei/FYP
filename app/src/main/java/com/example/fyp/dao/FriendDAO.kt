@@ -114,27 +114,18 @@ class FriendDAO {
     }
 
 
-    suspend fun getFriend(userID_1: String, userID_2: String): Friend? {
-        var friend: Friend? = null
-
+    suspend fun getFriend(userID1: String, userID2: String): Friend? {
         val snapshot = dbRef.get().await()
-
-        if (snapshot.exists()) {
-            for (friendSnapshot in snapshot.children) {
-                val requestUserID =
-                    friendSnapshot.child("requestUserID").getValue(String::class.java)
-                val receiveUserID =
-                    friendSnapshot.child("receiveUserID").getValue(String::class.java)
-                if ((requestUserID == userID_1 && receiveUserID == userID_2) ||
-                    (requestUserID == userID_2 && receiveUserID == userID_1)
-                ) {
-                    friend = friendSnapshot.getValue(Friend::class.java)
-                    break
-                }
+        for (friendSnapshot in snapshot.children) {
+            val friend = friendSnapshot.getValue(Friend::class.java)
+            if (friend != null &&
+                ((friend.requestUserID == userID1 && friend.receiveUserID == userID2) ||
+                        (friend.requestUserID == userID2 && friend.receiveUserID == userID1))
+            ) {
+                return friend
             }
         }
-
-        return friend
+        return null
     }
 
     private suspend fun getNextID(): Int {
@@ -185,6 +176,25 @@ class FriendDAO {
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle error
+            }
+        })
+    }
+
+    fun observeFriendList(userID: String, callback: (List<Friend>) -> Unit) {
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val friendList = mutableListOf<Friend>()
+                for (friendSnapshot in snapshot.children) {
+                    val friend = friendSnapshot.getValue(Friend::class.java)
+                    if (friend != null && (friend.requestUserID == userID || friend.receiveUserID == userID)) {
+                        friendList.add(friend)
+                    }
+                }
+                callback(friendList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FriendDAO", "Failed to fetch friend list: ${error.message}")
             }
         })
     }

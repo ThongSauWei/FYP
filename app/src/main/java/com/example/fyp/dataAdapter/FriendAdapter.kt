@@ -167,10 +167,49 @@ class FriendAdapter(val mode: Int) : RecyclerView.Adapter<FriendAdapter.FriendHo
                     transaction?.commit()
                 }
             }
+            Mode.DELETE -> {
+                val currentProfile = profileList[position]
+                holder.tvText.text = currentProfile.userCourse
+
+                // Setup dynamic container for DELETE mode
+                holder.dynamicContainer.layoutParams.width = (30 * holder.dynamicContainer.context.resources.displayMetrics.density).toInt()
+                holder.dynamicContainer.layoutParams.height = (30 * holder.dynamicContainer.context.resources.displayMetrics.density).toInt()
+                holder.dynamicContainer.cardElevation = 5f
+                holder.dynamicContainer.radius = 15f
+
+                holder.imgContent.setImageResource(R.drawable.remove_friend_red)
+                holder.dynamicContainer.removeAllViews()
+                holder.dynamicContainer.addView(holder.imgContent)
+
+                holder.imgContent.setOnClickListener {
+                    val friendID = friendList[position].friendID
+                    deleteFriendDialog.friendID = friendID
+                    deleteFriendDialog.username = currentUser.username
+                    deleteFriendDialog.viewModel = friendViewModel
+                    deleteFriendDialog.show(fragmentManager, "DeleteFriendDialog")
+                }
+
+                holder.constraintLayout.setOnClickListener {
+                    val transaction = fragmentManager.fragments[0].activity?.supportFragmentManager?.beginTransaction()
+                    val fragment = FriendProfile()
+                    val bundle = Bundle()
+                    bundle.putString("friendUserID", currentUser.userID)
+                    fragment.arguments = bundle
+                    transaction?.replace(R.id.fragmentContainerView, fragment)
+                    transaction?.addToBackStack(null)
+                    transaction?.commit()
+                }
+            }
             else -> {
                 // Handle other modes
             }
         }
+    }
+
+    fun setDeleteFriendDialog(deleteFriendDialog : DeleteFriendDialog) {
+        this.deleteFriendDialog = deleteFriendDialog
+
+        notifyDataSetChanged()
     }
 
     private fun parseDateTime(dateTimeString: String): Date {
@@ -212,6 +251,5 @@ class FriendAdapter(val mode: Int) : RecyclerView.Adapter<FriendAdapter.FriendHo
         const val ADD = 1
         const val DELETE = 2
         const val CHAT = 3
-        const val INVITE = 4
     }
 }

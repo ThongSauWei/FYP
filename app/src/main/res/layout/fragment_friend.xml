@@ -34,13 +34,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvFriendCountNumberFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="23dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/abhayalibre_semibold"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvFriendCountFriends"
+                app:layout_constraintEnd_toStartOf="@+id/tvFriendCountFriends"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvTitleFriends" />
+
+            <TextView
                 android:id="@+id/tvFriendCountFriends"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="23dp"
                 android:layout_marginEnd="28dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:gravity="end"
-                android:text="@string/_0_friends"
+                android:text="@string/friends"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"

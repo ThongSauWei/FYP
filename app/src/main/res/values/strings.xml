@@ -15,6 +15,7 @@
     <string name="ok">OK</string>
 
     <string name="confirm_delete_haha">Confirm Delete Friends?</string>
+    <string name="confirm_delete">Confirm Delete</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
@@ -71,6 +72,7 @@
     <string name="unfriend">Unfriend</string>
     <string name="friend_request_sent">Friend Request Sent</string>
     <string name="friend_removed">Friend Removed</string>
+    <string name="error_friend_not_removed">Error Delete Friend</string>
 
     <string name="map">Map</string>
     <string name="history">History</string>

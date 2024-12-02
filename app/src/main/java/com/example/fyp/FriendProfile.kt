@@ -56,6 +56,8 @@ class FriendProfile : Fragment() {
     private lateinit var btnMessage: AppCompatButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutBackground: View
+    private lateinit var tvGenderFriendProfile: TextView
+    private lateinit var imageGenderFriendProfile: ImageView
 
     private val storageRef = FirebaseStorage.getInstance().getReference()
     private lateinit var friendViewModel: FriendViewModel
@@ -103,6 +105,8 @@ class FriendProfile : Fragment() {
         btnMessage = view.findViewById(R.id.btnMessageFriendProfile)
         layoutBackground = view.findViewById(R.id.linearLayoutFriendProfile)
         recyclerView = view.findViewById(R.id.recyclerViewPostFriendProfile)
+        tvGenderFriendProfile = view.findViewById(R.id.tvGenderFriendProfile)
+        imageGenderFriendProfile = view.findViewById(R.id.imageFriendGender)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
@@ -130,6 +134,23 @@ class FriendProfile : Fragment() {
             tvCourse.text = profile?.userCourse
             tvBio.text = profile?.userBio
 
+            // Set gender text and icon
+            tvGenderFriendProfile.text = profile?.userGender ?: ""
+            when (profile?.userGender) {
+                "Male" -> {
+                    imageGenderFriendProfile.setImageResource(R.drawable.baseline_male_24)
+                    imageGenderFriendProfile.visibility = View.VISIBLE
+                }
+                "Female" -> {
+                    imageGenderFriendProfile.setImageResource(R.drawable.baseline_female_24)
+                    imageGenderFriendProfile.visibility = View.VISIBLE
+                }
+                else -> {
+                    tvGenderFriendProfile.visibility = View.INVISIBLE
+                    imageGenderFriendProfile.visibility = View.INVISIBLE
+                }
+            }
+
             val saveDAO = SaveDAO()
 
             if (postList.isNotEmpty()) {
@@ -153,6 +174,7 @@ class FriendProfile : Fragment() {
             }
         }
     }
+
 
     private fun setupButtons() {
         friendViewModel.observeFriendStatus(currentUserID, friendUserID) { friend ->
@@ -260,17 +282,22 @@ class FriendProfile : Fragment() {
         ref.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val imageUrl = task.result.toString()
-                Picasso.get()
-                    .load(imageUrl)
-                    .placeholder(R.drawable.nullprofile)
-                    .error(R.drawable.nullprofile)
-                    .into(imgProfile)
-                imgProfile.setOnClickListener { showImageInDialog(imageUrl) }
+                if (isAdded && context != null) { // Ensure fragment is still attached
+                    Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(R.drawable.nullprofile)
+                        .error(R.drawable.nullprofile)
+                        .into(imgProfile)
+                    imgProfile.setOnClickListener { showImageInDialog(imageUrl) }
+                }
             } else {
-                imgProfile.setImageResource(R.drawable.nullprofile)
+                if (isAdded && context != null) { // Ensure fragment is still attached
+                    imgProfile.setImageResource(R.drawable.nullprofile)
+                }
             }
         }
     }
+
 
     private fun loadBackgroundImage(userID: String) {
         val ref = storageRef.child("userBackgroundImage/$userID.png")
@@ -279,22 +306,34 @@ class FriendProfile : Fragment() {
                 val imageUrl = task.result.toString()
                 Picasso.get().load(imageUrl).into(object : com.squareup.picasso.Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                        layoutBackground.background = BitmapDrawable(resources, bitmap)
+                        if (isAdded && context != null) { // Ensure fragment is still attached
+                            layoutBackground.background = BitmapDrawable(resources, bitmap)
+                        }
                     }
 
                     override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                        layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
+                        if (isAdded && context != null) { // Ensure fragment is still attached
+                            layoutBackground.setBackgroundColor(
+                                requireContext().getColor(R.color.profile_color)
+                            )
+                        }
                     }
 
                     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
                 })
             } else {
-                layoutBackground.setBackgroundColor(requireContext().getColor(R.color.profile_color))
+                if (isAdded && context != null) { // Ensure fragment is still attached
+                    layoutBackground.setBackgroundColor(
+                        requireContext().getColor(R.color.profile_color)
+                    )
+                }
             }
         }
     }
 
     private fun showImageInDialog(imageUrl: String) {
+        if (!isAdded || context == null) return // Ensure fragment is attached
+
         val dialog = android.app.Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_image_view)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
