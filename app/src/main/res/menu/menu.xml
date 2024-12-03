@@ -35,19 +35,19 @@
             <item
                 android:id="@+id/nav_contact"
                 android:icon="@drawable/contactus_icon"
-                android:title="Contact Us" />
+                android:title="@string/contact_us" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/aboutus_icon"
-                android:title="About Us" />
+                android:title="@string/about_us_title" />
             <item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/feedback_icon"
-                android:title="Feedback App" />
+                android:title="@string/feedback_title" />
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/setting_icon"
-                android:title="Settings" />
+                android:title="@string/settings" />
         </menu>
 
     </item>
