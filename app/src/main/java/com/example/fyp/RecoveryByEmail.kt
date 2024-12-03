@@ -38,6 +38,7 @@ class RecoveryByEmail : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.email_recovery, container, false)
+        (activity as MainActivity).setToolbar()
         initializeUIComponents(view)
         setupListeners()
         return view

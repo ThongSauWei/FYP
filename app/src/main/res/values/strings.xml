@@ -15,7 +15,7 @@
     <string name="ok">OK</string>
 
     <string name="confirm_delete_haha">Confirm Delete Friends?</string>
-    <string name="confirm_delete">Confirm Delete</string>
+    <string name="confirm_delete">Confirm Delete %1$s ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
@@ -60,8 +60,10 @@
     <string name="learning_style">Learning Style</string>
     <string name="profile_description">Description…</string>
 
+    <string name="discover_friend">Discover Friend</string>
     <string name="add_friend">Add Friend</string>
     <string name="message">Message</string>
+    <string name="friend">Friend</string>
     <string name="friends">Friends</string>
     <string name="all_friends">All Friends</string>
     <string name="_0_friends">0 Friends</string>

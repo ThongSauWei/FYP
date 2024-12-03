@@ -62,5 +62,7 @@ class UserRepository(private val userDAO: UserDAO) {
     fun deleteToken(email: String, callback: (Boolean) -> Unit) {
         userDAO.deleteToken(email, callback)
     }
-
+    suspend fun getAllUsers(): List<User> {
+        return userDAO.getAllUsers()
+    }
 }

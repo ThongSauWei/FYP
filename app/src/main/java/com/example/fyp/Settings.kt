@@ -26,6 +26,7 @@ class Settings : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        (activity as MainActivity).setToolbar()
 
         // Initialize views
         spinnerLanguageSettings = view.findViewById(R.id.spinnerLanguageSettings)

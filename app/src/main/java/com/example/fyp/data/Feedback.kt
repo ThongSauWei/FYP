@@ -3,9 +3,9 @@ package com.example.fyp.data
 data class Feedback(
     var feedbackID: String,
     val userID: String,
-    val feedbackContent: String,
-    val feedbackDateTime: String,
-    val rate: Int
+    var feedbackContent: String,
+    var feedbackDateTime: String,
+    var rate: Int
 ) {
     constructor() : this("", "", "", "", 0)
 }

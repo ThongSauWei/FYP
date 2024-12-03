@@ -101,11 +101,11 @@ class MainActivity : AppCompatActivity() {
 
                     true
                 }
-                R.id.nav_friend -> {
+                R.id.nav_search_friend -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
 
                     val transaction = manager.beginTransaction()
-                    val fragment = Friends()
+                    val fragment = SearchFriend()
                     transaction.replace(R.id.fragmentContainerView, fragment)
                     transaction.addToBackStack(null)
                     transaction.commit()
@@ -179,6 +179,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 else -> {
+                    setToolbar()
                     false
                 }
             }

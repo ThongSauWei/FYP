@@ -90,4 +90,13 @@ class UserViewModel(application : Application) : AndroidViewModel(application) {
     fun deleteToken(email: String, callback: (Boolean) -> Unit) {
         userRepository.deleteToken(email, callback)
     }
+
+    suspend fun searchUsers(searchText: String): List<User> {
+        return userRepository.searchUser(searchText)
+    }
+
+    suspend fun getAllUsers(): List<User> {
+        return userRepository.getAllUsers()
+    }
+
 }

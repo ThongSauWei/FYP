@@ -24,14 +24,14 @@ class FriendViewModel(application: Application) : AndroidViewModel(application) 
     init {
         val friendDao = FriendDAO()
         friendRepository = FriendRepository(friendDao)
-        fetchFriendList()
+        refreshFriendList(com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference.getUserID(getApplication()))
     }
 
     fun addFriend(friend: Friend) {
         viewModelScope.launch(Dispatchers.IO) {
             if (friendRepository.getFriend(friend.requestUserID, friend.receiveUserID) == null) {
                 friendRepository.addFriend(friend)
-                fetchFriendList() // Refresh the friend list after adding
+                refreshFriendList(com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference.getUserID(getApplication())) // Refresh the friend list after adding
             }
         }
     }
@@ -53,14 +53,14 @@ class FriendViewModel(application: Application) : AndroidViewModel(application) 
     fun deleteFriend(friendID: String) {
         viewModelScope.launch(Dispatchers.IO) {
             friendRepository.deleteFriend(friendID)
-            fetchFriendList()
+            refreshFriendList(com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference.getUserID(getApplication()))
         }
     }
 
-    private fun fetchFriendList() {
+    fun refreshFriendList(userID: String) {
         viewModelScope.launch {
-            val newList = friendRepository.getFriendList(userID)
-            _friendList.postValue(newList)
+            val friends = friendRepository.getFriendList(userID)
+            _friendList.postValue(friends)
         }
     }
 

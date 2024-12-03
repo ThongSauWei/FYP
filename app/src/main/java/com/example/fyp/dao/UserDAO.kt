@@ -271,4 +271,29 @@ class UserDAO {
                 }
             })
     }
+
+    // Fetch all users
+    suspend fun getAllUsers(): List<User> = withContext(kotlinx.coroutines.Dispatchers.IO) {
+        return@withContext suspendCancellableCoroutine { continuation ->
+            val userList = mutableListOf<User>()
+            dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (userSnapshot in snapshot.children) {
+                            val user = userSnapshot.getValue(User::class.java)
+                            if (user != null) {
+                                userList.add(user)
+                            }
+                        }
+                    }
+                    continuation.resume(userList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
+            })
+        }
+    }
+
 }

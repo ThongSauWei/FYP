@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -142,5 +143,29 @@ class ProfileDAO {
             .addOnFailureListener {
 
             }
+    }
+
+    suspend fun getAllProfiles(): List<Profile> = withContext(Dispatchers.IO) {
+        return@withContext suspendCancellableCoroutine { continuation ->
+            val profileList = mutableListOf<Profile>()
+
+            dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (profileSnapshot in snapshot.children) {
+                            val profile = profileSnapshot.getValue(Profile::class.java)
+                            if (profile != null) {
+                                profileList.add(profile)
+                            }
+                        }
+                    }
+                    continuation.resume(profileList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
+            })
+        }
     }
 }

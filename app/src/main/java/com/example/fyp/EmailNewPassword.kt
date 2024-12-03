@@ -28,7 +28,7 @@ class EmailNewPassword : Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.newpassword_email, container, false)
-
+        (activity as MainActivity).setToolbar()
         newPassword = view.findViewById(R.id.txtEmailNewPassword)
         confirmPassword = view.findViewById(R.id.txtEmailConfirmPasswordNewPassword)
         backBtn = view.findViewById(R.id.btnExitNewPassword)

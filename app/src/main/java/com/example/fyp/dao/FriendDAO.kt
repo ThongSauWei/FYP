@@ -52,26 +52,18 @@ class FriendDAO {
 
 
     suspend fun getFriendList(userID: String): List<Friend> = withContext(Dispatchers.IO) {
-
         val deferred = CompletableDeferred<List<Friend>>()
 
-        dbRef.addValueEventListener(object : ValueEventListener {
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val friendList = ArrayList<Friend>()
+                val friendList = mutableListOf<Friend>()
                 if (snapshot.exists()) {
                     for (friendSnapshot in snapshot.children) {
-                        val status = friendSnapshot.child("status").getValue(String::class.java)
-                        if (status == "Friend") {
-                            val friend = friendSnapshot.getValue(Friend::class.java)
-                            friendList.add(friend!!)
-                        }
-                    }
-
-                    val iterator = friendList.iterator()
-                    while (iterator.hasNext()) {
-                        val friend = iterator.next()
-                        if (friend.requestUserID != userID && friend.receiveUserID != userID) {
-                            iterator.remove()
+                        val friend = friendSnapshot.getValue(Friend::class.java)
+                        if (friend != null && friend.status == "Friend" &&
+                            (friend.requestUserID == userID || friend.receiveUserID == userID)
+                        ) {
+                            friendList.add(friend)
                         }
                     }
                 }
@@ -81,13 +73,11 @@ class FriendDAO {
             override fun onCancelled(error: DatabaseError) {
                 deferred.completeExceptionally(error.toException())
             }
-
         })
 
-        val friendList = deferred.await()
-
-        friendList
+        return@withContext deferred.await()
     }
+
 
     fun updateFriend(friend: Friend) {
         dbRef.child(friend.friendID).setValue(friend)
@@ -180,24 +170,6 @@ class FriendDAO {
         })
     }
 
-    fun observeFriendList(userID: String, callback: (List<Friend>) -> Unit) {
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val friendList = mutableListOf<Friend>()
-                for (friendSnapshot in snapshot.children) {
-                    val friend = friendSnapshot.getValue(Friend::class.java)
-                    if (friend != null && (friend.requestUserID == userID || friend.receiveUserID == userID)) {
-                        friendList.add(friend)
-                    }
-                }
-                callback(friendList)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FriendDAO", "Failed to fetch friend list: ${error.message}")
-            }
-        })
-    }
 
     suspend fun getFriendByID(friendID: String): Friend? {
         val snapshot = dbRef.child(friendID).get().await()

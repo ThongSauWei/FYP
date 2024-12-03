@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:fontFamily="@font/caveat"
+                android:layout_marginStart="20dp"
                 android:text="@string/find_friends"
                 android:textColor="@color/white"
                 android:textSize="32sp"
@@ -46,8 +47,10 @@
 
             <EditText
                 android:id="@+id/txtSearchSearchFriend"
-                android:layout_width="350dp"
+                android:layout_width="320dp"
                 android:layout_height="44dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/search_box_bg"
                 android:drawableStart="@drawable/baseline_search_light_24"
@@ -57,9 +60,10 @@
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:hint="@string/search_by_name_category_or_learning_styles"
                 android:inputType="text"
+                android:textColorHint="@color/button_grey"
                 android:paddingStart="15dp"
-                android:textColor="@color/light_grey"
-                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvSubtitleSearchFriend" />
@@ -69,6 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/txtSearchSearchFriend"
@@ -77,13 +83,13 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnSearchSearchFriend"
-                    android:layout_width="350dp"
+                    android:layout_width="320dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_bg"
                     android:fontFamily="@font/abhayalibre_semibold"
                     android:text="@string/search_friends"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

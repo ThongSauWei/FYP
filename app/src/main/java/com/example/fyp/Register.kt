@@ -41,6 +41,7 @@ class Register : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
+        (activity as MainActivity).setToolbar()
 
         // Initialize views
         txtNameRegister = view.findViewById(R.id.txtNameRegister)

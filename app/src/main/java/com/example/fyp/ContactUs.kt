@@ -33,6 +33,7 @@ class ContactUs : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_contact_us, container, false)
+        (activity as MainActivity).setToolbar()
 
         // Initialize UI components
         txtNameContactUs = view.findViewById(R.id.txtNameContactUs)

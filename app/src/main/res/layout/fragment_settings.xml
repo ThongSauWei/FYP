@@ -25,7 +25,7 @@
         android:fontFamily="@font/caveat"
         android:text="@string/settings"
         android:textColor="@color/white"
-        android:textSize="32sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/btnBackSettings"
         app:layout_constraintTop_toTopOf="parent" />
@@ -122,7 +122,7 @@
             android:fontFamily="@font/abhayalibre_semibold"
             android:text="@string/setting_contact_us"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <View
@@ -169,7 +169,7 @@
             android:fontFamily="@font/abhayalibre_semibold"
             android:text="@string/setting_language"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <Spinner
             android:id="@+id/spinnerLanguageSettings"
@@ -218,7 +218,7 @@
             android:fontFamily="@font/abhayalibre_semibold"
             android:text="@string/feedback"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <View
@@ -265,7 +265,7 @@
             android:fontFamily="@font/abhayalibre_semibold"
             android:text="@string/setting_about_us"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <!-- Contact Us Button -->

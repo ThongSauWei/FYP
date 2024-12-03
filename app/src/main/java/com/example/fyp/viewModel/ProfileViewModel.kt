@@ -50,4 +50,9 @@ class ProfileViewModel(application : Application) : AndroidViewModel(application
             profileRepository.deleteProfile(userID)
         }
     }
+
+
+    suspend fun getAllProfiles(): List<Profile> {
+        return profileRepository.getAllProfiles()
+    }
 }

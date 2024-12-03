@@ -10,7 +10,7 @@
     <string name="underlined_recover_by_email"><u>邮件恢复</u></string>
     <string name="email_recovery_title">邮件验证恢复</string>
     <string name="hello_blank_fragment">你好空白片段</string>
-    <string name="confirm_delete_haha">确认删除好友？</string>
+    <string name="confirm_delete_haha">确认删除%1$s?</string>
     <string name="confirm_delete">确认删除 ？</string>
     <string name="yes">是的</string>
     <string name="no">否</string>
@@ -54,6 +54,9 @@
     <string name="filter">筛选</string>
     <string name="category">类别</string>
     <string name="learning_style">学习风格</string>
+
+    <string name="discover_friend">发现朋友</string>
+    <string name="friend">朋友</string>
     <string name="add_friend">添加朋友</string>
     <string name="unfriend">取消好友</string>
     <string name="message">消息</string>

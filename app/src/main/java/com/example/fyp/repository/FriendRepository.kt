@@ -33,8 +33,5 @@ class FriendRepository(private val friendDao : FriendDAO) {
         return friendDao.getFriendByID(friendID)
     }
 
-    fun observeFriendList(userID: String, callback: (List<Friend>) -> Unit) {
-        friendDao.observeFriendList(userID, callback)
-    }
 
 }

@@ -5,94 +5,125 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fyp.dataAdapter.FriendAdapter
-import com.example.fyp.dialog.DeleteFriendDialog
+import com.example.fyp.data.Profile
+import com.example.fyp.data.User
 import com.example.fyp.viewModel.FriendViewModel
+import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.launch
 
 class Friends : Fragment() {
 
-    private lateinit var friendViewModel: FriendViewModel
-    private lateinit var userViewModel: UserViewModel
-    private lateinit var friendAdapter: FriendAdapter
     private lateinit var tvFriendCount: TextView
     private lateinit var recyclerView: RecyclerView
-    private val currentUserID by lazy { SaveSharedPreference.getUserID(requireContext()) }
+    private lateinit var friendViewModel: FriendViewModel
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_friend, container, false)
-
-        // Initialize Views
+        (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
+        // Initialize views
         tvFriendCount = view.findViewById(R.id.tvFriendCountNumberFriends)
         recyclerView = view.findViewById(R.id.recyclerViewFriendFriends)
 
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.setHasFixedSize(true)
+
         // Initialize ViewModels
-        friendViewModel = ViewModelProvider(requireActivity()).get(FriendViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
-        // Setup RecyclerView
-        setupRecyclerView()
-
-        // Load Friends
         loadFriends()
+        observeFriendList()
 
         return view
     }
 
-    private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
-        friendAdapter = FriendAdapter(FriendAdapter.Mode.DELETE).apply {
-            setFragmentManager(parentFragmentManager)
-            setViewModel(friendViewModel)
-            setDeleteFriendDialog(DeleteFriendDialog())
-            setOnItemClickListener { user, _, _ ->
-                navigateToChat(user.userID)
+    private fun observeFriendList() {
+        friendViewModel.friendList.observe(viewLifecycleOwner) { friendList ->
+            lifecycleScope.launch {
+                val adapter = FriendAdapter(
+                    userList = mutableListOf(), // Populate dynamically
+                    profileList = mutableListOf(),
+                    friendList = friendList,
+                    fragmentManager = parentFragmentManager,
+                    friendViewModel = friendViewModel
+                )
+                recyclerView.adapter = adapter
+                tvFriendCount.text = friendList.size.toString()
             }
         }
-        recyclerView.adapter = friendAdapter
+
+        // Initial load
+        friendViewModel.refreshFriendList(
+            com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference.getUserID(requireContext())
+        )
     }
 
     private fun loadFriends() {
-        lifecycleScope.launch {
-            try {
-                val friends = friendViewModel.getFriendList(currentUserID)
-                val users = friends.mapNotNull {
-                    val otherUserID =
-                        if (it.receiveUserID != currentUserID) it.receiveUserID else it.requestUserID
-                    userViewModel.getUserByID(otherUserID)
+        friendViewModel.friendList.observe(viewLifecycleOwner) { friendList ->
+            lifecycleScope.launch {
+                val userList = mutableListOf<User>()
+                val profileList = mutableListOf<Profile>()
+
+                for (friend in friendList) {
+                    val friendUserID =
+                        if (friend.requestUserID == SaveSharedPreference.getUserID(requireContext())) {
+                            friend.receiveUserID
+                        } else {
+                            friend.requestUserID
+                        }
+
+                    val user = userViewModel.getUserByID(friendUserID)
+                    val profile = profileViewModel.getProfile(friendUserID)
+
+                    // Handle null values gracefully
+                    val safeUser = user ?: User(
+                        userID = friendUserID,
+                        username = "Unknown User",
+                        email = "",
+                        userMobileNo = "",
+                        userDOB = "",
+                        password = "",
+                        securityQuestion = "",
+                        token = ""
+                    )
+                    val safeProfile = profile ?: Profile(
+                        userID = friendUserID,
+                        userCourse = "TARUMT",
+                        userBio = "",
+                        userImage = "",
+                        userGender = "",
+                        userBackgroundImage = "",
+                        userChosenLanguage = ""
+                    )
+
+                    userList.add(safeUser)
+                    profileList.add(safeProfile)
                 }
 
-                friendAdapter.setFriendList(friends)
-                friendAdapter.setUserList(users)
-
-                // Update Friend Count
-                tvFriendCount.text = friends.size.toString()
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Failed to load friends: ${e.message}", Toast.LENGTH_SHORT).show()
+                val adapter = FriendAdapter(
+                    userList,
+                    profileList,
+                    friendList,
+                    parentFragmentManager,
+                    friendViewModel
+                )
+                recyclerView.adapter = adapter
+                tvFriendCount.text = userList.size.toString()
             }
         }
-    }
-
-    private fun navigateToChat(friendUserID: String) {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        val fragment = InnerChat()
-        val bundle = Bundle()
-        bundle.putString("friendUserID", friendUserID)
-        fragment.arguments = bundle
-        transaction?.replace(R.id.fragmentContainerView, fragment)
-        transaction?.addToBackStack(null)
-        transaction?.commit()
     }
 }
