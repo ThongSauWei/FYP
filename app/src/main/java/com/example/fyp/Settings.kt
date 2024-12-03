@@ -27,11 +27,9 @@ class Settings : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         (activity as MainActivity).setToolbar()
 
-        // Initialize views
         spinnerLanguageSettings = view.findViewById(R.id.spinnerLanguageSettings)
         btnBackSettings = view.findViewById(R.id.btnBackSettings)
         btnSaveSettings = view.findViewById(R.id.btnSaveSettings)
@@ -39,52 +37,40 @@ class Settings : Fragment() {
         btnContactUs = view.findViewById(R.id.btnContactUsSettings)
         btnFeedback = view.findViewById(R.id.btnFeedbackSettings)
 
-        // Populate spinner with language options
         val languages = resources.getStringArray(R.array.language_array)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerLanguageSettings.adapter = adapter
 
-        // Load saved language and set the spinner selection
         val savedLanguage = SaveSharedPreference.getLanguage(requireContext())
         spinnerLanguageSettings.setSelection(if (savedLanguage == "zh") 1 else 0)
 
-        // Back button functionality
         btnBackSettings.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        // Save selected language and restart activity
         btnSaveSettings.setOnClickListener {
             val selectedLanguage = spinnerLanguageSettings.selectedItem.toString()
             val languageCode = if (selectedLanguage == "中文") "zh" else "en"
 
-            // Save language locally
             SaveSharedPreference.setLanguage(requireContext(), languageCode)
-
-            // Apply the new language
             setAppLocale(languageCode)
 
-            // Update Firebase (Optional)
             val userID = SaveSharedPreference.getUserID(requireContext())
-            val userLanguageRef = FirebaseDatabase.getInstance().getReference("users/$userID/language")
+            val userLanguageRef = FirebaseDatabase.getInstance().getReference("users/$userID/userChosenLanguage")
             userLanguageRef.setValue(languageCode)
 
-            // Restart the activity to apply the language change
             activity?.recreate()
         }
 
-        // About Us button click
         btnAboutUs.setOnClickListener {
             navigateToFragment(AboutUs())
         }
 
-        // Contact Us button click
         btnContactUs.setOnClickListener {
             navigateToFragment(ContactUs())
         }
 
-        // Feedback button click
         btnFeedback.setOnClickListener {
             navigateToFragment(Feedback())
         }
@@ -99,7 +85,6 @@ class Settings : Fragment() {
         transaction?.commit()
     }
 
-    // Function to set the app locale without affecting the device
     private fun setAppLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)

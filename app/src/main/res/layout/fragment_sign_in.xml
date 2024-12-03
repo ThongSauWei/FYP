@@ -7,7 +7,7 @@
     android:background="@color/background"
     tools:context=".SignIn">
 
-    <!-- Back Button Icon -->
+    <!--&lt;!&ndash; Back Button Icon &ndash;&gt;
     <ImageView
         android:id="@+id/btnExitSignIn"
         android:layout_width="28dp"
@@ -15,18 +15,17 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/arrow_back"
-        android:contentDescription="@string/go_back" />
+        android:contentDescription="@string/go_back" />-->
 
     <!-- Sign IN Title -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/btnExitSignIn"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
-        android:layout_toEndOf="@id/btnExitSignIn"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="60dp"
         android:fontFamily="@font/caveat"
         android:text="@string/sign_in"
         android:textColor="@color/white"
@@ -39,7 +38,7 @@
         android:layout_width="350dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnExitSignIn"
+        android:layout_below="@id/titleText"
         android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/tarumt_logo" />

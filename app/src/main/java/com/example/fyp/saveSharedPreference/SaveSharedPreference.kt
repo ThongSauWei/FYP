@@ -33,7 +33,7 @@ object SaveSharedPreference { //save and retrieve user-specific data, such as th
     }
 
     fun getLanguage(context: Context): String {
-        return context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE).getString(LANGUAGE_KEY, "en") ?: "en"
+        return getSharedPreference(context).getString(LANGUAGE_KEY, "en") ?: "en"
     }
     fun getNextID(dbRef: DatabaseReference, prefix: String, onComplete: (String) -> Unit) {
         dbRef.orderByKey().limitToLast(1).get().addOnSuccessListener { snapshot ->

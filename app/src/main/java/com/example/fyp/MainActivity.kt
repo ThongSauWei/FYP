@@ -185,15 +185,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val footerMenu : View = findViewById(R.id.footerMenu)
+        val footerMenu: View = findViewById(R.id.footerMenu)
         footerMenu.setOnClickListener {
+            // Clear login information
             SaveSharedPreference.setUserID(this, "")
 
+            // Refresh the sidebar (reset to default menu)
+            refreshNavigationViewMenu()
+
+            // Close the sidebar (if open)
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
+            // Navigate to the SignIn fragment and clear back stack
             val transaction = manager.beginTransaction()
             val fragment = SignIn()
             transaction.replace(R.id.fragmentContainerView, fragment)
+            manager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE) // Clear back stack
             transaction.addToBackStack(null)
             transaction.commit()
+
+            // Optional: Show a logout confirmation message
+            Toast.makeText(this, "You have been logged out.", Toast.LENGTH_SHORT).show()
         }
 
         // Set up Drawer Toggle
@@ -259,6 +273,14 @@ class MainActivity : AppCompatActivity() {
     fun setToolbar() {
         toolbarContainer.removeAllViews()
         toolbarContainer.visibility = View.GONE
+    }
+
+    fun refreshNavigationViewMenu() {
+        // Clear the current menu
+        navigationView.menu.clear()
+
+        // Re-inflate the menu to reflect updated language resources
+        navigationView.inflateMenu(R.menu.menu) // Replace `drawer_menu` with your menu XML file name
     }
 
 }
