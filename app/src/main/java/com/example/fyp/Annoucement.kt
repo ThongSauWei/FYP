@@ -12,15 +12,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fyp.dao.AnnoucementDAO
+import com.example.fyp.dao.FriendDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dataAdapter.AnnoucementAdapter
+import com.example.fyp.dataAdapter.FriendRequestAdapter
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -32,6 +40,7 @@ class Annoucement : Fragment() {
     private val annoucementDAO = AnnoucementDAO()
     private lateinit var postImageDAO: PostImageDAO
     private lateinit var storageRef: StorageReference
+    private val friendDAO = FriendDAO()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,12 +71,16 @@ class Annoucement : Fragment() {
 
         postImageDAO = PostImageDAO(storageRef, databaseRef)
         // Fetch and display data
+        loadFriendRequests()
+
         loadAnnouncements()
 
 
         val cardViewRequest = view.findViewById<CardView>(R.id.cardViewProfile)
         val tvFriendRequest = view.findViewById<TextView>(R.id.textView9)
         val tvApproveRequest = view.findViewById<TextView>(R.id.textView11)
+
+
 
         // Define a common click listener
         val navigateToFriendRequest = View.OnClickListener {
@@ -85,6 +98,34 @@ class Annoucement : Fragment() {
 
         return view
     }
+
+    private fun loadFriendRequests() {
+        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
+        val cardViewProfile = view?.findViewById<MaterialCardView>(R.id.cardViewProfile) // Use MaterialCardView instead of CardView
+
+        val currentUserID = getCurrentUserID()
+
+        // Fetch pending friend requests directly from the Friend table
+        GlobalScope.launch(Dispatchers.IO) {
+            val pendingFriendRequests = friendDAO.getPendingFriendRequests(currentUserID)
+            withContext(Dispatchers.Main) {
+                if (pendingFriendRequests.isNotEmpty()) {
+                    // Show the cardAnnExits and set the red border for cardViewProfile
+                    cardAnnExits?.visibility = View.VISIBLE
+                    cardViewProfile?.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.red)) // Set red border
+                    Log.d("FriendRequest", "Pending requests found, card visible with red border")
+                } else {
+                    // Hide the cardAnnExits and reset the border color
+                    cardAnnExits?.visibility = View.GONE
+                    cardViewProfile?.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.black)) // Reset to original border color
+                    Log.d("FriendRequest", "No pending requests, card hidden")
+                }
+            }
+        }
+    }
+
+
+
 
     private fun loadAnnouncements() {
         val currentUserID = getCurrentUserID()
