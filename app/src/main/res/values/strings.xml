@@ -16,6 +16,7 @@
 
     <string name="confirm_delete_haha">Confirm Delete Friends?</string>
     <string name="confirm_delete">Confirm Delete %1$s ?</string>
+    <string name="confirm_delete_announcement">Confirm Delete ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
