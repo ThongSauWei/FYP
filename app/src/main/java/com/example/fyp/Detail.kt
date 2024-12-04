@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -362,6 +363,18 @@ class Detail : Fragment() {
 
         val tvDateTimePostHolder: TextView = view.findViewById(R.id.tvDateTimePostHolder)
         val profileUserImage: ImageView = view.findViewById(R.id.profileUserImage)
+
+        // Set the click listener for the profile image
+        profileUserImage.setOnClickListener {
+            openFriendProfile(post.userID) // Pass the userID to FriendProfile
+        }
+
+        // Set the click listener for the username
+        tvNamePostHolder.setOnClickListener {
+            openFriendProfile(post.userID) // Pass the userID to FriendProfile
+        }
+
+
         val tvPostTitlePostHolder: TextView = view.findViewById(R.id.tvPostTitlePostHolder)
         val postDesc: TextView = view.findViewById(R.id.postDesc)
         val numLovePostHolder: TextView = view.findViewById(R.id.numLovePostHolder)
@@ -465,6 +478,23 @@ class Detail : Fragment() {
         handleLikeClick(lovePostHolder, post)
         handleBookmarkClick(bookmarkPostHolder, post)
         handleShareClick(sharePostHolder, post)
+    }
+
+    // Function to open the FriendProfile fragment and pass the userID
+    private fun openFriendProfile(friendUserID: String) {
+        val activity = context as? AppCompatActivity
+        activity?.let {
+            val transaction = it.supportFragmentManager.beginTransaction()
+            val fragment = FriendProfile()
+
+            val bundle = Bundle()
+            bundle.putString("friendUserID", friendUserID) // Pass the userID to FriendProfile
+            fragment.arguments = bundle
+
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null) // Optional: Adds this fragment to the back stack
+            transaction.commit()
+        }
     }
 
     private fun populateCategories(container: LinearLayout, categories: List<PostCategory>) {
