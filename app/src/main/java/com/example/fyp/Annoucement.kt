@@ -137,13 +137,22 @@ class Annoucement : Fragment() {
                 // Filter out announcements with type "Friend Request"
                 val filteredAnnouncements = announcements.filter { it.announcementType != "Friend Request" }
 
-                // Group the remaining announcements by date
-                val groupedItems = filteredAnnouncements.groupBy { announcement ->
-                    getDatePart(announcement.announcementDate) // Group by date only
-                }.flatMap { (date, announcementsForDate) ->
-                    // Create a header for the date and add all announcements for that date
-                    listOf(ListItem.Header(getFormattedDate(date))) + // Add header
-                            announcementsForDate.map { ListItem.AnnouncementItem(it) } // Add items
+                // Sort announcements by date in descending order
+                val sortedAnnouncements = filteredAnnouncements.sortedByDescending { announcement ->
+                    try {
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(announcement.announcementDate)?.time
+                    } catch (e: Exception) {
+                        Log.e("Annoucement", "Error parsing date: ${announcement.announcementDate}", e)
+                        0L // Default to earliest date if parsing fails
+                    }
+                }
+
+                // Group announcements by date, with "Today" and "Yesterday" prioritized
+                val groupedItems = sortedAnnouncements.groupBy { announcement ->
+                    getFormattedDate(announcement.announcementDate) // Group by "Today", "Yesterday", or specific date
+                }.flatMap { (formattedDate, announcementsForDate) ->
+                    // Create a header for each date and add all announcements for that date
+                    listOf(ListItem.Header(formattedDate)) + announcementsForDate.map { ListItem.AnnouncementItem(it) }
                 }
 
                 // Pass the activity context and postImageDAO to the adapter
@@ -152,6 +161,7 @@ class Annoucement : Fragment() {
             }
         }
     }
+
 
     private fun getDatePart(dateTime: String): String {
         return try {
@@ -169,42 +179,25 @@ class Annoucement : Fragment() {
     }
 
     private fun getFormattedDate(dateTime: String): String {
-        try {
-            // Try to parse the date and time (full format)
+        return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            var parsedDate: Date? = null
-            try {
-                parsedDate = inputFormat.parse(dateTime)
-            } catch (e: Exception) {
-                // If parsing with time fails, try parsing just the date part
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                parsedDate = dateFormat.parse(dateTime)
-            }
+            val parsedDate = inputFormat.parse(dateTime)
 
-            // If parsedDate is null, return the original string as a fallback
-            if (parsedDate == null) {
-                return dateTime
-            }
-
-            // Get today's date in yyyy-MM-dd format
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-            // Get yesterday's date in yyyy-MM-dd format
             val yesterdayCalendar = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
             val yesterday = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(yesterdayCalendar.time)
 
-            // Format the parsed date as per the requirement
-            val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate)
+            val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate!!)
 
-            // Compare with today and yesterday
-            return when (formattedDate) {
+            when (formattedDate) {
                 today -> "Today"
                 yesterday -> "Yesterday"
                 else -> SimpleDateFormat("dd MMM", Locale.getDefault()).format(parsedDate)
             }
         } catch (e: Exception) {
-            Log.e("Annoucement", "Error parsing date: $dateTime", e)
-            return dateTime // Return original if parsing fails
+            Log.e("Annoucement", "Error formatting date: $dateTime", e)
+            dateTime // Return original if parsing fails
         }
     }
+
 }

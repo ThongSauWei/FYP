@@ -28,12 +28,14 @@ import com.example.fyp.FriendProfile
 import com.example.fyp.MainActivity
 import com.example.fyp.Profile
 import com.example.fyp.R
+import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.PostSharedDAO
 import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Announcement
 import com.example.fyp.data.Friend
 import com.example.fyp.data.Like
 import com.example.fyp.data.Post
@@ -276,11 +278,17 @@ class PostAdapter(
         holder.sharePostHolder.setOnClickListener {
             val postDetails = "Check out this amazing post: ${post.postTitle}\n\nShared from TARUMT Campus App!"
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain" // Define the MIME type
-                putExtra(Intent.EXTRA_TEXT, postDetails) // Content to share
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, postDetails)
             }
             context.startActivity(Intent.createChooser(shareIntent, "Share post via"))
+
+            // Add announcement for share
+            addAnnouncementForAction(post, "Share") {
+                Toast.makeText(context, "Post shared and announcement added.", Toast.LENGTH_SHORT).show()
+            }
         }
+
 
         //link to FriendProfile
         holder.cvProfilePostHolder.setOnClickListener {
@@ -381,22 +389,13 @@ class PostAdapter(
     // Add click listener for lovePostHolder
     suspend fun handleLikeClick(post: Post, holder: PostViewHolder) {
         val currentUserID = getCurrentUserID()
-
-        // Check if the current user has already liked this post
         val existingLike = likeDAO.getLikeByUserIDAndPostID(currentUserID, post.postID)
 
-        if (existingLike != null) {
-            // Toggle like status
-            val newStatus = if (existingLike.status == 1) 0 else 1
-            existingLike.status = newStatus
+        val newStatus = if (existingLike != null) {
+            existingLike.status = if (existingLike.status == 1) 0 else 1
             likeDAO.updateLikeStatus(existingLike)
-
-            // Update UI
-            holder.lovePostHolder.setImageResource(
-                if (newStatus == 1) R.drawable.baseline_favorite_24 else R.drawable.love_border
-            )
+            existingLike.status
         } else {
-            // Create and save a new like
             val like = Like(
                 likeID = UUID.randomUUID().toString(),
                 userID = currentUserID,
@@ -405,33 +404,30 @@ class PostAdapter(
                 timeStamp = getCurrentTimestamp()
             )
             likeDAO.saveLike(like)
-
-            // Update UI
-            holder.lovePostHolder.setImageResource(R.drawable.baseline_favorite_24)
+            1
         }
 
-        // Refresh posts after a successful action
-        refreshPosts()
+        holder.lovePostHolder.setImageResource(
+            if (newStatus == 1) R.drawable.baseline_favorite_24 else R.drawable.love_border
+        )
+
+        if (newStatus == 1) { // Only add an announcement if the post is liked
+            addAnnouncementForAction(post, "Like") {
+                refreshPosts()
+            }
+        }
     }
+
 
     suspend fun handleBookmarkClick(post: Post, holder: PostViewHolder) {
         val currentUserID = getCurrentUserID()
-
-        // Check if the current user has already bookmarked this post
         val existingSave = saveDAO.getSaveByUserIDAndPostID(currentUserID, post.postID)
 
-        if (existingSave != null) {
-            // Toggle save status
-            val newStatus = if (existingSave.status == 1) 0 else 1
-            existingSave.status = newStatus
+        val newStatus = if (existingSave != null) {
+            existingSave.status = if (existingSave.status == 1) 0 else 1
             saveDAO.updateSaveStatus(existingSave)
-
-            // Update UI
-            holder.bookmarkPostHolder.setImageResource(
-                if (newStatus == 1) R.drawable.bookmark_full else R.drawable.bookmark_border
-            )
+            existingSave.status
         } else {
-            // Create and save a new bookmark
             val save = Save(
                 saveID = UUID.randomUUID().toString(),
                 userID = currentUserID,
@@ -440,14 +436,20 @@ class PostAdapter(
                 timeStamp = getCurrentTimestamp()
             )
             saveDAO.saveSave(save)
-
-            // Update UI
-            holder.bookmarkPostHolder.setImageResource(R.drawable.bookmark_full)
+            1
         }
 
-        // Refresh posts after a successful action
-        refreshPosts()
+        holder.bookmarkPostHolder.setImageResource(
+            if (newStatus == 1) R.drawable.bookmark_full else R.drawable.bookmark_border
+        )
+
+        if (newStatus == 1) { // Only add an announcement if the post is bookmarked
+            addAnnouncementForAction(post, "Save") {
+                refreshPosts()
+            }
+        }
     }
+
 
     private fun refreshPosts() {
         (context as? FragmentActivity)?.lifecycleScope?.launch {
@@ -651,6 +653,36 @@ class PostAdapter(
             }
         })
     }
+
+    private fun addAnnouncementForAction(
+        post: Post,
+        actionType: String,
+        onSuccess: () -> Unit
+    ) {
+        val currentUserID = getCurrentUserID()
+
+        val announcement = Announcement(
+            announcementID = "", // To be generated by AnnoucementDAO
+            announcementType = actionType,
+            announcementDate = getCurrentTimestamp(),
+            announcementStatus = 1
+        )
+
+        AnnoucementDAO().addAnnouncement(
+            announcement,
+            userID = post.userID,
+            senderUserID = currentUserID,
+            postID = post.postID
+        ) { success, exception ->
+            if (success) {
+                Log.d("PostAdapter", "$actionType announcement added successfully for post ${post.postID}.")
+                onSuccess()
+            } else {
+                Log.e("PostAdapter", "Failed to add $actionType announcement: ${exception?.message}")
+            }
+        }
+    }
+
 
     // Update posts in adapter
     fun updatePosts(newPosts: List<Post>) {
