@@ -239,20 +239,6 @@ class Home : Fragment() {
             }
         }
 
-
-
-
-        // Fetch and filter posts
-//        lifecycleScope.launch {
-//            try {
-//                val postList = fetchFilteredPosts(selectedCategories, selectedDateRange)
-//                postAdapter.updatePosts(postList)
-//            } catch (e: Exception) {
-//                Toast.makeText(requireContext(), "Failed to load filtered posts", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-
         return view
     }
 
@@ -306,20 +292,48 @@ class Home : Fragment() {
     private fun fetchPosts(isFollow: Boolean) {
         lifecycleScope.launch {
             try {
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+
                 val postList = if (isFollow) {
-                    val currentUserID = SaveSharedPreference.getUserID(requireContext())
                     val friends = friendViewModel.getFriendList(currentUserID)
                     val friendPosts = postViewModel.getPostsByUserIDs(friends.map { it.receiveUserID })
-                    friendPosts
+                    filterPostsByVisibility(friendPosts, currentUserID)
                 } else {
-                    postViewModel.getAllPosts()
+                    val allPosts = postViewModel.getAllPosts()
+                    filterPostsByVisibility(allPosts, currentUserID)
                 }
+
                 postAdapter.updatePosts(postList)
-                swipeRefreshLayout.isRefreshing = false // This works now because swipeRefreshLayout is initialized at the class level
+                swipeRefreshLayout.isRefreshing = false // Stop refreshing
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
                 swipeRefreshLayout.isRefreshing = false
             }
         }
+    }
+
+    private suspend fun filterPostsByVisibility(posts: List<Post>, currentUserID: String): List<Post> {
+        val visiblePosts = mutableListOf<Post>()
+
+        for (post in posts) {
+            when (post.postType) {
+                "Public" -> {
+                    visiblePosts.add(post) // Public posts are always visible
+                }
+                "Private" -> {
+                    if (post.userID == currentUserID) {
+                        visiblePosts.add(post) // Private posts are visible to the user who created them
+                    }
+                }
+                "Restricted" -> {
+                    val hasAccess = postViewModel.checkIfUserHasAccessToPost(currentUserID, post.postID)
+                    if (hasAccess) {
+                        visiblePosts.add(post) // Restricted posts are visible if the user has access
+                    }
+                }
+            }
+        }
+
+        return visiblePosts
     }
 }

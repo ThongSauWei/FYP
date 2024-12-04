@@ -416,6 +416,8 @@ class PostAdapter(
                 refreshPosts()
             }
         }
+
+        refreshPosts()
     }
 
 
@@ -448,6 +450,8 @@ class PostAdapter(
                 refreshPosts()
             }
         }
+
+        refreshPosts()
     }
 
 

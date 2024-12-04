@@ -70,4 +70,9 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         postRepository.deletePostWithAssociations(postID, postImageDAO, postCategoryDAO, postCommentDAO, onComplete)
     }
 
+    suspend fun checkIfUserHasAccessToPost(userID: String, postID: String): Boolean {
+        return postRepository.checkIfUserHasAccessToPost(userID, postID)
+    }
+
+
 }
