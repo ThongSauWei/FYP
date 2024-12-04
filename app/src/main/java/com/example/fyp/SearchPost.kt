@@ -28,6 +28,7 @@ import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostCategoryViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +38,7 @@ import kotlinx.coroutines.launch
 class SearchPost : Fragment() {
     private lateinit var postAdapter: PostAdapter
     private lateinit var postViewModel: PostViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var postCategoryViewModel: PostCategoryViewModel
@@ -67,6 +69,7 @@ class SearchPost : Fragment() {
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
         postCategoryViewModel = ViewModelProvider(this).get(PostCategoryViewModel::class.java)
+        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewFriendSearchFriend)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -98,6 +101,7 @@ class SearchPost : Fragment() {
             saveDAO = SaveDAO(),
             context = requireContext(),
             postViewModel = postViewModel,
+            postViewHistoryViewModel = postViewHistoryViewModel,
             friendViewModel = friendViewModel
         )
 
@@ -121,27 +125,6 @@ class SearchPost : Fragment() {
             R.id.revisionCard to "Revision"
         )
 
-//        val textViewId = cardToTextViewMap[cardView.id]
-//        val textView = view?.findViewById<TextView>(textViewId)
-
-//        val textViewId = cardToTextViewMap[cardView.id]
-//        if (textViewId != null) {
-//            val textView = view?.findViewById<TextView>(textViewId)
-//            textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-//        } else {
-//            Log.e("SearchPost", "No mapping found for CardView ID: ${cardView.id}")
-//        }
-
-
-//        categories.forEach { (cardId, category) ->
-//            view.findViewById<CardView>(cardId).setOnClickListener {
-//                if (category == "All") {
-//                    fetchAndDisplayPosts()
-//                } else {
-//                    fetchAndDisplayPostsByCategory(category)
-//                }
-//            }
-//        }
         categories.forEach { (cardId, category) ->
             val cardView = view.findViewById<CardView>(cardId) // Safely find the CardView
             cardView?.setOnClickListener {
@@ -153,12 +136,6 @@ class SearchPost : Fragment() {
                 }
             }
         }
-
-
-
-
-
-
 
         return view
     }
@@ -186,12 +163,6 @@ class SearchPost : Fragment() {
         } ?: Log.e("SearchPost", "No mapping found for CardView ID: ${cardView.id}")
     }
 
-
-
-
-
-
-
     private fun fetchAndDisplayPosts() {
         lifecycleScope.launch {
             try {
@@ -216,9 +187,6 @@ class SearchPost : Fragment() {
             }
         }
     }
-
-
-
 
     private fun displayPosts(posts: List<Post>) {
         Log.d("SearchPost", "Displaying ${posts.size} posts")

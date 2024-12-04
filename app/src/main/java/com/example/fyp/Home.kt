@@ -21,12 +21,16 @@ import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
@@ -39,11 +43,13 @@ import java.util.logging.Handler
 
 class Home : Fragment() {
     private lateinit var postViewModel: PostViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var postAdapter: PostAdapter
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout // Declare here
     private val postCategoryDAO = PostCategoryDAO()
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
 
 
     override fun onCreateView(
@@ -79,7 +85,14 @@ class Home : Fragment() {
         }
 
         // Initialize ViewModels
+        // Initialize repositories, ViewModels, and ViewModelFactory
+        postViewHistoryRepository = PostViewHistoryRepository(PostViewHistoryDAO()) // Create the repository
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository) // Create the factory
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
+
+
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
+//        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         friendViewModel = ViewModelProvider(this)[FriendViewModel::class.java]
 
@@ -132,6 +145,7 @@ class Home : Fragment() {
             saveDAO = SaveDAO(),
             context = requireContext(),
             postViewModel = postViewModel,
+            postViewHistoryViewModel = postViewHistoryViewModel,
             friendViewModel = friendViewModel
         )
 

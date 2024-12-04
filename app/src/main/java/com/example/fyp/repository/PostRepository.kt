@@ -85,4 +85,8 @@ class PostRepository(private val postDao : PostDAO) {
         return postDao.checkIfUserHasAccessToPost(userID, postID)
     }
 
+    suspend fun updatePostActiveStatus(postID: String, newStatus: Int) {
+        postDao.updatePostActiveStatus(postID, newStatus)
+    }
+
 }

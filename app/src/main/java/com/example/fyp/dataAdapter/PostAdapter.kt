@@ -44,6 +44,7 @@ import com.example.fyp.data.Save
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -68,6 +69,7 @@ class PostAdapter(
     private val saveDAO: SaveDAO,
     private val context: Context,
     private val postViewModel: PostViewModel,
+    private val postViewHistoryViewModel: PostViewHistoryViewModel,
     private val friendViewModel: FriendViewModel,
     private val isProfileMode: Boolean = false // Indicates if the adapter is used in
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
@@ -334,6 +336,9 @@ class PostAdapter(
             bundle.putString("POST_ID", post.postID)  // Pass the postID to the fragment
             fragment.arguments = bundle
 
+            // Add or update the post view history before navigating
+            postViewHistoryViewModel.addOrUpdateViewHistory(post.postID, currentUserID)
+
             // Start the fragment transaction
             val fragmentManager = (context as FragmentActivity).supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
@@ -347,6 +352,9 @@ class PostAdapter(
             val bundle = Bundle()
             bundle.putString("POST_ID", post.postID)  // Pass the postID to the fragment
             fragment.arguments = bundle
+
+            // Add or update the post view history before navigating
+            postViewHistoryViewModel.addOrUpdateViewHistory(post.postID, currentUserID)
 
             // Start the fragment transaction
             val fragmentManager = (context as FragmentActivity).supportFragmentManager

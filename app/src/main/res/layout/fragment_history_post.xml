@@ -26,6 +26,7 @@
                 android:id="@+id/tvExplore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="11dp"
                 android:fontFamily="@font/abhayalibre_extrabold"
@@ -34,7 +35,7 @@
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/separatorAnnHolder"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.135"
+                app:layout_constraintHorizontal_bias="0.048"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,12 +71,13 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder1"
-                tools:listitem="@layout/history_holder" />
+                tools:listitem="@layout/postholder" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
                 android:layout_width="110dp"
                 android:layout_height="30dp"
+                android:layout_marginStart="-6dp"
                 android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/background"
                 app:cardCornerRadius="7dp"
@@ -96,45 +98,76 @@
                     android:textSize="16sp" />
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvSavedPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="19dp"
-                android:fontFamily="@font/abhayalibre_medium"
-                android:justificationMode="inter_word"
-                android:text="@string/saved_post"
-                android:textColor="@color/tab_unused"
-                android:textSize="16sp"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView1"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardCornerRadius="7dp"
                 app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
                 app:layout_constraintStart_toEndOf="@+id/materialCardView"
-                app:layout_constraintTop_toTopOf="@+id/materialCardView" />
+                app:layout_constraintTop_toTopOf="@+id/materialCardView"
+                app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/tvLikedPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="19dp"
-                android:fontFamily="@font/abhayalibre_medium"
-                android:justificationMode="inter_word"
-                android:text="@string/liked_post"
-                android:textColor="@color/tab_unused"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvSavedPost"
-                app:layout_constraintStart_toEndOf="@+id/tvSavedPost"
-                app:layout_constraintTop_toTopOf="@+id/tvSavedPost" />
+                <TextView
+                    android:id="@+id/tvSavedPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/abhayalibre_medium"
+                    android:justificationMode="inter_word"
+                    android:text="@string/saved_post"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
 
-            <ImageView
-                android:id="@+id/searchImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
-                android:src="@drawable/search_unused"
-                app:layout_constraintBottom_toBottomOf="@+id/tvLikedPost"
-                app:layout_constraintStart_toEndOf="@+id/tvLikedPost"
-                app:layout_constraintTop_toTopOf="@+id/tvLikedPost" />
+            <!--            <TextView-->
+<!--                android:id="@+id/tvLikedPost"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:fontFamily="@font/abhayalibre_medium"-->
+<!--                android:justificationMode="inter_word"-->
+<!--                android:text="@string/liked_post"-->
+<!--                android:textColor="@color/tab_unused"-->
+<!--                android:textSize="16sp"-->
+<!--                tools:layout_editor_absoluteX="244dp"-->
+<!--                tools:layout_editor_absoluteY="84dp" />-->
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView2"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="@+id/materialCardView1"
+                app:layout_constraintStart_toEndOf="@+id/materialCardView1"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView1">
+
+                <TextView
+                    android:id="@+id/tvLikedPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/abhayalibre_medium"
+                    android:justificationMode="inter_word"
+                    android:text="@string/liked_post"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+<!--            <ImageView-->
+<!--                android:id="@+id/searchImage"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="19dp"-->
+<!--                android:src="@drawable/search_unused"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/tvLikedPost"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/tvLikedPost"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/tvLikedPost" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

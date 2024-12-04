@@ -214,5 +214,10 @@ class PostDAO {
         }
     }
 
+    suspend fun updatePostActiveStatus(postID: String, newStatus: Int) {
+        dbRef.child(postID).child("active").setValue(newStatus)
+    }
+
+
 
 }

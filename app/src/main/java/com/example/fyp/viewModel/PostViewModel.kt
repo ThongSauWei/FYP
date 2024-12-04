@@ -74,5 +74,9 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         return postRepository.checkIfUserHasAccessToPost(userID, postID)
     }
 
+    suspend fun updatePostActiveStatus(postID: String, newStatus: Int) {
+        postRepository.updatePostActiveStatus(postID, newStatus)
+    }
+
 
 }

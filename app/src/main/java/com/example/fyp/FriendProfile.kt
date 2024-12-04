@@ -32,6 +32,7 @@ import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
@@ -64,6 +65,7 @@ class FriendProfile : Fragment() {
     private lateinit var postViewModel: PostViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
 
     private lateinit var currentUserID: String
     private lateinit var friendUserID: String
@@ -91,6 +93,7 @@ class FriendProfile : Fragment() {
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        postViewHistoryViewModel = ViewModelProvider(this).get(PostViewHistoryViewModel::class.java)
 
         imgProfile = view.findViewById(R.id.imgProfileFriendProfile)
         tvName = view.findViewById(R.id.tvNameFriendProfile)
@@ -167,6 +170,7 @@ class FriendProfile : Fragment() {
                     saveDAO = saveDAO,
                     context = requireContext(),
                     postViewModel = postViewModel,
+                    postViewHistoryViewModel = postViewHistoryViewModel,
                     friendViewModel = friendViewModel,
                     isProfileMode = false
                 )

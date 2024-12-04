@@ -35,6 +35,7 @@ import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -46,6 +47,7 @@ class Profile : Fragment() {
     private lateinit var friendViewModel : FriendViewModel
     private lateinit var userViewModel : UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
     private lateinit var storageRef: StorageReference
     private lateinit var profileDao: ProfileDAO
     private lateinit var postList : List<Post>
@@ -82,6 +84,7 @@ class Profile : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         /*(activity as MainActivity).setToolbar(R.layout.toolbar, R.color.profile_color)*/
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
 
         nameProfile = view.findViewById(R.id.tvNameProfile)
         DOBProfile = view.findViewById(R.id.tvDOBProfile)
@@ -254,6 +257,7 @@ class Profile : Fragment() {
                     saveDAO = saveDAO, // Pass the SaveDAO instance
                     context = requireContext(), // Pass the context
                     postViewModel = postViewModel, // Pass the PostViewModel instance
+                    postViewHistoryViewModel = postViewHistoryViewModel,
                     friendViewModel = friendViewModel, // Pass the FriendViewModel instance
                     isProfileMode = true // Custom flag for profile-specific logic
                 )
