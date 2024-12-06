@@ -21,13 +21,16 @@ import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostCategoryViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
 import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -43,6 +46,8 @@ class SearchPost : Fragment() {
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var postCategoryViewModel: PostCategoryViewModel
     private var selectedCard: CardView? = null
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
+    private lateinit var postViewHistoryDAO: PostViewHistoryDAO
 
     private val cardToTextViewMap = mapOf(
         R.id.allCard to R.id.tvAll,
@@ -63,13 +68,22 @@ class SearchPost : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
+        // Initialize postViewHistoryDAO before using it
+        postViewHistoryDAO = PostViewHistoryDAO()
+
+
         (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
         postCategoryViewModel = ViewModelProvider(this).get(PostCategoryViewModel::class.java)
-        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
+//        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
+
+        postViewHistoryRepository = PostViewHistoryRepository(postViewHistoryDAO)
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository)
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
+
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewFriendSearchFriend)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

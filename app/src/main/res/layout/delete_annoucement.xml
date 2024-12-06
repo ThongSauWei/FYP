@@ -33,7 +33,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/abhayalibre_semibold"
         android:gravity="center_horizontal"
-        android:text="@string/confirm_delete"
+        android:text="@string/confirm_delete_announcement"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imgDeleteTitle"

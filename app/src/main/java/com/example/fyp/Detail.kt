@@ -133,7 +133,6 @@ class Detail : Fragment() {
             }
         }
 
-
 // Adjust when the keyboard visibility changes
         KeyboardVisibilityEvent.setEventListener(requireActivity()) { isOpen ->
             val scrollView = view.findViewById<ScrollView>(R.id.scrollView2)
@@ -145,11 +144,6 @@ class Detail : Fragment() {
                 scrollView.setPadding(0, 0, 0, 0)
             }
         }
-
-
-
-
-
 
         sendBtn.setOnClickListener {
             val postID = arguments?.getString("POST_ID")
@@ -184,10 +178,28 @@ class Detail : Fragment() {
             }
         }
 
-
         // Set up RecyclerView
         recyclerViewComment.layoutManager = LinearLayoutManager(activity)
-        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
+//        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
+
+        val adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope) { comment ->
+            lifecycleScope.launch {
+                val currentUserID = getCurrentUserID()
+                val post = postViewModel.getPostByID(comment.postID)
+                if (post != null && post.userID == currentUserID) {
+                    val postCommentDAO = PostCommentDAO()
+                    postCommentDAO.deletePostComment(comment.postCommentID)
+                    Toast.makeText(context, "Comment deleted successfully", Toast.LENGTH_SHORT).show()
+                    observeAndRefreshComments(post.postID) // Refresh the comments
+                } else {
+                    Toast.makeText(context, "You are not authorized to delete this comment.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        recyclerViewComment.adapter = adapter
+
+        if (postID != null) observeAndRefreshComments(postID)
 
         return view
     }

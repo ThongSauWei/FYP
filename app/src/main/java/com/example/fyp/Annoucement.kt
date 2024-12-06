@@ -51,7 +51,7 @@ class Annoucement : Fragment() {
         (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
         // Customize toolbar appearance
         val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
-        titleTextView?.text = "ANNOUNCEMENT"
+        titleTextView?.text = "NOTIFICATION"
 
         val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
         navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
@@ -100,28 +100,28 @@ class Annoucement : Fragment() {
     }
 
     private fun loadFriendRequests() {
-        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
+//        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
         val cardViewProfile = view?.findViewById<MaterialCardView>(R.id.cardViewProfile) // Use MaterialCardView instead of CardView
+        val cardNotice = view?.findViewById<CardView>(R.id.cardNotice)
+        val textView9 = view?.findViewById<TextView>(R.id.textView9)
 
         val currentUserID = getCurrentUserID()
 
         // Fetch pending friend requests directly from the Friend table
         GlobalScope.launch(Dispatchers.IO) {
             val pendingFriendRequests = friendDAO.getPendingFriendRequests(currentUserID)
+            Log.d("FriendRequest", "Pending requests: $pendingFriendRequests")
             withContext(Dispatchers.Main) {
                 if (pendingFriendRequests.isNotEmpty()) {
-                    // Show the cardAnnExits and set the red border for cardViewProfile
-                    cardAnnExits?.visibility = View.VISIBLE
-                    cardViewProfile?.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.red)) // Set red border
-                    Log.d("FriendRequest", "Pending requests found, card visible with red border")
+                    Log.d("FriendRequest", "Pending requests found")
+                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
                 } else {
-                    // Hide the cardAnnExits and reset the border color
-                    cardAnnExits?.visibility = View.GONE
-                    cardViewProfile?.setStrokeColor(ContextCompat.getColor(requireContext(), R.color.black)) // Reset to original border color
-                    Log.d("FriendRequest", "No pending requests, card hidden")
+                    Log.d("FriendRequest", "No pending requests found")
+                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
                 }
             }
         }
+
     }
 
 

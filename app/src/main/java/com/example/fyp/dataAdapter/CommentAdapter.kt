@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit
 
 class CommentAdapter(
     private var comments: List<PostComment>,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val deleteCommentListener: (PostComment) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentHolder>() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var storageRef: StorageReference
@@ -34,6 +35,7 @@ class CommentAdapter(
         val imgProfileCommentHolder: ImageView = itemView.findViewById(R.id.imgProfileCommentHolder)
         val tvUsername: TextView = itemView.findViewById(R.id.tvUsername)
         val tvCommentDate: TextView = itemView.findViewById(R.id.tvCommentDate)
+        val deleteComment: TextView = itemView.findViewById(R.id.delete_comment)
     }
 
     fun setViewModel(userViewModel: UserViewModel) {
@@ -73,6 +75,10 @@ class CommentAdapter(
                         .load(task.result)
                         .into(holder.imgProfileCommentHolder)
                 }
+            }
+
+            holder.deleteComment.setOnClickListener {
+                deleteCommentListener(comment)
             }
         }
     }

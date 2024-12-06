@@ -68,7 +68,7 @@
     <ImageView
         android:id="@+id/imagePost"
         android:layout_width="263dp"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="20dp"
         android:scaleType="fitXY"

@@ -26,15 +26,18 @@ import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.ProfileDAO
 import com.example.fyp.dao.SaveDAO
 import com.squareup.picasso.Picasso
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
 import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -72,6 +75,8 @@ class Profile : Fragment() {
     private lateinit var linearLayoutProfile: LinearLayout
     private lateinit var genderProfile: TextView
     private lateinit var imageGender: ImageView
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
+    private lateinit var postViewHistoryDAO: PostViewHistoryDAO
 
 
     private val imagePickRequestCode = 1000
@@ -84,7 +89,14 @@ class Profile : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         /*(activity as MainActivity).setToolbar(R.layout.toolbar, R.color.profile_color)*/
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
+//        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
+        // Initialize postViewHistoryDAO before using it
+        postViewHistoryDAO = PostViewHistoryDAO()
+
+        postViewHistoryRepository = PostViewHistoryRepository(postViewHistoryDAO)
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository)
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
+
 
         nameProfile = view.findViewById(R.id.tvNameProfile)
         DOBProfile = view.findViewById(R.id.tvDOBProfile)

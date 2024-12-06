@@ -24,14 +24,17 @@ import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Friend
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
 import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -66,6 +69,8 @@ class FriendProfile : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
+    private lateinit var postViewHistoryDAO: PostViewHistoryDAO
 
     private lateinit var currentUserID: String
     private lateinit var friendUserID: String
@@ -93,7 +98,13 @@ class FriendProfile : Fragment() {
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        postViewHistoryViewModel = ViewModelProvider(this).get(PostViewHistoryViewModel::class.java)
+//        postViewHistoryViewModel = ViewModelProvider(this).get(PostViewHistoryViewModel::class.java)
+
+        postViewHistoryDAO = PostViewHistoryDAO()
+
+        postViewHistoryRepository = PostViewHistoryRepository(postViewHistoryDAO)
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository)
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
 
         imgProfile = view.findViewById(R.id.imgProfileFriendProfile)
         tvName = view.findViewById(R.id.tvNameFriendProfile)

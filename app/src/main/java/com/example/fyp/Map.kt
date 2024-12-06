@@ -71,6 +71,22 @@ class Map : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
+        // Customize toolbar appearance
+        val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
+        titleTextView?.text = "MAP"
+
+        val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
+        navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
+        navIcon?.setOnClickListener { activity?.onBackPressed() } // Set click behavior
+
+        val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
+        btnNotification?.visibility = View.GONE
+
+        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
+        btnSearchToolbarWithAnnouce?.visibility = View.GONE
+
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 
