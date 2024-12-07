@@ -80,7 +80,7 @@ class Profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        /*(activity as MainActivity).setToolbar(R.layout.toolbar, R.color.profile_color)*/
+        (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         nameProfile = view.findViewById(R.id.tvNameProfile)

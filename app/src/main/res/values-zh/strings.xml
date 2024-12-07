@@ -55,25 +55,25 @@
     <string name="category">类别</string>
     <string name="learning_style">学习风格</string>
 
-    <string name="discover_friend">发现朋友</string>
-    <string name="friend">朋友</string>
-    <string name="add_friend">添加朋友</string>
-    <string name="unfriend">取消好友</string>
+    <string name="discover_friend">发现用户</string>
+    <string name="friend">关注者</string>
+    <string name="add_friend">关注</string>
+    <string name="unfriend">取消关注</string>
     <string name="message">消息</string>
     <string name="post">帖子</string>
-    <string name="friends">朋友</string>
-    <string name="all_friends">所有朋友</string>
-    <string name="_0_friends">0 朋友</string>
-    <string name="friend_request_sent">已发送好友请求</string>
-    <string name="friend_removed">已移除好友</string>
+    <string name="friends">关注者</string>
+    <string name="all_friends">所有关注者</string>
+    <string name="_0_friends">0 关注者</string>
+    <string name="friend_request_sent">已发送关注请求</string>
+    <string name="friend_removed">已移除关注</string>
     <string name="typing">输入中…</string>
     <string name="all">所有</string>
     <string name="InnerChatTyping">输入中…</string>
     <string name="history">浏览历史</string>
     <string name="map">地图</string>
     <string name="view_post">查看帖子</string>
-    <string name="invite_friends_to_join">邀请朋友加入</string>
-    <string name="invite_more_friends_to_join_the_discussion_now">立即邀请更多朋友加入讨论！</string>
+    <string name="invite_friends_to_join">邀请关注者加入</string>
+    <string name="invite_more_friends_to_join_the_discussion_now">立即邀请更多关注者加入讨论！</string>
     <string name="done">完成</string>
     <string name="search_by_name">按名字搜索</string>
     <string name="assignment">作业</string>
@@ -95,7 +95,7 @@
     <string name="need_help">需要帮助吗？</string>
     <string name="edit_profile">编辑个人资料</string>
     <string name="profile_groups">群组</string>
-    <string name="profile_friends">朋友</string>
+    <string name="profile_friends">关注者</string>
     <string name="create_post">创建帖子</string>
     <string name="sign_up">注册</string>
     <string name="signUpName">名字</string>
@@ -106,11 +106,11 @@
     <string name="signUp_sign_up_btn">注册</string>
     <string name="already_have_an_account">已有账户？</string>
     <string name="SignUpEmail">电子邮件</string>
-    <string name="find_friends">寻找朋友</string>
+    <string name="find_friends">寻找用户</string>
     <string name="study_with_other_study_partner">与学习伙伴一起学习！</string>
     <string name="search_by_name_category_or_learning_styles">按名字、类别或学习风格搜索</string>
-    <string name="search_friends">搜寻朋友</string>
-    <string name="suggest_friends">推荐朋友</string>
+    <string name="search_friends">搜寻用户</string>
+    <string name="suggest_friends">推荐关注</string>
     <string name="search_a_post">搜索帖子</string>
     <string name="explore_something_special">探索特别内容…</string>
     <string name="search_for_post">寻找任何帖子…</string>
@@ -178,8 +178,8 @@
 
 
     <array name="problem_type">
-        <item>无法添加朋友</item>
-        <item>无法加入群组</item>
+        <item>无法关注用户</item>
+        <item>无法注册</item>
         <item>无法上传帖子</item>
         <item>无法登录</item>
         <item>其他</item>

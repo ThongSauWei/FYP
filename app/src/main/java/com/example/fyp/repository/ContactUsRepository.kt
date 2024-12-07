@@ -24,7 +24,7 @@ class ContactUsRepository {
         // Perform network operation on a background thread
         GlobalScope.launch(Dispatchers.IO) {  // Use IO dispatcher for network operations
             try {
-                val sendGridApiKey = "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"
+                val sendGridApiKey = "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"
                 val client = OkHttpClient()
                 val jsonBody = JSONObject()
 

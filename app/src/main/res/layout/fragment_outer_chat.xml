@@ -33,8 +33,10 @@
 
             <EditText
                 android:id="@+id/txtSearchOuterChat"
-                android:layout_width="350dp"
+                android:layout_width="320dp"
                 android:layout_height="44dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/search_box_bg"
                 android:drawableStart="@drawable/baseline_search_light_24"
@@ -45,7 +47,7 @@
                 android:hint="@string/search_your_friends"
                 android:inputType="text"
                 android:paddingStart="15dp"
-                android:textColor="@color/light_grey"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +57,8 @@
                 android:id="@+id/cardViewBtnSearchOuterChat"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
@@ -64,13 +68,13 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnSearchOuterChat"
-                    android:layout_width="350dp"
+                    android:layout_width="320dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_bg"
                     android:fontFamily="@font/abhayalibre_semibold"
                     android:text="@string/search_chat_friends"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -81,11 +85,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="70dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewBtnSearchOuterChat"
+                app:layout_constraintVertical_bias="0.0"
                 tools:listitem="@layout/chat_holder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

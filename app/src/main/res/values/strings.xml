@@ -14,8 +14,8 @@
     <string name="recovery_msg">Recovery your password by email validation</string>
     <string name="ok">OK</string>
 
-    <string name="confirm_delete_haha">Confirm Delete Friends?</string>
-    <string name="confirm_delete">Confirm Delete %1$s ?</string>
+    <string name="confirm_delete_haha">Confirm Delete Followers?</string>
+    <string name="confirm_delete">Confirm Unfollow %1$s ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
@@ -60,28 +60,28 @@
     <string name="learning_style">Learning Style</string>
     <string name="profile_description">Description…</string>
 
-    <string name="discover_friend">Discover Friend</string>
-    <string name="add_friend">Add Friend</string>
+    <string name="discover_friend">Discover Users</string>
+    <string name="add_friend">Follow</string>
     <string name="message">Message</string>
-    <string name="friend">Friend</string>
-    <string name="friends">Friends</string>
-    <string name="all_friends">All Friends</string>
-    <string name="_0_friends">0 Friends</string>
+    <string name="friend">Follower</string>
+    <string name="friends">Followers</string>
+    <string name="all_friends">All Followers</string>
+    <string name="_0_friends">0 Followers</string>
     <string name="typing">Typing...</string>
     <string name="all">ALL</string>
     <string name="InnerChatTyping">Typing...</string>
     <string name="requested">Requested</string>
-    <string name="unfriend">Unfriend</string>
-    <string name="friend_request_sent">Friend Request Sent</string>
-    <string name="friend_removed">Friend Removed</string>
-    <string name="error_friend_not_removed">Error Delete Friend</string>
+    <string name="unfriend">Unfollow</string>
+    <string name="friend_request_sent">Follow Request Sent</string>
+    <string name="friend_removed">Follower Removed</string>
+    <string name="error_friend_not_removed">Error Delete Follower</string>
 
     <string name="map">Map</string>
     <string name="history">History</string>
     <string name="post">Post</string>
     <string name="view_post">View Post</string>
-    <string name="invite_friends_to_join">Invite Friends to Join</string>
-    <string name="invite_more_friends_to_join_the_discussion_now">Invite more friends to join the discussion now!!</string>
+    <string name="invite_friends_to_join">Invite Followers to Join</string>
+    <string name="invite_more_friends_to_join_the_discussion_now">Invite more followers to join the discussion now!!</string>
     <string name="done">Done</string>
 
     <string name="search_by_name">search by name</string>
@@ -106,7 +106,7 @@
     <string name="need_help">Need help?</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_groups">Groups</string>
-    <string name="profile_friends">Friends</string>
+    <string name="profile_friends">Followers</string>
     <string name="create_post">New Post</string>
     <string name="sign_up">Sign UP</string>
     <string name="signUpName">Name</string>
@@ -118,12 +118,12 @@
     <string name="signUp_sign_up_btn">Sign Up</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="SignUpEmail">Email</string>
-    <string name="find_friends">Find Friends</string>
-    <string name="study_with_other_study_partner">Find more friends !!</string>
-    <string name="search_by_name_category_or_learning_styles">search by name, category or learning styles</string>
+    <string name="find_friends">Find Users</string>
+    <string name="study_with_other_study_partner">Find more users !!</string>
+    <string name="search_by_name_category_or_learning_styles">Search by name</string>
     <string name="search_friends">Search Friends</string>
 
-    <string name="suggest_friends">Suggest Friends</string>
+    <string name="suggest_friends">Suggest to follow</string>
     <string name="search_a_post">Search a Post</string>
     <string name="explore_something_special">Explore something special...</string>
     <string name="search_for_post">Search for any post ...</string>
@@ -189,8 +189,8 @@
     <string name="chooseRestricted">Choose restricted user :</string>
 
     <!--    Friend Request-->
-    <string name="friend_request">Friend Request</string>
-    <string name="approve_or_ignore">Approve or Ignore Friend Requests</string>
+    <string name="friend_request">Follow Request</string>
+    <string name="approve_or_ignore">Approve or Ignore Follow Requests</string>
     <string name="today">Today</string>
     <string name="confirm_btn">Confirm</string>
     <string name="del_btn">Delete</string>
@@ -233,8 +233,8 @@
         <item>中文</item>
     </array>
     <array name="problem_type">
-        <item>Can\'t Add Friends</item>
-        <item>Can\'t Join Group</item>
+        <item>Can\'t Follow User</item>
+        <item>Can\'t Register</item>
         <item>Can\'t Upload Post</item>
         <item>Can\'t Login</item>
         <item>Others</item>

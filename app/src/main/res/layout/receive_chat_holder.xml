@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,9 +19,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- Text Message -->
         <TextView
             android:id="@+id/tvChatReceiveChatHolder"
-            android:maxWidth="300dp"
+            android:maxWidth="280dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/abhayalibre_semibold"
@@ -29,52 +31,81 @@
             android:paddingEnd="10dp"
             android:paddingBottom="5dp"
             android:textColor="@color/black"
-            android:text="Helooooooooooooooooooooooo byebyeeeeeeeeeee"
+            android:text="Received text message!"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Image Message -->
+        <ImageView
+            android:id="@+id/imgChatReceiveChatHolder"
+            android:layout_width="280dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <!-- Video Thumbnail -->
+        <FrameLayout
+            android:id="@+id/videoChatReceiveChatHolder"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewBtnViewPostReceiveChatHolder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+            <!-- Video Thumbnail -->
+            <VideoView
+                android:id="@+id/videoViewChatReceive"
+                android:layout_width="280dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="30dp" />
+
+            <ImageView
+                android:id="@+id/btnPlayVideo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:visibility="gone"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="10dp">
+                android:src="@drawable/baseline_play_circle_24" />
+        </FrameLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnViewPostReceiveChatHolder"
-                    android:layout_width="87dp"
-                    android:layout_height="31dp"
-                    android:background="@drawable/button_bg"
-                    android:fontFamily="@font/caveat"
-                    android:text="@string/view_post"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+        <!-- Selected File -->
+        <TextView
+            android:id="@+id/fileChatReceiveChatHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:text="received_file.docx"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:drawableStart="@drawable/baseline_file_present_24" />
 
-            </androidx.cardview.widget.CardView>
+        <!-- TextView for File Link -->
+        <TextView
+            android:id="@+id/tvFileLinkReceive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:text="Download File"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tvTimeReceiveChatHolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="4dp"
-                android:fontFamily="@font/abhayalibre_semibold"
-                android:gravity="end"
-                android:text="11:57pm"
-                android:textSize="15sp" />
-
-        </LinearLayout>
-
+        <!-- Time and Status -->
+        <TextView
+            android:id="@+id/tvTimeReceiveChatHolder"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:gravity="end"
+            android:text="11:57pm"
+            android:textSize="15sp" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

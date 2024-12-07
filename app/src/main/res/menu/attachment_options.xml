@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/optionImage"
+        android:icon="@drawable/image_icon"
+        android:title="Send Image" />
+    <item
+        android:id="@+id/optionVideo"
+        android:icon="@drawable/baseline_video_library_24"
+        android:title="Send Video" />
+    <item
+        android:id="@+id/optionFile"
+        android:icon="@drawable/baseline_upload_file_24"
+        android:title="Send File" />
+</menu>

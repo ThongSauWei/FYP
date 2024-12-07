@@ -187,28 +187,22 @@ class MainActivity : AppCompatActivity() {
 
         val footerMenu: View = findViewById(R.id.footerMenu)
         footerMenu.setOnClickListener {
-            // Clear login information
             SaveSharedPreference.setUserID(this, "")
-
-            // Refresh the sidebar (reset to default menu)
             refreshNavigationViewMenu()
-
-            // Close the sidebar (if open)
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             }
 
-            // Navigate to the SignIn fragment and clear back stack
             val transaction = manager.beginTransaction()
             val fragment = SignIn()
             transaction.replace(R.id.fragmentContainerView, fragment)
-            manager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE) // Clear back stack
-            transaction.addToBackStack(null)
+            manager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
             transaction.commit()
 
-            // Optional: Show a logout confirmation message
+            setDrawerEnabled(false) // Lock the drawer after logout
             Toast.makeText(this, "You have been logged out.", Toast.LENGTH_SHORT).show()
         }
+
 
         // Set up Drawer Toggle
         actionBarDrawerToggle = ActionBarDrawerToggle(
@@ -273,6 +267,14 @@ class MainActivity : AppCompatActivity() {
     fun setToolbar() {
         toolbarContainer.removeAllViews()
         toolbarContainer.visibility = View.GONE
+    }
+
+    fun setDrawerEnabled(enabled: Boolean) {
+        if (enabled) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        }
     }
 
     fun refreshNavigationViewMenu() {

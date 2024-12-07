@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class SignIn : Fragment() {
+
     private lateinit var txtEmailSignIn: EditText
     private lateinit var txtPasswordSignIn: EditText
     private lateinit var btnSignInSignIn: Button
@@ -33,6 +33,10 @@ class SignIn : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
+
+        // Disable the navigation drawer when on the SignIn fragment
+        (activity as MainActivity).setDrawerEnabled(false)
+
         (activity as MainActivity).setToolbar()
 
         txtEmailSignIn = view.findViewById(R.id.txtEmailSignIn)
@@ -64,26 +68,34 @@ class SignIn : Fragment() {
     }
 
     private fun signInWithEmailAndPassword(email: String, password: String) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val user = userViewModel.getUserByLogin(email, password)
                 if (user != null) {
-                    SaveSharedPreference.setUserID(requireContext(), user.userID)
+                    if (isAdded && context != null) {
+                        SaveSharedPreference.setUserID(requireContext(), user.userID)
 
-                    applyUserLanguage(user.userID) {
-                        refreshFragment(Home()) // Refresh the Home fragment
+                        applyUserLanguage(user.userID) {
+                            // Enable the drawer after successful sign-in
+                            (activity as MainActivity).setDrawerEnabled(true)
+                            refreshFragment(Home())
+                        }
                     }
                 } else {
+                    if (isAdded && context != null) {
+                        Toast.makeText(
+                            requireContext(), "Authentication failed. Invalid Email/Password!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                if (isAdded && context != null) {
                     Toast.makeText(
-                        requireContext(), "Authentication failed. Invalid Email/Password!",
+                        requireContext(), "Authentication failed: ${e.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    requireContext(), "Authentication failed: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }
@@ -106,26 +118,32 @@ class SignIn : Fragment() {
     private fun applyUserLanguage(userID: String, onLanguageApplied: () -> Unit) {
         val userLanguageRef = FirebaseDatabase.getInstance().getReference("users/$userID/userChosenLanguage")
         userLanguageRef.get().addOnSuccessListener { snapshot ->
-            val languageCode = snapshot.getValue(String::class.java) ?: "en"
+            if (isAdded && context != null) {
+                val languageCode = snapshot.getValue(String::class.java) ?: "en"
 
-            SaveSharedPreference.setLanguage(requireContext(), languageCode)
-            setAppLocale(languageCode)
+                SaveSharedPreference.setLanguage(requireContext(), languageCode)
+                setAppLocale(languageCode)
 
-            // Refresh the NavigationView menu
-            (requireActivity() as MainActivity).refreshNavigationViewMenu()
-            onLanguageApplied()
+                // Refresh the NavigationView menu
+                (requireActivity() as MainActivity).refreshNavigationViewMenu()
+                onLanguageApplied()
+            }
         }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Failed to retrieve user language.", Toast.LENGTH_SHORT).show()
-            onLanguageApplied()
+            if (isAdded && context != null) {
+                Toast.makeText(requireContext(), "Failed to retrieve user language.", Toast.LENGTH_SHORT).show()
+                onLanguageApplied()
+            }
         }
     }
 
     private fun setAppLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-        val config = android.content.res.Configuration()
-        config.setLocale(locale)
-        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
+        if (isAdded && context != null) {
+            val locale = Locale(languageCode)
+            Locale.setDefault(locale)
+            val config = android.content.res.Configuration()
+            config.setLocale(locale)
+            requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
+        }
     }
 
     private fun refreshFragment(fragment: Fragment) {
@@ -141,5 +159,10 @@ class SignIn : Fragment() {
         transaction?.replace(R.id.fragmentContainerView, fragment)
         transaction?.addToBackStack(null)
         transaction?.commit()
+
+        // Enable the drawer if navigating away from SignIn
+        if (fragment !is SignIn) {
+            (activity as MainActivity).setDrawerEnabled(true)
+        }
     }
 }

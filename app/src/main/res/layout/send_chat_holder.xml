@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,13 +26,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/abhayalibre_semibold"
-            android:maxWidth="300dp"
+            android:maxWidth="280dp"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
             android:paddingEnd="25dp"
             android:paddingBottom="5dp"
+            android:text="This is a text message!"
             android:textColor="@color/white"
-            android:text="This is a banana sample text message wakakakaka!"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="visible" />
@@ -39,58 +40,63 @@
         <!-- Image Message -->
         <ImageView
             android:id="@+id/imgChatSendChatHolder"
-            android:layout_width="300dp"
+            android:layout_width="280dp"
             android:layout_height="150dp"
             android:layout_marginTop="8dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="30dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/post_image"
             android:visibility="gone" />
 
         <!-- Video Thumbnail -->
-        <!--<FrameLayout
+        <FrameLayout
             android:id="@+id/videoChatSendChatHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            >
+            android:visibility="gone">
+
+            <!-- Video Thumbnail -->
+            <VideoView
+                android:id="@+id/videoViewChatSend"
+                android:layout_width="280dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnPlayVideo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:src="@drawable/baseline_play_circle_24" />
-        </FrameLayout>-->
+        </FrameLayout>
 
-        <!-- Audio Message -->
-        <LinearLayout
-            android:id="@+id/audioChatSendChatHolder"
-            android:layout_width="match_parent"
+        <!-- Selected File -->
+        <TextView
+            android:id="@+id/fileChatSendChatHolder"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:padding="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:visibility="gone">
+            android:layout_marginStart="10dp"
+            android:text="example_file.pdf"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:drawableStart="@drawable/baseline_file_present_24" />
 
-            <ImageView
-                android:id="@+id/btnPlayAudio"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/baseline_play_circle_24" />
-
-            <TextView
-                android:id="@+id/tvAudioDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="00:30"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvFileLinkSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"
+            android:text="Download File"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
         <!-- Time and Status -->
         <LinearLayout
@@ -102,9 +108,10 @@
 
             <TextView
                 android:id="@+id/tvTimeSendChatHolder"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="18dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:text="11:57 PM"
                 android:textColor="@color/grey"
@@ -112,5 +119,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

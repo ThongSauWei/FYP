@@ -67,7 +67,7 @@ class SearchFriendAdapter(
             val transaction = fragmentManager.beginTransaction()
             val fragment = FriendProfile()
             val bundle = Bundle()
-            bundle.putString("userID", user.userID) // Passing userID
+            bundle.putString("friendUserID", user.userID) // Passing userID
             fragment.arguments = bundle
             transaction.replace(R.id.fragmentContainerView, fragment)
             transaction.addToBackStack(null)
