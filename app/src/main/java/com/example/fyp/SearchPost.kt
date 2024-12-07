@@ -21,13 +21,17 @@ import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostCategoryViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -37,10 +41,13 @@ import kotlinx.coroutines.launch
 class SearchPost : Fragment() {
     private lateinit var postAdapter: PostAdapter
     private lateinit var postViewModel: PostViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var postCategoryViewModel: PostCategoryViewModel
     private var selectedCard: CardView? = null
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
+    private lateinit var postViewHistoryDAO: PostViewHistoryDAO
 
     private val cardToTextViewMap = mapOf(
         R.id.allCard to R.id.tvAll,
@@ -61,12 +68,22 @@ class SearchPost : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
+        // Initialize postViewHistoryDAO before using it
+        postViewHistoryDAO = PostViewHistoryDAO()
+
+
         (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
         postCategoryViewModel = ViewModelProvider(this).get(PostCategoryViewModel::class.java)
+//        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
+
+        postViewHistoryRepository = PostViewHistoryRepository(postViewHistoryDAO)
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository)
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
+
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewFriendSearchFriend)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -98,6 +115,7 @@ class SearchPost : Fragment() {
             saveDAO = SaveDAO(),
             context = requireContext(),
             postViewModel = postViewModel,
+            postViewHistoryViewModel = postViewHistoryViewModel,
             friendViewModel = friendViewModel
         )
 
@@ -121,27 +139,6 @@ class SearchPost : Fragment() {
             R.id.revisionCard to "Revision"
         )
 
-//        val textViewId = cardToTextViewMap[cardView.id]
-//        val textView = view?.findViewById<TextView>(textViewId)
-
-//        val textViewId = cardToTextViewMap[cardView.id]
-//        if (textViewId != null) {
-//            val textView = view?.findViewById<TextView>(textViewId)
-//            textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-//        } else {
-//            Log.e("SearchPost", "No mapping found for CardView ID: ${cardView.id}")
-//        }
-
-
-//        categories.forEach { (cardId, category) ->
-//            view.findViewById<CardView>(cardId).setOnClickListener {
-//                if (category == "All") {
-//                    fetchAndDisplayPosts()
-//                } else {
-//                    fetchAndDisplayPostsByCategory(category)
-//                }
-//            }
-//        }
         categories.forEach { (cardId, category) ->
             val cardView = view.findViewById<CardView>(cardId) // Safely find the CardView
             cardView?.setOnClickListener {
@@ -153,12 +150,6 @@ class SearchPost : Fragment() {
                 }
             }
         }
-
-
-
-
-
-
 
         return view
     }
@@ -186,12 +177,6 @@ class SearchPost : Fragment() {
         } ?: Log.e("SearchPost", "No mapping found for CardView ID: ${cardView.id}")
     }
 
-
-
-
-
-
-
     private fun fetchAndDisplayPosts() {
         lifecycleScope.launch {
             try {
@@ -216,9 +201,6 @@ class SearchPost : Fragment() {
             }
         }
     }
-
-
-
 
     private fun displayPosts(posts: List<Post>) {
         Log.d("SearchPost", "Displaying ${posts.size} posts")

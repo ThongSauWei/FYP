@@ -52,5 +52,41 @@ class PostRepository(private val postDao : PostDAO) {
         return postDao.getPostByID(postID)
     }
 
+    suspend fun getPostsForUser(currentUserID: String): List<Post> {
+        val allPosts = postDao.getAllPost()  // Fetch all posts
+        val visiblePosts = mutableListOf<Post>()
+
+        for (post in allPosts) {
+            when (post.postType) {
+                "Public" -> {
+                    // Public posts are visible to everyone
+                    visiblePosts.add(post)
+                }
+                "Private" -> {
+                    // Private posts are visible only to the user who created it
+                    if (post.userID == currentUserID) {
+                        visiblePosts.add(post)
+                    }
+                }
+                "Restricted" -> {
+                    // Restricted posts require checking the PostShared table
+                    val hasAccess = postDao.checkIfUserHasAccessToPost(currentUserID, post.postID)
+                    if (hasAccess) {
+                        visiblePosts.add(post)
+                    }
+                }
+            }
+        }
+
+        return visiblePosts
+    }
+
+    suspend fun checkIfUserHasAccessToPost(userID: String, postID: String): Boolean {
+        return postDao.checkIfUserHasAccessToPost(userID, postID)
+    }
+
+    suspend fun updatePostActiveStatus(postID: String, newStatus: Int) {
+        postDao.updatePostActiveStatus(postID, newStatus)
+    }
 
 }

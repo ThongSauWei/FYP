@@ -11,6 +11,7 @@
     <string name="email_recovery_title">邮件验证恢复</string>
     <string name="hello_blank_fragment">你好空白片段</string>
     <string name="confirm_delete_haha">确认删除%1$s?</string>
+    <string name="confirm_delete_announcement">确认删除 ?</string>
     <string name="confirm_delete">确认删除 ？</string>
     <string name="yes">是的</string>
     <string name="no">否</string>
@@ -212,6 +213,8 @@
     <string name="feedback_title">TARUMT校园中评分</string>
 
     <string name="follow">关注</string>
+
+    <string name="delete_comment">刪除評論</string>
 
     <!--   post time-->
     <string name="select_date">日期</string>

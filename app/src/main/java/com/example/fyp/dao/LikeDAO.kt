@@ -106,6 +106,26 @@ class LikeDAO {
             }
         }
     }
+
+    suspend fun getLikesByUserID(userID: String): List<Like> = suspendCancellableCoroutine { continuation ->
+        dbRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val likes = mutableListOf<Like>()
+                for (data in snapshot.children) {
+                    val like = data.getValue(Like::class.java)
+                    if (like != null) {
+                        likes.add(like)
+                    }
+                }
+                continuation.resume(likes)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
+
 }
 
 

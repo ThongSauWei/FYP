@@ -12,15 +12,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fyp.dao.AnnoucementDAO
+import com.example.fyp.dao.FriendDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dataAdapter.AnnoucementAdapter
+import com.example.fyp.dataAdapter.FriendRequestAdapter
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -32,6 +40,7 @@ class Annoucement : Fragment() {
     private val annoucementDAO = AnnoucementDAO()
     private lateinit var postImageDAO: PostImageDAO
     private lateinit var storageRef: StorageReference
+    private val friendDAO = FriendDAO()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +51,7 @@ class Annoucement : Fragment() {
         (activity as MainActivity).setToolbar(R.layout.toolbar_with_annouce_and_title)
         // Customize toolbar appearance
         val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
-        titleTextView?.text = "ANNOUNCEMENT"
+        titleTextView?.text = "NOTIFICATION"
 
         val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
         navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
@@ -62,12 +71,16 @@ class Annoucement : Fragment() {
 
         postImageDAO = PostImageDAO(storageRef, databaseRef)
         // Fetch and display data
+        loadFriendRequests()
+
         loadAnnouncements()
 
 
         val cardViewRequest = view.findViewById<CardView>(R.id.cardViewProfile)
         val tvFriendRequest = view.findViewById<TextView>(R.id.textView9)
         val tvApproveRequest = view.findViewById<TextView>(R.id.textView11)
+
+
 
         // Define a common click listener
         val navigateToFriendRequest = View.OnClickListener {
@@ -86,6 +99,34 @@ class Annoucement : Fragment() {
         return view
     }
 
+    private fun loadFriendRequests() {
+//        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
+        val cardViewProfile = view?.findViewById<MaterialCardView>(R.id.cardViewProfile) // Use MaterialCardView instead of CardView
+        val cardNotice = view?.findViewById<CardView>(R.id.cardNotice)
+        val textView9 = view?.findViewById<TextView>(R.id.textView9)
+
+        val currentUserID = getCurrentUserID()
+
+        // Fetch pending friend requests directly from the Friend table
+        GlobalScope.launch(Dispatchers.IO) {
+            val pendingFriendRequests = friendDAO.getPendingFriendRequests(currentUserID)
+            Log.d("FriendRequest", "Pending requests: $pendingFriendRequests")
+            withContext(Dispatchers.Main) {
+                if (pendingFriendRequests.isNotEmpty()) {
+                    Log.d("FriendRequest", "Pending requests found")
+                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                } else {
+                    Log.d("FriendRequest", "No pending requests found")
+                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
+                }
+            }
+        }
+
+    }
+
+
+
+
     private fun loadAnnouncements() {
         val currentUserID = getCurrentUserID()
 
@@ -96,13 +137,22 @@ class Annoucement : Fragment() {
                 // Filter out announcements with type "Friend Request"
                 val filteredAnnouncements = announcements.filter { it.announcementType != "Friend Request" }
 
-                // Group the remaining announcements by date
-                val groupedItems = filteredAnnouncements.groupBy { announcement ->
-                    getDatePart(announcement.announcementDate) // Group by date only
-                }.flatMap { (date, announcementsForDate) ->
-                    // Create a header for the date and add all announcements for that date
-                    listOf(ListItem.Header(getFormattedDate(date))) + // Add header
-                            announcementsForDate.map { ListItem.AnnouncementItem(it) } // Add items
+                // Sort announcements by date in descending order
+                val sortedAnnouncements = filteredAnnouncements.sortedByDescending { announcement ->
+                    try {
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(announcement.announcementDate)?.time
+                    } catch (e: Exception) {
+                        Log.e("Annoucement", "Error parsing date: ${announcement.announcementDate}", e)
+                        0L // Default to earliest date if parsing fails
+                    }
+                }
+
+                // Group announcements by date, with "Today" and "Yesterday" prioritized
+                val groupedItems = sortedAnnouncements.groupBy { announcement ->
+                    getFormattedDate(announcement.announcementDate) // Group by "Today", "Yesterday", or specific date
+                }.flatMap { (formattedDate, announcementsForDate) ->
+                    // Create a header for each date and add all announcements for that date
+                    listOf(ListItem.Header(formattedDate)) + announcementsForDate.map { ListItem.AnnouncementItem(it) }
                 }
 
                 // Pass the activity context and postImageDAO to the adapter
@@ -111,6 +161,7 @@ class Annoucement : Fragment() {
             }
         }
     }
+
 
     private fun getDatePart(dateTime: String): String {
         return try {
@@ -128,42 +179,25 @@ class Annoucement : Fragment() {
     }
 
     private fun getFormattedDate(dateTime: String): String {
-        try {
-            // Try to parse the date and time (full format)
+        return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            var parsedDate: Date? = null
-            try {
-                parsedDate = inputFormat.parse(dateTime)
-            } catch (e: Exception) {
-                // If parsing with time fails, try parsing just the date part
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                parsedDate = dateFormat.parse(dateTime)
-            }
+            val parsedDate = inputFormat.parse(dateTime)
 
-            // If parsedDate is null, return the original string as a fallback
-            if (parsedDate == null) {
-                return dateTime
-            }
-
-            // Get today's date in yyyy-MM-dd format
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-            // Get yesterday's date in yyyy-MM-dd format
             val yesterdayCalendar = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
             val yesterday = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(yesterdayCalendar.time)
 
-            // Format the parsed date as per the requirement
-            val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate)
+            val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(parsedDate!!)
 
-            // Compare with today and yesterday
-            return when (formattedDate) {
+            when (formattedDate) {
                 today -> "Today"
                 yesterday -> "Yesterday"
                 else -> SimpleDateFormat("dd MMM", Locale.getDefault()).format(parsedDate)
             }
         } catch (e: Exception) {
-            Log.e("Annoucement", "Error parsing date: $dateTime", e)
-            return dateTime // Return original if parsing fails
+            Log.e("Annoucement", "Error formatting date: $dateTime", e)
+            dateTime // Return original if parsing fails
         }
     }
+
 }

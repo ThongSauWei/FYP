@@ -72,6 +72,26 @@ class SaveDAO {
             }
         }
     }
+
+    suspend fun getSavesByUserID(userID: String): List<Save> = suspendCancellableCoroutine { continuation ->
+        dbRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val saves = mutableListOf<Save>()
+                for (data in snapshot.children) {
+                    val save = data.getValue(Save::class.java)
+                    if (save != null) {
+                        saves.add(save)
+                    }
+                }
+                continuation.resume(saves)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
+    }
+
 }
 
 

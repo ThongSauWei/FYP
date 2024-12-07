@@ -110,6 +110,33 @@
                 app:layout_constraintStart_toStartOf="@+id/textView9"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/cardAnnExits"-->
+<!--                android:layout_width="12dp"-->
+<!--                android:layout_height="12dp"-->
+<!--                android:layout_marginStart="53dp"-->
+<!--                android:background="@color/error_red"-->
+<!--                android:visibility="gone"-->
+<!--            app:cardBackgroundColor="@android:color/holo_red_light"-->
+<!--            app:cardCornerRadius="100dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/cardViewProfile"-->
+<!--            app:layout_constraintVertical_bias="1.0" />-->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardNotice"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                app:cardBackgroundColor="@color/background"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"
+                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/cardViewProfile"
+                app:layout_constraintTop_toTopOf="@+id/cardViewProfile"
+                app:layout_constraintVertical_bias="0.0" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -23,22 +24,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.fyp.dao.AnnoucementDAO
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Announcement
 import com.example.fyp.data.Like
 import com.example.fyp.data.Post
 import com.example.fyp.data.PostCategory
 import com.example.fyp.data.PostComment
 import com.example.fyp.data.Save
+import com.example.fyp.data.UserAnnouncement
 import com.example.fyp.dataAdapter.CommentAdapter
 import com.example.fyp.dataAdapter.ImageSliderAdapter
 import com.example.fyp.viewModel.PostCommentViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
@@ -126,7 +133,6 @@ class Detail : Fragment() {
             }
         }
 
-
 // Adjust when the keyboard visibility changes
         KeyboardVisibilityEvent.setEventListener(requireActivity()) { isOpen ->
             val scrollView = view.findViewById<ScrollView>(R.id.scrollView2)
@@ -138,11 +144,6 @@ class Detail : Fragment() {
                 scrollView.setPadding(0, 0, 0, 0)
             }
         }
-
-
-
-
-
 
         sendBtn.setOnClickListener {
             val postID = arguments?.getString("POST_ID")
@@ -177,10 +178,28 @@ class Detail : Fragment() {
             }
         }
 
-
         // Set up RecyclerView
         recyclerViewComment.layoutManager = LinearLayoutManager(activity)
-        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
+//        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
+
+        val adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope) { comment ->
+            lifecycleScope.launch {
+                val currentUserID = getCurrentUserID()
+                val post = postViewModel.getPostByID(comment.postID)
+                if (post != null && post.userID == currentUserID) {
+                    val postCommentDAO = PostCommentDAO()
+                    postCommentDAO.deletePostComment(comment.postCommentID)
+                    Toast.makeText(context, "Comment deleted successfully", Toast.LENGTH_SHORT).show()
+                    observeAndRefreshComments(post.postID) // Refresh the comments
+                } else {
+                    Toast.makeText(context, "You are not authorized to delete this comment.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        recyclerViewComment.adapter = adapter
+
+        if (postID != null) observeAndRefreshComments(postID)
 
         return view
     }
@@ -190,6 +209,11 @@ class Detail : Fragment() {
         postCommentViewModel.addPostComment(postComment)
         postCommentViewModel.addCommentSuccess.observe(viewLifecycleOwner, Observer { isSuccess ->
             if (isSuccess) {
+                // Create and add the announcement
+                // Launch a coroutine to call the suspend function
+                lifecycleScope.launch {
+                    addAnnouncementAfterComment(postID, postComment)
+                }
                 observeAndRefreshComments(postID)
                 Toast.makeText(requireContext(), "Comment added successfully!", Toast.LENGTH_SHORT).show()
             } else {
@@ -197,6 +221,105 @@ class Detail : Fragment() {
             }
         })
     }
+
+
+    private suspend fun addAnnouncementAfterComment(postID: String, postComment: PostComment) {
+        val currentUserID = getCurrentUserID()
+        val post = postViewModel.getPostByID(postID)
+
+        // Fetch post details (this could be done in parallel)
+        post?.let {
+            val announcementDAO = AnnoucementDAO()
+
+            // First, generate unique IDs for the announcement and userAnnouncement
+            val newAnnouncementID = generateNewAnnouncementID()
+            val newUserAnnouncementID = generateNewUserAnnouncementID()
+
+            // Create the Announcement object
+            val announcement = Announcement(
+                announcementID = newAnnouncementID,
+                announcementType = "Comment", // Announcement type is always "Comment" here
+                announcementDate = getCurrentTimestamp(),
+                announcementStatus = 1 // Active
+            )
+
+            // Create the UserAnnouncement object
+            val userAnnouncement = UserAnnouncement(
+                userAnnID = newUserAnnouncementID,
+                userID = post.userID, // Post's userID
+                senderUserID = currentUserID, // Current logged in user
+                postID = postID,
+                announcementID = newAnnouncementID
+            )
+
+            // Add the announcement and userAnnouncement to the database
+            announcementDAO.addAnnouncement(announcement, post.userID, currentUserID, postID) { success, exception ->
+                if (success) {
+                    Log.d("DetailFragment", "Announcement and UserAnnouncement added successfully.")
+                } else {
+                    Log.e("DetailFragment", "Failed to add announcement.", exception)
+                }
+            }
+        }
+    }
+
+    // Helper methods to generate the new unique IDs
+    private fun generateNewAnnouncementID(): String {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Announcement")
+        var newAnnouncementID = "A1000" // Default starting ID
+
+        dbRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (child in snapshot.children) {
+                        val key = child.key
+                        if (key != null && key.startsWith("A")) {
+                            val idNumber = key.substring(1).toIntOrNull()
+                            if (idNumber != null) {
+                                newAnnouncementID = "A" + (idNumber + 1).toString() // Increment ID
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("DetailFragment", "Error generating Announcement ID.", error.toException())
+            }
+        })
+
+        return newAnnouncementID
+    }
+
+    private fun generateNewUserAnnouncementID(): String {
+        // Assuming the UserAnnouncement ID follows the pattern "UA1000"
+        val dbRef = FirebaseDatabase.getInstance().getReference("UserAnnouncement")
+        var newUserAnnID = "UA1000" // Default starting ID
+
+        dbRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (child in snapshot.children) {
+                        val key = child.key
+                        if (key != null && key.startsWith("UA")) {
+                            val idNumber = key.substring(2).toIntOrNull()
+                            if (idNumber != null) {
+                                newUserAnnID = "UA" + (idNumber + 1).toString() // Increment ID
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("DetailFragment", "Error generating UserAnnouncement ID.", error.toException())
+            }
+        })
+
+        return newUserAnnID
+    }
+
 
 
 
@@ -252,6 +375,18 @@ class Detail : Fragment() {
 
         val tvDateTimePostHolder: TextView = view.findViewById(R.id.tvDateTimePostHolder)
         val profileUserImage: ImageView = view.findViewById(R.id.profileUserImage)
+
+        // Set the click listener for the profile image
+        profileUserImage.setOnClickListener {
+            openFriendProfile(post.userID) // Pass the userID to FriendProfile
+        }
+
+        // Set the click listener for the username
+        tvNamePostHolder.setOnClickListener {
+            openFriendProfile(post.userID) // Pass the userID to FriendProfile
+        }
+
+
         val tvPostTitlePostHolder: TextView = view.findViewById(R.id.tvPostTitlePostHolder)
         val postDesc: TextView = view.findViewById(R.id.postDesc)
         val numLovePostHolder: TextView = view.findViewById(R.id.numLovePostHolder)
@@ -357,6 +492,23 @@ class Detail : Fragment() {
         handleShareClick(sharePostHolder, post)
     }
 
+    // Function to open the FriendProfile fragment and pass the userID
+    private fun openFriendProfile(friendUserID: String) {
+        val activity = context as? AppCompatActivity
+        activity?.let {
+            val transaction = it.supportFragmentManager.beginTransaction()
+            val fragment = FriendProfile()
+
+            val bundle = Bundle()
+            bundle.putString("friendUserID", friendUserID) // Pass the userID to FriendProfile
+            fragment.arguments = bundle
+
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null) // Optional: Adds this fragment to the back stack
+            transaction.commit()
+        }
+    }
+
     private fun populateCategories(container: LinearLayout, categories: List<PostCategory>) {
         container.removeAllViews() // Clear any existing categories
 
@@ -391,18 +543,19 @@ class Detail : Fragment() {
                         timeStamp = getCurrentTimestamp()
                     )
                     likeDAO.saveLike(newLike)
+
+                    // Add announcement
+                    addAnnouncement("Like", post, currentUserID)
                 }
 
                 lovePostHolder.setImageResource(
                     if (existingLike?.status == 1) R.drawable.baseline_favorite_24 else R.drawable.love_border
                 )
 
-                // Refresh the like count display
                 refreshPosts(post.postID)
             }
         }
     }
-
 
     private fun handleBookmarkClick(bookmarkPostHolder: ImageView, post: Post) {
         bookmarkPostHolder.setOnClickListener {
@@ -423,7 +576,11 @@ class Detail : Fragment() {
                         timeStamp = getCurrentTimestamp()
                     )
                     saveDAO.saveSave(newSave)
+
+                    // Add announcement
+                    addAnnouncement("Save", post, currentUserID)
                 }
+
                 bookmarkPostHolder.setImageResource(
                     if (existingSave?.status == 1) R.drawable.bookmark_full else R.drawable.bookmark_border
                 )
@@ -456,8 +613,36 @@ class Detail : Fragment() {
                 putExtra(Intent.EXTRA_TEXT, "Check out this post: ${post.postTitle}")
             }
             startActivity(Intent.createChooser(shareIntent, "Share post via"))
+
+            // Add announcement
+            val currentUserID = getCurrentUserID()
+            addAnnouncement("Share", post, currentUserID)
         }
     }
+
+    private fun addAnnouncement(actionType: String, post: Post, senderUserID: String) {
+        val announcement = Announcement(
+            announcementID = "",  // Will be generated in DAO
+            announcementType = actionType,
+            announcementDate = getCurrentTimestamp(),
+            announcementStatus = 1  // Active status
+        )
+
+        val announcementDAO = AnnoucementDAO()
+        announcementDAO.addAnnouncement(
+            announcement,
+            userID = post.userID,  // Post's userID
+            senderUserID = senderUserID,
+            postID = post.postID
+        ) { success, exception ->
+            if (success) {
+                Log.d("DetailFragment", "$actionType announcement added successfully.")
+            } else {
+                Log.e("DetailFragment", "Failed to add $actionType announcement.", exception)
+            }
+        }
+    }
+
 
     private fun setupIndicators(indicatorContainer: LinearLayout, size: Int, viewPager: ViewPager2) {
         if (size <= 1) {

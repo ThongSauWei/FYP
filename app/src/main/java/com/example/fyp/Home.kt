@@ -21,12 +21,16 @@ import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
+import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
+import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
@@ -39,11 +43,13 @@ import java.util.logging.Handler
 
 class Home : Fragment() {
     private lateinit var postViewModel: PostViewModel
+    private lateinit var postViewHistoryViewModel: PostViewHistoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var postAdapter: PostAdapter
     private lateinit var friendViewModel: FriendViewModel
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout // Declare here
     private val postCategoryDAO = PostCategoryDAO()
+    private lateinit var postViewHistoryRepository: PostViewHistoryRepository
 
 
     override fun onCreateView(
@@ -79,7 +85,14 @@ class Home : Fragment() {
         }
 
         // Initialize ViewModels
+        // Initialize repositories, ViewModels, and ViewModelFactory
+        postViewHistoryRepository = PostViewHistoryRepository(PostViewHistoryDAO()) // Create the repository
+        val postViewHistoryViewModelFactory = PostViewHistoryViewModelFactory(postViewHistoryRepository) // Create the factory
+        postViewHistoryViewModel = ViewModelProvider(this, postViewHistoryViewModelFactory).get(PostViewHistoryViewModel::class.java)
+
+
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
+//        postViewHistoryViewModel = ViewModelProvider(this)[PostViewHistoryViewModel::class.java]
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         friendViewModel = ViewModelProvider(this)[FriendViewModel::class.java]
 
@@ -132,6 +145,7 @@ class Home : Fragment() {
             saveDAO = SaveDAO(),
             context = requireContext(),
             postViewModel = postViewModel,
+            postViewHistoryViewModel = postViewHistoryViewModel,
             friendViewModel = friendViewModel
         )
 
@@ -239,20 +253,6 @@ class Home : Fragment() {
             }
         }
 
-
-
-
-        // Fetch and filter posts
-//        lifecycleScope.launch {
-//            try {
-//                val postList = fetchFilteredPosts(selectedCategories, selectedDateRange)
-//                postAdapter.updatePosts(postList)
-//            } catch (e: Exception) {
-//                Toast.makeText(requireContext(), "Failed to load filtered posts", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-
         return view
     }
 
@@ -306,20 +306,48 @@ class Home : Fragment() {
     private fun fetchPosts(isFollow: Boolean) {
         lifecycleScope.launch {
             try {
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+
                 val postList = if (isFollow) {
-                    val currentUserID = SaveSharedPreference.getUserID(requireContext())
                     val friends = friendViewModel.getFriendList(currentUserID)
                     val friendPosts = postViewModel.getPostsByUserIDs(friends.map { it.receiveUserID })
-                    friendPosts
+                    filterPostsByVisibility(friendPosts, currentUserID)
                 } else {
-                    postViewModel.getAllPosts()
+                    val allPosts = postViewModel.getAllPosts()
+                    filterPostsByVisibility(allPosts, currentUserID)
                 }
+
                 postAdapter.updatePosts(postList)
-                swipeRefreshLayout.isRefreshing = false // This works now because swipeRefreshLayout is initialized at the class level
+                swipeRefreshLayout.isRefreshing = false // Stop refreshing
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
                 swipeRefreshLayout.isRefreshing = false
             }
         }
+    }
+
+    private suspend fun filterPostsByVisibility(posts: List<Post>, currentUserID: String): List<Post> {
+        val visiblePosts = mutableListOf<Post>()
+
+        for (post in posts) {
+            when (post.postType) {
+                "Public" -> {
+                    visiblePosts.add(post) // Public posts are always visible
+                }
+                "Private" -> {
+                    if (post.userID == currentUserID) {
+                        visiblePosts.add(post) // Private posts are visible to the user who created them
+                    }
+                }
+                "Restricted" -> {
+                    val hasAccess = postViewModel.checkIfUserHasAccessToPost(currentUserID, post.postID)
+                    if (hasAccess) {
+                        visiblePosts.add(post) // Restricted posts are visible if the user has access
+                    }
+                }
+            }
+        }
+
+        return visiblePosts
     }
 }

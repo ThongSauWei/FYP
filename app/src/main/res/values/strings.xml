@@ -16,6 +16,7 @@
 
     <string name="confirm_delete_haha">Confirm Delete Followers?</string>
     <string name="confirm_delete">Confirm Unfollow %1$s ?</string>
+    <string name="confirm_delete_announcement">Confirm Delete ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_will_be_permanently">Delete will be permanently</string>
@@ -199,6 +200,8 @@
     <string name="feedback_title">Rate Of TARUMT Campus Hub</string>
 
     <string name="follow">Follow</string>
+
+    <string name="delete_comment">Delete Comment</string>
 
     <!--    map-->
     <string name="tar_map">TARUMT Map</string>
