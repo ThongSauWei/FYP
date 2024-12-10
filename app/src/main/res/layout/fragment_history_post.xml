@@ -71,7 +71,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separatorAnnHolder1"
-                tools:listitem="@layout/postholder" />
+                tools:listitem="@layout/history_holder" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"

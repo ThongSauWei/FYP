@@ -12,7 +12,7 @@ class AnnoucementDAO {
     private val userAnnRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("UserAnnouncement")
 
     // Method to add an announcement and link it with the user
-    fun addAnnouncement(announcement: Announcement, userID: String, senderUserID: String, postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+    fun addAnnouncement(announcement: Announcement, userID: String, senderUserID: String, postID: String?, onComplete: (Boolean, Exception?) -> Unit) {
         // Fetch the last announcement ID from the database and increment it
         dbRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -40,12 +40,12 @@ class AnnoucementDAO {
                 // Generate a new userAnnouncementID
                 val newUserAnnouncementID = "UA" + newAnnouncementID.substring(1)
 
-                // Create the UserAnnouncement object with senderUserID and postID
+                // Create the UserAnnouncement object with senderUserID and postID (nullable)
                 val userAnnouncement = UserAnnouncement(
                     userAnnID = newUserAnnouncementID,  // Unique userAnnouncementID (UA1000, UA1001, etc.)
                     userID = userID,
                     senderUserID = senderUserID,  // The user who performed the action
-                    postID = postID,  // The ID of the post
+                    postID = postID ?: "",  // The ID of the post (use empty string if null)
                     announcementID = newAnnouncementID
                 )
 
@@ -77,6 +77,7 @@ class AnnoucementDAO {
             }
         })
     }
+
 
 
     // Fetch announcements by user ID
@@ -177,6 +178,55 @@ class AnnoucementDAO {
                 }
             }
     }
+
+    // Fetch the count of announcements by user ID
+    fun getUserAnnouncementCountByUserID(userID: String, onComplete: (Int) -> Unit) {
+        userAnnRef.orderByChild("userID").equalTo(userID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var announcementCount = 0
+                val totalChildren = snapshot.childrenCount.toInt()
+                var processedChildren = 0
+
+                if (totalChildren == 0) {
+                    // No children, return immediately with count 0
+                    onComplete(announcementCount)
+                    return
+                }
+
+                for (child in snapshot.children) {
+                    val userAnnouncement = child.getValue(UserAnnouncement::class.java)
+                    if (userAnnouncement?.announcementID != null) {
+                        dbRef.child(userAnnouncement.announcementID).get().addOnCompleteListener { task ->
+                            processedChildren++
+                            if (task.isSuccessful) {
+                                val announcement = task.result.getValue(Announcement::class.java)
+                                // Only count announcements with status == 1
+                                if (announcement?.announcementStatus == 1) {
+                                    announcementCount++
+                                }
+                            }
+                            // Check if all children are processed
+                            if (processedChildren == totalChildren) {
+                                onComplete(announcementCount)
+                            }
+                        }
+                    } else {
+                        // Increment processedChildren for invalid userAnnouncement
+                        processedChildren++
+                        if (processedChildren == totalChildren) {
+                            onComplete(announcementCount)
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("AnnoucementDAO", "Error fetching UserAnnouncements count.", error.toException())
+                onComplete(0) // Return count 0 on error
+            }
+        })
+    }
+
 
 
 }

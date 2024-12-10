@@ -68,6 +68,21 @@
             </com.google.android.material.card.MaterialCardView>
 
 
+            <TextView
+                android:id="@+id/friendRequestCount"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/red_circle"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"
+                app:layout_constraintTop_toTopOf="@+id/cardViewProfile"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="65dp"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
@@ -124,18 +139,7 @@
 <!--            app:layout_constraintTop_toTopOf="@+id/cardViewProfile"-->
 <!--            app:layout_constraintVertical_bias="1.0" />-->
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardNotice"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                app:cardBackgroundColor="@color/background"
-                app:cardCornerRadius="100dp"
-                app:layout_constraintBottom_toBottomOf="@+id/cardViewProfile"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/cardViewProfile"
-                app:layout_constraintTop_toTopOf="@+id/cardViewProfile"
-                app:layout_constraintVertical_bias="0.0" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

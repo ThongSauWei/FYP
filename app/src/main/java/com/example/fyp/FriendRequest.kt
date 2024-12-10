@@ -101,8 +101,6 @@ class FriendRequest : Fragment() {
         }
     }
 
-
-
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(requireContext())
     }

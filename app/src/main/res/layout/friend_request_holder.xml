@@ -73,7 +73,7 @@
             android:fontFamily="@font/abhayalibre_medium"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            android:text="@string/confirm_btn"
+            android:text="@string/accept_btn"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -99,7 +99,7 @@
             android:fontFamily="@font/abhayalibre_medium"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            android:text="@string/del_btn"
+            android:text="@string/reject_btn"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold" />

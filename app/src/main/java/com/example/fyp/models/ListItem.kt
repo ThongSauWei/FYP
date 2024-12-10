@@ -8,4 +8,5 @@ sealed class ListItem {
     data class AnnouncementItem(val announcement: Announcement) : ListItem()
 
     data class FriendItem(val friend: Friend) : ListItem()
+
 }

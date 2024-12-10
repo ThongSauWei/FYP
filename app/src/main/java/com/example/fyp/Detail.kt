@@ -533,6 +533,7 @@ class Detail : Fragment() {
                 if (existingLike != null) {
                     val newStatus = if (existingLike.status == 1) 0 else 1
                     existingLike.status = newStatus
+                    existingLike.timeStamp = getCurrentTimestamp()
                     likeDAO.updateLikeStatus(existingLike)
                 } else {
                     val newLike = Like(
@@ -566,6 +567,7 @@ class Detail : Fragment() {
                 if (existingSave != null) {
                     val newStatus = if (existingSave.status == 1) 0 else 1
                     existingSave.status = newStatus
+                    existingSave.timeStamp = getCurrentTimestamp()
                     saveDAO.updateSaveStatus(existingSave)
                 } else {
                     val newSave = Save(

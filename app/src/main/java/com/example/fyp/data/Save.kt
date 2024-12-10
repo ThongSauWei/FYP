@@ -4,7 +4,7 @@ data class Save(
     val userID: String,
     val postID: String,
     var status: Int,
-    val timeStamp: String
+    var timeStamp: String
 ) {
     constructor() : this("", "", "", 0, "")
 }
