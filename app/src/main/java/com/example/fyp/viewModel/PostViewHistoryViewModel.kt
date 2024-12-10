@@ -1,4 +1,4 @@
-package com.example.fyp.viewmodel
+package com.example.fyp.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData

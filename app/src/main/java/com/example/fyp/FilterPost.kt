@@ -67,7 +67,7 @@ class FilterPost : Fragment() {
         val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
         btnNotification?.visibility = View.GONE
 
-        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
+        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnChatToolbarWithAnnouce)
         btnSearchToolbarWithAnnouce?.visibility = View.GONE
 
         // Example categories mapping

@@ -59,6 +59,7 @@ class EditProfile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        (activity as MainActivity).setToolbar()
         initViews(view)
         initViewModels()
 

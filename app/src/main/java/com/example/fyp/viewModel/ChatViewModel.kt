@@ -4,6 +4,8 @@ import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fyp.dao.ChatDAO
 import com.example.fyp.data.Chat
@@ -13,6 +15,9 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(application : Application) : AndroidViewModel(application) {
     private val chatRepository : ChatRepository
+
+    private val _chatList = MutableLiveData<List<Chat>>()
+    val chatList: LiveData<List<Chat>> get() = _chatList
 
     init {
         val chatDao = ChatDAO()
@@ -33,8 +38,12 @@ class ChatViewModel(application : Application) : AndroidViewModel(application) {
         return chatRepository.getChatByID(chatID)
     }
 
-    suspend fun getChatByUser(userID : String) : List<Chat> {
-        return chatRepository.getChatByUser(userID)
+    // Fetch chats by user and post to LiveData
+    fun fetchChatsByUser(userID: String) {
+        viewModelScope.launch {
+            val chats = chatRepository.getChatByUser(userID)
+            _chatList.postValue(chats)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,5 +61,13 @@ class ChatViewModel(application : Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             chatRepository.deleteChat(chatID)
         }
+    }
+
+    fun searchChats(query: String): LiveData<List<Chat>> {
+        val liveData = MutableLiveData<List<Chat>>()
+        chatRepository.searchChats(query) { filteredChats ->
+            liveData.postValue(filteredChats)
+        }
+        return liveData
     }
 }

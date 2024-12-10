@@ -63,5 +63,23 @@ class PostSharedDAO {
         })
     }
 
+    fun clearSharedPost(postID: String, callback: (Boolean, Exception?) -> Unit) {
+        dbRef.orderByChild("postID").equalTo(postID)
+            .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
+                override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                    for (child in snapshot.children) {
+                        child.ref.removeValue()
+                            .addOnSuccessListener { callback(true, null) }
+                            .addOnFailureListener { callback(false, it) }
+                    }
+                    callback(true, null) // All privacy settings cleared
+                }
+
+                override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                    callback(false, error.toException())
+                }
+            })
+    }
+
 }
 

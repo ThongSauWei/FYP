@@ -28,7 +28,7 @@ import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
-import com.example.fyp.viewmodel.PostViewHistoryViewModel
+import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

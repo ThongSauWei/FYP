@@ -261,6 +261,15 @@ class MainActivity : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
+        val btnChat: ImageView = toolbar.findViewById(R.id.btnChatToolbarWithAnnouce)
+        btnChat.setOnClickListener {
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = OuterChat()
+            transaction.replace(R.id.fragmentContainerView, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
 

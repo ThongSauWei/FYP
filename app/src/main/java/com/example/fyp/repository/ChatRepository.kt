@@ -48,4 +48,10 @@ class ChatRepository(private val chatDao : ChatDAO) {
     fun updateChat(chat: Chat) {
         chatDao.updateChat(chat)
     }
+
+    fun searchChats(query: String, callback: (List<Chat>) -> Unit) {
+        chatDao.searchChats(query) { filteredChats ->
+            callback(filteredChats)
+        }
+    }
 }

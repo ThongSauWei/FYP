@@ -31,7 +31,7 @@ import com.example.fyp.viewModel.PostCategoryViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
-import com.example.fyp.viewmodel.PostViewHistoryViewModel
+import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers

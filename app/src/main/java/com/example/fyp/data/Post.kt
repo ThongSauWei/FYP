@@ -6,11 +6,11 @@ import android.os.Parcelable
 data class Post(
     var postID: String,
     val postDateTime: String,
-    val postDescription: String,
-    val postTitle: String,
+    var postDescription: String,
+    var postTitle: String,
     val userID: String,
     val active: Int,
-    val postType: String
+    var postType: String
 ) : Parcelable {
     constructor() : this("", "", "", "", "", 0, "")
 

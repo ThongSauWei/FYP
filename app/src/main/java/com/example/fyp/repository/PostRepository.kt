@@ -89,4 +89,8 @@ class PostRepository(private val postDao : PostDAO) {
         postDao.updatePostActiveStatus(postID, newStatus)
     }
 
+    fun updatePost(post: Post, onComplete: (Boolean, Exception?) -> Unit) {
+        postDao.updatePost(post, onComplete)
+    }
+
 }

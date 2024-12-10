@@ -142,5 +142,31 @@ class PostImageDAO(
         dbRef.child(postImageID).removeValue()
     }
 
+    fun clearImagesForPost(postID: String) {
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (child in snapshot.children) {
+                    child.ref.removeValue() // Removes the image metadata
+                    val imageID = child.key
+                    if (imageID != null) {
+                        storageRef.child("$imageID.jpg").delete() // Deletes the image from storage
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "Failed to clear images for post $postID: ${error.message}")
+            }
+        })
+    }
+
+    fun deleteImageByID(imageID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        dbRef.child(imageID).removeValue().addOnSuccessListener {
+            onComplete(true, null)
+        }.addOnFailureListener { exception ->
+            onComplete(false, exception)
+        }
+    }
+
 
 }

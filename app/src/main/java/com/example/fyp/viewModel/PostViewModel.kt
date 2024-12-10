@@ -78,5 +78,8 @@ class PostViewModel(application : Application) : AndroidViewModel(application) {
         postRepository.updatePostActiveStatus(postID, newStatus)
     }
 
+    fun updatePost(post: Post, onComplete: (Boolean, Exception?) -> Unit) {
+        postRepository.updatePost(post, onComplete)
+    }
 
 }

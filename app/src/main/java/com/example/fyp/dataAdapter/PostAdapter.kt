@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.fyp.Detail
+import com.example.fyp.EditPost
 import com.example.fyp.FriendProfile
 import com.example.fyp.MainActivity
 import com.example.fyp.Profile
@@ -44,7 +45,7 @@ import com.example.fyp.data.Save
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
-import com.example.fyp.viewmodel.PostViewHistoryViewModel
+import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -521,7 +522,15 @@ class PostAdapter(
     }
 
     private fun editPost(post: Post) {
+        val fragment = EditPost()
+        val bundle = Bundle()
+        bundle.putString("POST_ID", post.postID)
+        fragment.arguments = bundle
 
+        val transaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragmentContainerView, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     private fun deletePost(context: Context, post: Post) {

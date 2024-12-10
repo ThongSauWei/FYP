@@ -149,4 +149,20 @@ class ChatDAO {
     fun updateChat(chat: Chat) {
         dbRef.child(chat.chatID).setValue(chat)
     }
+
+    fun searchChats(query: String, callback: (List<Chat>) -> Unit) {
+        dbRef.orderByChild("userID").startAt(query).endAt("$query\uf8ff")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val filteredChats = mutableListOf<Chat>()
+                    for (chatSnapshot in snapshot.children) {
+                        val chat = chatSnapshot.getValue(Chat::class.java)
+                        filteredChats.add(chat!!)
+                    }
+                    callback(filteredChats)
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+    }
 }

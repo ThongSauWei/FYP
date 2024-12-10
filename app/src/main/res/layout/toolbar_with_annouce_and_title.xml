@@ -35,7 +35,7 @@
 
     <!-- Search Icon on the Right Side -->
     <ImageView
-        android:id="@+id/btnSearchToolbarWithAnnouce"
+        android:id="@+id/btnChatToolbarWithAnnouce"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="50dp"

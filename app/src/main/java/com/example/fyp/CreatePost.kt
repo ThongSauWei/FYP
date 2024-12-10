@@ -121,7 +121,7 @@ class CreatePost : Fragment() {
         navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
         navIcon?.setOnClickListener { activity?.onBackPressed() } // Set click behavior
 
-        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnSearchToolbarWithAnnouce)
+        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnChatToolbarWithAnnouce)
         btnSearchToolbarWithAnnouce?.setImageResource(R.drawable.send_post)
 
 // Convert 30dp to pixels

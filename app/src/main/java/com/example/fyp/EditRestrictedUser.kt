@@ -6,14 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,28 +18,19 @@ import com.example.fyp.dao.FriendDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.PostSharedDAO
 import com.example.fyp.dao.UserDAO
-import com.example.fyp.data.Post
 import com.example.fyp.data.User
-import com.example.fyp.dataAdapter.FriendAdapter
 import com.example.fyp.dataAdapter.RestrictedUser
 import com.example.fyp.dataAdapter.RestrictedUserAdapter
-import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostCategoryViewModel
 import com.example.fyp.viewModel.PostViewModel
-import com.example.fyp.viewModel.ProfileViewModel
-import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.withContext
 
-
-class RestrictedUser : Fragment() {
-
+class EditRestrictedUser : Fragment() {
     private lateinit var postViewModel: PostViewModel
     private lateinit var postCategoryViewModel: PostCategoryViewModel
     private lateinit var recyclerView: RecyclerView
@@ -73,6 +60,7 @@ class RestrictedUser : Fragment() {
         postCategoryViewModel = ViewModelProvider(this).get(PostCategoryViewModel::class.java)
 
         // Extract data from the arguments
+        val postID = arguments?.getString("POST_ID")
         val title = arguments?.getString("title")
         val description = arguments?.getString("description")
         val categories = arguments?.getStringArrayList("categories")
@@ -80,7 +68,7 @@ class RestrictedUser : Fragment() {
 
         // Customize toolbar appearance
         val titleTextView = activity?.findViewById<TextView>(R.id.titleTextView)
-        titleTextView?.text = "Restricted User"
+        titleTextView?.text = "Edit Restricted Users"
 
         val navIcon = activity?.findViewById<ImageView>(R.id.navIcon)
         navIcon?.setImageResource(R.drawable.baseline_arrow_back_ios_24) // Set the navigation icon
@@ -89,14 +77,13 @@ class RestrictedUser : Fragment() {
         val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
         btnNotification?.visibility = View.GONE
 
-        val btnSearchToolbarWithAnnouce = activity?.findViewById<ImageView>(R.id.btnChatToolbarWithAnnouce)
-        btnSearchToolbarWithAnnouce?.setImageResource(R.drawable.send_post)
+        val btnSaveChanges = activity?.findViewById<ImageView>(R.id.btnChatToolbarWithAnnouce)
+        btnSaveChanges?.setImageResource(R.drawable.send_post)
 
-        btnSearchToolbarWithAnnouce?.setOnClickListener {
-            savePostToFirebase(title, description, categories, imageUris)
+        btnSaveChanges?.setOnClickListener {
+            updatePost(postID, title, description, categories, imageUris)
         }
 
-//        adapter
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerViewFriendFriends)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -108,7 +95,7 @@ class RestrictedUser : Fragment() {
             RestrictedUser("Alice", "U1002", false)
         )
 
-// Set adapter
+        // Set adapter
         adapter = RestrictedUserAdapter(sampleUsers) { user ->
             // Handle item click (e.g., toggle selection)
             println("User clicked: ${user.name}")
@@ -151,85 +138,96 @@ class RestrictedUser : Fragment() {
         }
     }
 
-    // Assuming the userList is part of the adapter
-    private fun savePostToFirebase(
+    private fun updatePost(
+        postID: String?,
         title: String?,
         description: String?,
         categories: ArrayList<String>?,
         imageUris: ArrayList<Uri>?
     ) {
-        if (title.isNullOrEmpty() || description.isNullOrEmpty() || categories.isNullOrEmpty()) {
-            Toast.makeText(requireContext(), "Please ensure all fields are filled", Toast.LENGTH_SHORT).show()
+        if (postID.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Invalid Post ID", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val userId = getCurrentUserID() // Get the current user ID
-        val currentDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-        val postType = "Restricted" // Always "Restricted" for this fragment
-        val post = Post("", currentDateTime, description, title, userId, 0, postType)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val post = postViewModel.getPostByID(postID)
+            if (post != null) {
+                // Use existing values if no new data is provided
+                val updatedTitle = title ?: post.postTitle
+                val updatedDescription = description ?: post.postDescription
+                val updatedCategories = categories ?: postCategoryViewModel.getCategoriesByPostID(postID).map { it.category }
 
-        postViewModel.addPost(post) { postID, exception ->
-            if (postID != null) {
-                Log.d("savePostToFirebase", "Post created with ID: $postID")
-
-                // Save categories
-                postCategoryViewModel.addCategories(postID, categories, userId) { success, _ ->
-                    if (!success) {
-                        Log.e("savePostToFirebase", "Failed to save categories.")
-                    } else {
-                        Log.d("savePostToFirebase", "Categories saved successfully.")
+                if (updatedTitle.isEmpty() || updatedDescription.isEmpty() || updatedCategories.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Please ensure all fields are filled", Toast.LENGTH_SHORT).show()
                     }
+                    return@launch
                 }
 
-                // Upload images
-                val postImageDAO = PostImageDAO(
-                    FirebaseStorage.getInstance().getReference("PostImages"),
-                    FirebaseDatabase.getInstance().getReference("PostImage")
-                )
-                postImageDAO.uploadImages(postID, imageUris ?: emptyList(), userId) { success, _ ->
-                    if (!success) {
-                        Log.e("savePostToFirebase", "Failed to upload images.")
+                post.postTitle = updatedTitle
+                post.postDescription = updatedDescription
+                post.postType = "Restricted"
+
+                postViewModel.updatePost(post) { success, exception ->
+                    if (success) {
+                        val userID = getCurrentUserID()
+
+                        // Update categories
+                        postCategoryViewModel.updateCategories(postID, ArrayList(updatedCategories), userID)
+
+                        // Update images
+                        val postImageDAO = PostImageDAO(
+                            FirebaseStorage.getInstance().getReference("PostImages"),
+                            FirebaseDatabase.getInstance().getReference("PostImage")
+                        )
+                        postImageDAO.uploadImages(postID, imageUris ?: emptyList(), userID) { success, _ ->
+                            if (!success) {
+                                Log.e("updatePost", "Failed to upload images.")
+                            } else {
+                                Log.d("updatePost", "Images uploaded successfully.")
+                            }
+                        }
+
+                        // Update restricted users
+                        val selectedUsers = adapter.getSelectedUsers()
+                        val postSharedDAO = PostSharedDAO()
+                        postSharedDAO.clearSharedPost(postID) { clearSuccess, _ ->
+                            if (clearSuccess) {
+                                selectedUsers.forEach { user ->
+                                    postSharedDAO.addSharedPost(postID, user.userID) { addSuccess, exception ->
+                                        if (addSuccess) {
+                                            Log.d("updatePost", "User ${user.name} added to restricted list.")
+                                        } else {
+                                            Log.e("updatePost", "Failed to add user ${user.name}: ${exception?.message}")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Notify the user and navigate back
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Post updated successfully!", Toast.LENGTH_SHORT).show()
+                            navigateToProfile() // Navigate back to the profile
+                        }
                     } else {
-                        Log.d("savePostToFirebase", "Images uploaded successfully.")
-                    }
-                }
-
-                // Access the user list through the adapter
-                val selectedUsers = adapter.getSelectedUsers()
-                Log.d("savePostToFirebase", "Selected users: ${selectedUsers.joinToString { it.name }}")
-
-                // Iterate over the selected friends and save each one
-                selectedUsers.forEach { selectedUser ->
-                    Log.d("savePostToFirebase", "Saving user: ${selectedUser.name} (ID: ${selectedUser.userID}) to PostShared")
-
-                    val postSharedDAO = PostSharedDAO()
-                    postSharedDAO.addSharedPost(postID, selectedUser.userID) { success, exception ->
-                        if (success) {
-                            Log.d("savePostToFirebase", "User ${selectedUser.name} saved successfully to PostShared.")
-                        } else {
-                            Log.e("savePostToFirebase", "Failed to save user ${selectedUser.name}: ${exception?.message}")
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Failed to update post: ${exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-
-                // Show success message and navigate back to the Home fragment
-                Toast.makeText(requireContext(), "Post created successfully!", Toast.LENGTH_SHORT).show()
-
-                // Pass success message to the Home fragment
-                val homeFragment = Home()
-                val bundle = Bundle()
-                bundle.putString("successMessage", "Post created successfully!")
-                homeFragment.arguments = bundle
-
-                // Replace the current fragment with the Home fragment
-                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                fragmentTransaction?.replace(R.id.fragmentContainerView, homeFragment)
-                fragmentTransaction?.commit()
-            } else {
-                Toast.makeText(requireContext(), "Failed to create post: ${exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    private fun navigateToProfile() {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        val profileFragment = Profile()
+        transaction?.replace(R.id.fragmentContainerView, profileFragment)
+        transaction?.commit()
+    }
+
 
     private fun getCurrentUserID(): String {
         return SaveSharedPreference.getUserID(requireContext())

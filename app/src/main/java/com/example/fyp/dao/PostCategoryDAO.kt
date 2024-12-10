@@ -188,6 +188,61 @@ class PostCategoryDAO {
         dbRef.child(postCategoryID).removeValue()
     }
 
+    fun updateCategories(postID: String, categories: List<String>, userID: String, callback: (Boolean) -> Unit) {
+        // Clear existing categories for the post
+        dbRef.orderByChild("postID").equalTo(postID).get().addOnSuccessListener { snapshot ->
+            val tasks = snapshot.children.map { it.ref.removeValue() }
+            com.google.android.gms.tasks.Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                // Add new categories
+                val categoryTasks = categories.map { category ->
+                    val newCategoryID = dbRef.push().key ?: return@map null
+                    val postCategory = PostCategory(newCategoryID, postID, category, userID)
+                    dbRef.child(newCategoryID).setValue(postCategory)
+                }
+                com.google.android.gms.tasks.Tasks.whenAllComplete(categoryTasks).addOnCompleteListener { task ->
+                    callback(task.isSuccessful)
+                }
+            }
+        }
+    }
+
+    fun addCategory(postID: String, category: String, userID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        val postCategoryID = dbRef.push().key ?: return
+        val postCategory = mapOf(
+            "postCategoryID" to postCategoryID,
+            "postID" to postID,
+            "category" to category,
+            "userID" to userID
+        )
+
+        dbRef.child(postCategoryID).setValue(postCategory)
+            .addOnSuccessListener { onComplete(true, null) }
+            .addOnFailureListener { exception -> onComplete(false, exception) }
+    }
+
+    fun deleteCategoryByPostAndUser(postID: String, category: String, userID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var categoryDeleted = false
+                for (categorySnapshot in snapshot.children) {
+                    val dataCategory = categorySnapshot.child("category").value as? String
+                    val dataUserID = categorySnapshot.child("userID").value as? String
+
+                    if (dataCategory == category && dataUserID == userID) {
+                        categorySnapshot.ref.removeValue()
+                            .addOnSuccessListener { categoryDeleted = true }
+                            .addOnFailureListener { exception -> onComplete(false, exception) }
+                    }
+                }
+                onComplete(categoryDeleted, null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onComplete(false, error.toException())
+            }
+        })
+    }
+
 }
 
 

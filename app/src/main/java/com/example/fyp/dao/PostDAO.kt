@@ -218,6 +218,14 @@ class PostDAO {
         dbRef.child(postID).child("active").setValue(newStatus)
     }
 
-
+    fun updatePost(post: Post, onComplete: (Boolean, Exception?) -> Unit) {
+        dbRef.child(post.postID).setValue(post)
+            .addOnSuccessListener {
+                onComplete(true, null)
+            }
+            .addOnFailureListener { exception ->
+                onComplete(false, exception)
+            }
+    }
 
 }

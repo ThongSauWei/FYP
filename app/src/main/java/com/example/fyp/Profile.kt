@@ -38,7 +38,7 @@ import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.ProfileViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
-import com.example.fyp.viewmodel.PostViewHistoryViewModel
+import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -201,6 +201,7 @@ class Profile : Fragment() {
     }
 
 
+
     override fun onResume() {
         super.onResume()
         loadProfilePicture() // Refresh profile picture when returning to this fragment
@@ -257,7 +258,7 @@ class Profile : Fragment() {
             // Populate RecyclerView
             if (postList.isNotEmpty()) {
                 val adapter = PostAdapter(
-                    posts = postList,
+                    posts = postList.filter { it.userID == currentUserID },
                     userViewModel = userViewModel,
                     postImageDAO = PostImageDAO(
                         FirebaseStorage.getInstance().reference,
