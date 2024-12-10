@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fyp.dao.AnnoucementDAO
@@ -71,7 +72,7 @@ class Annoucement : Fragment() {
 
         postImageDAO = PostImageDAO(storageRef, databaseRef)
         // Fetch and display data
-        loadFriendRequests()
+        loadFriendRequests(view)
 
         loadAnnouncements()
 
@@ -99,30 +100,57 @@ class Annoucement : Fragment() {
         return view
     }
 
-    private fun loadFriendRequests() {
-//        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
-        val cardViewProfile = view?.findViewById<MaterialCardView>(R.id.cardViewProfile) // Use MaterialCardView instead of CardView
-        val cardNotice = view?.findViewById<CardView>(R.id.cardNotice)
-        val textView9 = view?.findViewById<TextView>(R.id.textView9)
+//    private fun loadFriendRequests() {
+////        val cardAnnExits = view?.findViewById<CardView>(R.id.cardAnnExits)
+//        val cardViewProfile = view?.findViewById<MaterialCardView>(R.id.cardViewProfile) // Use MaterialCardView instead of CardView
+////        val cardNotice = view?.findViewById<CardView>(R.id.cardNotice)
+//        val textView9 = view?.findViewById<TextView>(R.id.textView9)
+//        val friendRequestCount = view?.findViewById<TextView>(R.id.friendRequestCount)
+//
+//        val currentUserID = getCurrentUserID()
+//
+//        // Fetch pending friend requests directly from the Friend table
+//        GlobalScope.launch(Dispatchers.IO) {
+//            val pendingFriendRequests = friendDAO.getPendingFriendRequests(currentUserID)
+//            Log.d("FriendRequest", "Pending requests: $pendingFriendRequests")
+//            withContext(Dispatchers.Main) {
+//                if (pendingFriendRequests.isNotEmpty()) {
+//                    Log.d("FriendRequest", "Pending requests found")
+////                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+//                } else {
+//                    Log.d("FriendRequest", "No pending requests found")
+////                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
+//                }
+//            }
+//        }
+//
+//    }
 
+    private fun loadFriendRequests(view: View) {
+        val friendRequestCount = view.findViewById<TextView>(R.id.friendRequestCount) // Red circle TextView
         val currentUserID = getCurrentUserID()
 
-        // Fetch pending friend requests directly from the Friend table
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val pendingFriendRequests = friendDAO.getPendingFriendRequests(currentUserID)
             Log.d("FriendRequest", "Pending requests: $pendingFriendRequests")
+
             withContext(Dispatchers.Main) {
                 if (pendingFriendRequests.isNotEmpty()) {
                     Log.d("FriendRequest", "Pending requests found")
-                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    // Show the red circle with the count of pending friend requests
+                    friendRequestCount?.apply {
+                        visibility = View.VISIBLE
+                        text = pendingFriendRequests.size.toString()  // Show the count
+                    }
                 } else {
                     Log.d("FriendRequest", "No pending requests found")
-                    cardNotice?.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background))
+                    // Hide the red circle if no pending requests
+                    friendRequestCount?.visibility = View.GONE
                 }
             }
         }
-
     }
+
 
 
 
@@ -134,11 +162,8 @@ class Annoucement : Fragment() {
             val announcementIDs = userAnnouncements.map { it.announcementID }
 
             annoucementDAO.getAnnouncementsByIds(announcementIDs) { announcements ->
-                // Filter out announcements with type "Friend Request"
-                val filteredAnnouncements = announcements.filter { it.announcementType != "Friend Request" }
-
-                // Sort announcements by date in descending order
-                val sortedAnnouncements = filteredAnnouncements.sortedByDescending { announcement ->
+                // Remove the filtering for "Friend Request" type
+                val sortedAnnouncements = announcements.sortedByDescending { announcement ->
                     try {
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(announcement.announcementDate)?.time
                     } catch (e: Exception) {
@@ -161,6 +186,7 @@ class Annoucement : Fragment() {
             }
         }
     }
+
 
 
     private fun getDatePart(dateTime: String): String {

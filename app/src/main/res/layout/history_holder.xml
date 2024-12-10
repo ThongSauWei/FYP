@@ -6,17 +6,16 @@
     android:layout_height="wrap_content"
     android:background="#0F0F0F">
 
-    <!-- Circle Design -->
-
-    <!-- Vertical Line -->
-
     <androidx.cardview.widget.CardView
-        android:layout_width="310dp"
+        android:id="@+id/cardMain"
+        android:layout_width="349dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/post"
         app:cardCornerRadius="11dp"
         app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,113 +25,258 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/postNameHistoryHolderHolder"
-                android:layout_width="103dp"
+                android:id="@+id/tvNamePostHolder"
+                android:layout_width="143dp"
                 android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="11dp"
                 android:fontFamily="@font/abhayalibre_extrabold"
                 android:text="Name"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/cvProfileImageHistory"
-                app:layout_constraintStart_toEndOf="@+id/cvProfileImageHistory"
-                app:layout_constraintTop_toTopOf="@+id/cvProfileImageHistory"
+                app:layout_constraintBottom_toBottomOf="@+id/cvProfilePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/cvProfilePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/cvProfilePostHolder"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/todayDateHistoryHolder"
+                android:id="@+id/tvDateTimePostHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/abhaya_libre"
                 android:text="10minutes ago"
                 android:textColor="@color/sub_word"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/postNameHistoryHolderHolder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.597"
-                app:layout_constraintStart_toEndOf="@+id/postNameHistoryHolderHolder"
-                app:layout_constraintTop_toTopOf="@+id/postNameHistoryHolderHolder"
-                app:layout_constraintVertical_bias="0.181" />
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintTop_toBottomOf="@+id/lovePostHolder" />
+
+            <ImageView
+                android:id="@+id/imgDropdownMenuPostItemProfile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="dropdown"
+                android:src="@drawable/bullet"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/tvNamePostHolder"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <View
                 android:id="@+id/separatorPostHolder"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="58dp" />
 
-            <ImageView
-                android:id="@+id/imgPostHistoryHolder"
-                android:layout_width="367dp"
-                android:layout_height="190dp"
-                android:layout_marginTop="5dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/post_image"
+                app:layout_constraintTop_toBottomOf="@+id/tvNamePostHolder" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerPostImages"
+                android:layout_width="match_parent"
+                android:layout_height="235dp"
+                android:layout_marginTop="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/separatorPostHolder" />
 
+            <LinearLayout
+                android:id="@+id/indicatorContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewPagerPostImages" />
+
             <TextView
-                android:id="@+id/tvPostTitleHistoryHolder"
-                android:layout_width="260dp"
+                android:id="@+id/tvPostTitlePostHolder"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="131dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:justificationMode="inter_word"
                 android:text="Today is Assignment Day !!! aaaaaaaaaaaa aaaaaaaaa aaaaaaaa aaaa "
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/todayDateHistoryHolder"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.038"
+                app:layout_constraintStart_toStartOf="@+id/viewPagerPostImages"
+                app:layout_constraintTop_toBottomOf="@+id/indicatorContainer"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/cardViewTypeHolder"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-6dp"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/cvProfileImageHistory"
-                app:layout_constraintTop_toBottomOf="@+id/imgPostHistoryHolder" />
+                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
-                android:id="@+id/componentHistoryHolder"
+                android:id="@+id/lovePostHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/numLovePostHolder"
+                app:layout_constraintStart_toStartOf="@+id/tvPostTitlePostHolder"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewTypeHolder"
+                app:layout_constraintVertical_bias="0.473"
+                app:srcCompat="@drawable/love_border" />
+
+            <TextView
+                android:id="@+id/numLovePostHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:text="22"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/lovePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/lovePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/lovePostHolder" />
+
+            <ImageView
+                android:id="@+id/commentPostHolder"
+                android:layout_width="22dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/numLovePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/numLovePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/numLovePostHolder"
+                app:srcCompat="@drawable/comment" />
+
+            <TextView
+                android:id="@+id/numCommentPostHolder"
+                android:layout_width="8dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/abhayalibre_medium"
+                android:text="9"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/commentPostHolder"
+                app:layout_constraintStart_toEndOf="@+id/commentPostHolder"
+                app:layout_constraintTop_toTopOf="@+id/commentPostHolder"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/sharePostHolder"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/numCommentPostHolder"
+                app:layout_constraintStart_toEndOf="@+id/numCommentPostHolder"
+                app:layout_constraintTop_toTopOf="@+id/numCommentPostHolder"
+                app:srcCompat="@drawable/baseline_send_24" />
+
+            <ImageView
+                android:id="@+id/bookmarkPostHolder"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tvPostTitleHistoryHolder"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostTitleHistoryHolder"
-                app:layout_constraintVertical_bias="0.05"
-                app:srcCompat="@drawable/baseline_favorite_24" />
+                android:layout_marginStart="170dp"
+                app:layout_constraintBottom_toBottomOf="@+id/sharePostHolder"
+                app:layout_constraintEnd_toEndOf="@+id/tvDateTimePostHolder"
+                app:layout_constraintHorizontal_bias="0.078"
+                app:layout_constraintStart_toEndOf="@+id/sharePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/sharePostHolder"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/bookmark_border" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvProfileImageHistory"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="14dp"
+                android:id="@+id/cvProfilePostHolder"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="21dp"
                 android:layout_marginBottom="10dp"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintBottom_toTopOf="@+id/separatorPostHolder"
-                app:layout_constraintEnd_toStartOf="@+id/postNameHistoryHolderHolder"
+                app:layout_constraintEnd_toStartOf="@+id/tvNamePostHolder"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
-                    android:id="@+id/imageProfileHistory"
+                    android:id="@+id/profileUserImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/post_image" />
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFollow"
+                android:layout_width="65dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="@color/post_follow"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvNamePostHolder"
+                app:layout_constraintStart_toEndOf="@+id/tvNamePostHolder"
+                app:layout_constraintTop_toTopOf="@+id/tvNamePostHolder"
+                app:layout_constraintVertical_bias="1.0">
+
+                <TextView
+                    android:id="@+id/tvFollow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/abhayalibre_extrabold"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="Follow"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+            </androidx.cardview.widget.CardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvDayHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/abhayalibre_extrabold"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/today"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/cardMain"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

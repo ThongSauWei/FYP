@@ -402,6 +402,7 @@ class PostAdapter(
 
         val newStatus = if (existingLike != null) {
             existingLike.status = if (existingLike.status == 1) 0 else 1
+            existingLike.timeStamp = getCurrentTimestamp()
             likeDAO.updateLikeStatus(existingLike)
             existingLike.status
         } else {
@@ -436,6 +437,7 @@ class PostAdapter(
 
         val newStatus = if (existingSave != null) {
             existingSave.status = if (existingSave.status == 1) 0 else 1
+            existingSave.timeStamp = getCurrentTimestamp()
             saveDAO.updateSaveStatus(existingSave)
             existingSave.status
         } else {
@@ -703,7 +705,6 @@ class PostAdapter(
             }
         }
     }
-
 
     // Update posts in adapter
     fun updatePosts(newPosts: List<Post>) {

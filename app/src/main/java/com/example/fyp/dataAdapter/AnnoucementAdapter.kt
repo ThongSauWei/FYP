@@ -125,7 +125,19 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
 
                                 // Set the user data in the view (username, profile image, etc.)
                                 user?.let {
-                                    tvTypeTitle.text = "${it.username} ${announcement.announcementType.toLowerCase()} your post"  // Set the announcement type
+                                    if (announcement.announcementType == "Friend Request") {
+                                        // Display message for Friend Request type
+                                        tvTypeTitle.text = "${it.username} accepted your friend request"
+
+                                        // Hide imagePost for "Friend Request"
+                                        imagePost.visibility = View.GONE
+                                    } else {
+                                        // Display generic message for other types of announcements
+                                        tvTypeTitle.text = "${it.username} ${announcement.announcementType.toLowerCase()} your post"
+
+                                        // Make sure imagePost is visible for other types
+                                        imagePost.visibility = View.VISIBLE
+                                    }
 
                                     // Load the profile image
                                     val ref = storageRef.child("imageProfile").child("${it.userID}.png")
@@ -144,7 +156,6 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                                 deleteDialog.announcementID = item.announcement.announcementID
                                 deleteDialog.show((itemView.context as AppCompatActivity).supportFragmentManager, "DeleteAnnDialog")
                             }
-
 
                             // Get the postID from UserAnnouncement
                             val postID = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)?.postID
@@ -174,16 +185,11 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                     }
                 })
 
-            // Only display certain types of announcements (hide "Friend Request")
-            if (announcement.announcementType == "Friend Request") {
-                itemView.visibility = View.GONE // Hide the item if the type is "Friend Request"
-            } else {
-                itemView.visibility = View.VISIBLE // Show the item otherwise
-
-                // Set the time text
-                tvTime.text = calculateRelativeTime(announcement.announcementDate)
-            }
+            // Set the time text
+            tvTime.text = calculateRelativeTime(announcement.announcementDate)
         }
+
+
 
         private fun calculateRelativeTime(postDateTime: String): String {
             val inputDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) // Adjusted to parse date and time

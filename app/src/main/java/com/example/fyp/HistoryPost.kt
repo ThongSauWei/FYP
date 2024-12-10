@@ -22,7 +22,7 @@ import com.example.fyp.dao.SaveDAO
 import com.example.fyp.data.Like
 import com.example.fyp.data.Post
 import com.example.fyp.data.Save
-import com.example.fyp.dataAdapter.PostAdapter
+import com.example.fyp.dataAdapter.HistoryAdapter
 import com.example.fyp.repository.PostViewHistoryRepository
 import com.example.fyp.viewModel.FriendViewModel
 import com.example.fyp.viewModel.PostViewModel
@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 class HistoryPost : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: PostAdapter
+    private lateinit var adapter: HistoryAdapter
     private lateinit var tvHistoryPost: TextView
     private lateinit var tvSavedPost: TextView
     private lateinit var tvLikedPost: TextView
@@ -87,6 +87,7 @@ class HistoryPost : Fragment() {
         // Initialize DAOs and ViewModels
         postImageDAO = PostImageDAO(storageRef, databaseRef)
         postCategoryDAO = PostCategoryDAO()
+        postViewHistoryDAO = PostViewHistoryDAO()
         likeDAO = LikeDAO()
         postCommentDAO = PostCommentDAO()
         saveDAO = SaveDAO()
@@ -101,11 +102,12 @@ class HistoryPost : Fragment() {
         friendViewModel = ViewModelProvider(this).get(FriendViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        adapter = PostAdapter(
+        adapter = HistoryAdapter(
             mutableListOf(),
             userViewModel,
             postImageDAO,
             postCategoryDAO,
+            postViewHistoryDAO,
             likeDAO,
             postCommentDAO,
             saveDAO,
@@ -246,19 +248,29 @@ class HistoryPost : Fragment() {
                 Log.d("HistoryPost", "Fetching saved posts for user: $currentUserID")
 
                 val savedPosts = mutableListOf<Post>()
+
+                // Fetch all saves for the current user
                 val saves = withContext(Dispatchers.IO) {
                     saveDAO.getSavesByUserID(currentUserID!!)
                 }
 
-                for (save in saves) {
-                    if (save.status == 1) { // Only include active saves
-                        val post = withContext(Dispatchers.IO) {
-                            postDAO.getPostByID(save.postID)
-                        }
-                        if (post != null) {
-                            savedPosts.add(post)
-                            Log.d("HistoryPost", "Loaded saved post: ${post.postTitle}")
-                        }
+                // Filter and group saves by postID, then keep the latest save record
+                val latestSaves = saves
+                    .filter { it.status == 1 } // Include only active saves
+                    .groupBy { it.postID }    // Group by postID
+                    .mapValues { entry ->
+                        entry.value.maxByOrNull { save -> save.timeStamp } // Get the latest save by timestamp
+                    }
+                    .values
+                    .filterNotNull() // Remove null values, just in case
+
+                for (save in latestSaves) {
+                    val post = withContext(Dispatchers.IO) {
+                        postDAO.getPostByID(save.postID)
+                    }
+                    if (post != null) {
+                        savedPosts.add(post)
+                        Log.d("HistoryPost", "Loaded saved post: ${post.postTitle}")
                     }
                 }
 
@@ -275,6 +287,7 @@ class HistoryPost : Fragment() {
     }
 
 
+
     private fun loadLikedPosts() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
@@ -286,19 +299,29 @@ class HistoryPost : Fragment() {
                 Log.d("HistoryPost", "Fetching liked posts for user: $currentUserID")
 
                 val likedPosts = mutableListOf<Post>()
+
+                // Fetch all likes for the current user
                 val likes = withContext(Dispatchers.IO) {
                     likeDAO.getLikesByUserID(currentUserID!!)
                 }
 
-                for (like in likes) {
-                    if (like.status == 1) { // Only include active likes
-                        val post = withContext(Dispatchers.IO) {
-                            postDAO.getPostByID(like.postID)
-                        }
-                        if (post != null) {
-                            likedPosts.add(post)
-                            Log.d("HistoryPost", "Loaded liked post: ${post.postTitle}")
-                        }
+                // Filter and group likes by postID, then keep the latest like record
+                val latestLikes = likes
+                    .filter { it.status == 1 } // Include only active likes
+                    .groupBy { it.postID }    // Group by postID
+                    .mapValues { entry ->
+                        entry.value.maxByOrNull { like -> like.timeStamp } // Get the latest like by timestamp
+                    }
+                    .values
+                    .filterNotNull() // Remove null values, just in case
+
+                for (like in latestLikes) {
+                    val post = withContext(Dispatchers.IO) {
+                        postDAO.getPostByID(like.postID)
+                    }
+                    if (post != null) {
+                        likedPosts.add(post)
+                        Log.d("HistoryPost", "Loaded liked post: ${post.postTitle}")
                     }
                 }
 
@@ -313,6 +336,7 @@ class HistoryPost : Fragment() {
             }
         }
     }
+
 
 
     private fun loadPostById(postID: String, onPostLoaded: (Post?) -> Unit) {

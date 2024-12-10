@@ -194,7 +194,10 @@
     <string name="approve_or_ignore">Approve or Ignore Follow Requests</string>
     <string name="today">Today</string>
     <string name="confirm_btn">Confirm</string>
+    <string name="accept_btn">Accept</string>
     <string name="del_btn">Delete</string>
+    <string name="reject_btn">Delete</string>
+
 
     <!-- Feedback -->
     <string name="feedback_title">Rate Of TARUMT Campus Hub</string>

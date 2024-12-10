@@ -9,6 +9,7 @@ import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -97,5 +98,38 @@ class PostViewHistoryDAO {
             }
         }
     }
+
+    // Get post view history for a specific postID
+    // Get a single PostViewHistory by postID and userID
+    suspend fun getPostViewHistoryByPostIDAndUserID(postID: String, userID: String): PostViewHistory? {
+        return withContext(Dispatchers.IO) {
+            suspendCancellableCoroutine { continuation ->
+                dbRef.orderByChild("postID").equalTo(postID)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            var foundHistory: PostViewHistory? = null
+                            for (data in snapshot.children) {
+                                val history = data.getValue(PostViewHistory::class.java)
+                                if (history?.userID == userID) {
+                                    foundHistory = history
+                                    break
+                                }
+                            }
+                            continuation.resume(foundHistory)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            continuation.resumeWithException(error.toException())
+                        }
+                    })
+
+                // Handle coroutine cancellation
+                continuation.invokeOnCancellation {
+                    // Optionally, remove the listener if needed
+                }
+            }
+        }
+    }
+
 
 }

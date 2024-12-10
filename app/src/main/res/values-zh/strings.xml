@@ -156,7 +156,9 @@
     <string name="approve_or_ignore">同意或无视好友请求</string>
     <string name="today">今天</string>
     <string name="confirm_btn">确认</string>
+    <string name="accept_btn">允許</string>
     <string name="del_btn">删除</string>
+    <string name="reject_btn">拒絕</string>
 
     <string name="tar_map">TARUMT 地图</string>
 
