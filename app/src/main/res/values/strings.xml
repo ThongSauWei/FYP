@@ -2,6 +2,7 @@
     <string name="app_name">FinalYearProject</string>
     <string name="go_back">Go Back</string>
     <string name="underlined_sign_up"><u>Sign Up</u></string>
+    <string name="new_user">New User?</string>
     <string name="underlined_forget_password"><u>Forget Password?</u></string>
     <string name="underlined_sign_in"><u>Sign In</u></string>
     <string name="underlined_contact_us"><u>Contact Us?</u></string>

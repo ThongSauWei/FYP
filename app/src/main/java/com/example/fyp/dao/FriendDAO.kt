@@ -1,6 +1,7 @@
 package com.example.fyp.dao
 
 import android.util.Log
+import com.example.fyp.data.Chat
 import com.example.fyp.data.Friend
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 
 class FriendDAO {
     private val dbRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Friend")
+    private val chatDAO = ChatDAO() // Initialize ChatDAO
 
     private var nextID = 1000
 
@@ -158,6 +160,12 @@ class FriendDAO {
                         (requestUserID == userID2 && receiveUserID == userID1)
                     ) {
                         friend = friendSnapshot.getValue(Friend::class.java)
+
+                        // Trigger chat creation when status changes to "Friend"
+                        if (friend?.status == "Friend") {
+                            createChatIfNotExists(userID1, userID2)
+                        }
+
                         break
                     }
                 }
@@ -165,7 +173,7 @@ class FriendDAO {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
+                Log.e("FriendDAO", "Error observing friend status: ${error.message}")
             }
         })
     }
@@ -176,5 +184,24 @@ class FriendDAO {
         return if (snapshot.exists()) snapshot.getValue(Friend::class.java) else null
     }
 
+    private fun createChatIfNotExists(userID1: String, userID2: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val existingChat = chatDAO.getChat(userID1, userID2)
+            if (existingChat == null) {
+                val newChatID = "C${System.currentTimeMillis()}"
+                val newChat = Chat(
+                    chatID = newChatID,
+                    initiatorUserID = userID1,
+                    receiverUserID = userID2,
+                    initiatorLastSeen = "",
+                    receiverLastSeen = ""
+                )
+                chatDAO.addChat(newChat)
+                Log.d("Chat", "Created new chat with ID: $newChatID")
+            } else {
+                Log.d("Chat", "Chat already exists between $userID1 and $userID2")
+            }
+        }
+    }
 
 }

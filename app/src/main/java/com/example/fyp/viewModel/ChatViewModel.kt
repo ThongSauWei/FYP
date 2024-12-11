@@ -12,6 +12,8 @@ import com.example.fyp.data.Chat
 import com.example.fyp.repository.ChatRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ChatViewModel(application : Application) : AndroidViewModel(application) {
     private val chatRepository : ChatRepository
@@ -69,5 +71,19 @@ class ChatViewModel(application : Application) : AndroidViewModel(application) {
             liveData.postValue(filteredChats)
         }
         return liveData
+    }
+
+    fun listenForChatUpdates(userID: String) {
+        chatRepository.listenForChatUpdates(userID) { updatedChats ->
+            _chatList.postValue(updatedChats);
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun markAsRead(chatID: String, userID: String) {
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        viewModelScope.launch(Dispatchers.IO) {
+            chatRepository.updateLastSeen(chatID, userID, timestamp);
+        }
     }
 }

@@ -11,8 +11,8 @@ data class ChatLine(
     val receiverID: String = "",        // Default empty string
 
     val isSharedPost: Boolean = false,
-    val postSharedID: String? = null    //ID of the shared post, if applicable
-
+    val postSharedID: String? = null,    //ID of the shared post, if applicable
+    var read: Boolean = false
 ) {
 
 }

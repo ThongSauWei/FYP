@@ -131,20 +131,39 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Sign Up Link -->
+
+    <!-- Forgot Password Link -->
+
+    <TextView
+        android:id="@+id/NewUserText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardViewSignInButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="149dp"
+        android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/new_user"
+        android:textColor="@color/dark_yellow"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/signUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cardViewSignInButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="30dp"
+        android:layout_alignBottom="@+id/NewUserText"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
-        android:text="@string/underlined_sign_up"
+        android:layout_marginBottom="-1dp"
+        android:layout_toEndOf="@+id/NewUserText"
         android:fontFamily="@font/abhayalibre_semibold"
+        android:text="@string/underlined_sign_up"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
-    <!-- Forgot Password Link -->
     <TextView
         android:id="@+id/forgotPasswordLink"
         android:layout_width="wrap_content"

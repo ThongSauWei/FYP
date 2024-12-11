@@ -10,6 +10,7 @@
 
     <!-- ScrollView to enable scrolling -->
     <ScrollView
+        android:id="@+id/editProfileScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">

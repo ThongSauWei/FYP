@@ -1,5 +1,8 @@
 package com.example.fyp.dao
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.fyp.data.Chat
 import com.example.fyp.data.ChatLine
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,6 +15,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class ChatLineDAO {
     val dbRef : DatabaseReference = FirebaseDatabase.getInstance().getReference("ChatLine")
@@ -125,4 +130,50 @@ class ChatLineDAO {
 
         return chatLineID
     }
+
+    suspend fun getLastMessageContent(chatID: String): String? {
+        val snapshot = dbRef.orderByChild("chatID").equalTo(chatID).limitToLast(1).get().await()
+        return snapshot.children.firstOrNull()?.getValue(ChatLine::class.java)?.content
+    }
+
+    suspend fun getLastMessageTime(chatID: String): String? {
+        val snapshot = dbRef.orderByChild("chatID").equalTo(chatID).limitToLast(1).get().await()
+        return snapshot.children.firstOrNull()?.getValue(ChatLine::class.java)?.dateTime
+    }
+
+    suspend fun getUnreadMessageCount(chatID: String, currentUserID: String): Int {
+        val snapshot = dbRef.orderByChild("chatID").equalTo(chatID).get().await()
+        return snapshot.children.count {
+            val chatLine = it.getValue(ChatLine::class.java)
+            chatLine != null && chatLine.receiverID == currentUserID && !chatLine.read
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateLastSeen(chatID: String, userID: String) {
+        val lastSeenKey = if (userID == "initiator") "initiatorLastSeen" else "receiverLastSeen"
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        dbRef.child(chatID).child(lastSeenKey).setValue(timestamp)
+    }
+
+    fun markAllMessagesAsRead(chatID: String, currentUserID: String) {
+        dbRef.orderByChild("chatID").equalTo(chatID)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (child in snapshot.children) {
+                        val chatLine = child.getValue(ChatLine::class.java)
+                        if (chatLine != null && chatLine.receiverID == currentUserID) {
+                            child.ref.child("read").setValue(true)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+    }
+
+
 }

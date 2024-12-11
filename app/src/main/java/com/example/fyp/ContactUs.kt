@@ -46,6 +46,8 @@ class ContactUs : Fragment() {
         // ViewModel initialization
         viewModel = ViewModelProvider(this).get(ContactUsViewModel::class.java)
 
+        val scrollView = view.findViewById<ScrollView>(R.id.contactUsScrollView)
+
         // Set up the spinner
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -65,9 +67,32 @@ class ContactUs : Fragment() {
         submitBtn.setOnClickListener {
             handleSubmit()
         }
+        setupKeyboardListener(scrollView)
 
         return view
     }
+
+    private fun setupKeyboardListener(scrollView: ScrollView) {
+        val rootView = scrollView.rootView
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is visible
+                scrollView.setPadding(0, 0, 0, 900) // Add 1000px padding at the bottom
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, scrollView.bottom)
+                }
+            } else {
+                // Keyboard is hidden
+                scrollView.setPadding(0, 0, 0, 0) // Remove the padding when the keyboard hides
+            }
+        }
+    }
+
 
     private fun handleSubmit() {
         val name = txtNameContactUs.text.toString().trim()
@@ -104,7 +129,7 @@ class ContactUs : Fragment() {
 
             try {
                 viewModel.sendEmailToSupport(
-                    toEmail = "erikafung26@gmail.con",
+                    toEmail = "erikafung26@gmail.com",
                     subject = "New Contact Us Report: $problemType",
                     name = name,
                     email = email,

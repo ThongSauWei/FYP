@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -54,6 +55,8 @@ class Register : Fragment() {
         btnSignUpRegister = view.findViewById(R.id.btnSignUpRegister)
         btnSignInRegister = view.findViewById(R.id.btnSignInRegister)
         btnExitRegister = view.findViewById(R.id.btnExitRegister)
+
+
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
@@ -111,8 +114,34 @@ class Register : Fragment() {
             setOnClickListener { showDatePicker() }
         }
 
+        val scrollView = view.findViewById<ScrollView>(R.id.registerScrollView)
+
+        setupKeyboardListener(scrollView)
+
         return view
     }
+
+    private fun setupKeyboardListener(scrollView: ScrollView) {
+        val rootView = scrollView.rootView
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is visible
+                scrollView.setPadding(0, 0, 0, 1000) // Add 1000px padding at the bottom
+                scrollView.post {
+                    scrollView.smoothScrollTo(0, scrollView.bottom)
+                }
+            } else {
+                // Keyboard is hidden
+                scrollView.setPadding(0, 0, 0, 0) // Remove the padding when the keyboard hides
+            }
+        }
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

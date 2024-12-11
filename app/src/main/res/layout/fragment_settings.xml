@@ -43,9 +43,9 @@
 
     <ImageView
         android:id="@+id/btnSaveSettings"
-        android:layout_width="29dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="56dp"
+        android:layout_width="27dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="58dp"
         android:layout_marginEnd="30dp"
         android:contentDescription="@string/yes"
         android:src="@drawable/tick"
@@ -138,6 +138,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnFeedbackSettings" />
 
+    <View
+        android:id="@+id/separator6Settings"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChangePasswordSettings" />
+
     <LinearLayout
         android:id="@+id/btnLanguageSettings"
         android:layout_width="match_parent"
@@ -152,7 +165,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnFeedbackSettings">
+        app:layout_constraintTop_toBottomOf="@id/btnChangePasswordSettings">
 
         <ImageView
             android:id="@+id/iconLanguage"
@@ -217,6 +230,40 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/abhayalibre_semibold"
             android:text="@string/feedback"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnChangePasswordSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFeedbackSettings">
+
+        <ImageView
+            android:id="@+id/iconChangePassword"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/new_password"
+            android:src="@drawable/baseline_lock_open_24" />
+
+        <TextView
+            android:id="@+id/tvChangePasswordSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/abhayalibre_semibold"
+            android:text="@string/new_password"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </LinearLayout>

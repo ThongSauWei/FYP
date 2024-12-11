@@ -30,4 +30,16 @@ class ChatLineRepository (private val chatLineDao : ChatLineDAO) {
     fun deleteChatLine(chatLineID : String) {
         chatLineDao.deleteChatLine(chatLineID)
     }
+
+    suspend fun getLastMessageContent(chatID: String): String? {
+        return chatLineDao.getLastMessageContent(chatID)
+    }
+
+    suspend fun getLastMessageTime(chatID: String): String? {
+        return chatLineDao.getLastMessageTime(chatID)
+    }
+
+    suspend fun getUnreadMessageCount(chatID: String, currentUserID: String): Int {
+        return chatLineDao.getUnreadMessageCount(chatID, currentUserID)
+    }
 }

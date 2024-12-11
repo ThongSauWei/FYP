@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +21,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.fyp.dao.ChatDAO
+import com.example.fyp.dao.ChatLineDAO
 import com.example.fyp.dao.LikeDAO
 import com.example.fyp.dao.PostCategoryDAO
 import com.example.fyp.dao.PostCommentDAO
 import com.example.fyp.dao.PostImageDAO
 import com.example.fyp.dao.PostViewHistoryDAO
 import com.example.fyp.dao.SaveDAO
+import com.example.fyp.data.Chat
 import com.example.fyp.data.Friend
 import com.example.fyp.data.Post
 import com.example.fyp.dataAdapter.PostAdapter
@@ -243,19 +247,42 @@ class FriendProfile : Fragment() {
     }
 
     private fun navigateToInnerChat() {
-        val transaction = activity?.supportFragmentManager?.beginTransaction()
-        val fragment = InnerChat() // Assuming InnerChat is a Fragment
-        val bundle = Bundle()
+        lifecycleScope.launch {
+            val chatDAO = ChatDAO()
+            val chatLineDAO = ChatLineDAO()
 
-        // Pass the friendUserID to the InnerChat fragment
-        bundle.putString("friendUserID", friendUserID)
-        fragment.arguments = bundle
+            // Check if a Chat exists
+            var chat = chatDAO.getChat(currentUserID, friendUserID)
 
-        // Navigate to the InnerChat fragment
-        transaction?.replace(R.id.fragmentContainerView, fragment)
-        transaction?.addToBackStack(null)
-        transaction?.commit()
+            if (chat == null) {
+                // If no Chat exists, create a new one
+                val newChatID = "C${System.currentTimeMillis()}"
+                chat = Chat(
+                    chatID = newChatID,
+                    initiatorUserID = currentUserID,
+                    receiverUserID = friendUserID,
+                    initiatorLastSeen = "",
+                    receiverLastSeen = ""
+                )
+                chatDAO.addChat(chat)
+                Log.d("Chat", "Created new chat with ID: $newChatID")
+            }
+
+            // Navigate to InnerChat Fragment
+            val bundle = Bundle().apply {
+                putString("chatID", chat.chatID)
+                putString("friendUserID", friendUserID)
+            }
+            val innerChatFragment = InnerChat()
+            innerChatFragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, innerChatFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
+
 
     private fun showDeleteFriendDialog(friend: Friend) {
         val dialogView = layoutInflater.inflate(R.layout.delete_friend_dialog, null)

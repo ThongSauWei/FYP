@@ -54,4 +54,12 @@ class ChatRepository(private val chatDao : ChatDAO) {
             callback(filteredChats)
         }
     }
+
+    fun listenForChatUpdates(userID: String, onUpdate: (List<Chat>) -> Unit) {
+        chatDao.listenForChatUpdates(userID, onUpdate);
+    }
+
+    fun updateLastSeen(chatID: String, userID: String, timestamp: String) {
+        chatDao.updateLastSeen(chatID, userID, timestamp);
+    }
 }

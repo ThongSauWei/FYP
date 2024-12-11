@@ -165,4 +165,28 @@ class ChatDAO {
                 override fun onCancelled(error: DatabaseError) {}
             })
     }
+
+    fun listenForChatUpdates(userID: String, onUpdate: (List<Chat>) -> Unit) {
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val updatedChats = mutableListOf<Chat>();
+                for (chatSnapshot in snapshot.children) {
+                    val chat = chatSnapshot.getValue(Chat::class.java);
+                    if (chat != null && (chat.initiatorUserID == userID || chat.receiverUserID == userID)) {
+                        updatedChats.add(chat);
+                    }
+                }
+                onUpdate(updatedChats);
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if necessary
+            }
+        });
+    }
+
+    // Update the last seen timestamp for a chat
+    fun updateLastSeen(chatID: String, userID: String, timestamp: String) {
+        dbRef.child(chatID).child(if (userID == "initiator") "initiatorLastSeen" else "receiverLastSeen").setValue(timestamp);
+    }
 }

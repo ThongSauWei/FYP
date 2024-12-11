@@ -4,6 +4,7 @@
     <string name="go_back">返回</string>
     <string name="calendar">日历</string>
     <string name="underlined_sign_up"><u>注册</u></string>
+    <string name="new_user">新用户?</string>
     <string name="underlined_forget_password"><u>忘记密码？</u></string>
     <string name="underlined_sign_in"><u>登录</u></string>
     <string name="underlined_contact_us"><u>联系我们?</u></string>

@@ -68,4 +68,16 @@ class ChatLineViewModel(application: Application, private val repository: ChatLi
             fetchChatLine(chatID)
         }
     }
+
+    suspend fun getLastMessageContent(chatID: String): String? {
+        return chatLineRepository.getLastMessageContent(chatID)
+    }
+
+    suspend fun getLastMessageTime(chatID: String): String? {
+        return chatLineRepository.getLastMessageTime(chatID)
+    }
+
+    suspend fun getUnreadMessageCount(chatID: String, currentUserID: String): Int {
+        return chatLineRepository.getUnreadMessageCount(chatID, currentUserID)
+    }
 }

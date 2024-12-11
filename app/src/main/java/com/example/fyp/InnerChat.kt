@@ -1,43 +1,48 @@
-package com.example.fyp
+package com.example.fyp;
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.fyp.dao.ChatLineDAO
-import com.example.fyp.dao.UserDAO
-import com.example.fyp.data.ChatLine
-import com.example.fyp.data.User
-import com.example.fyp.dataAdapter.InnerChatAdapter
-import com.example.fyp.repository.ChatLineRepository
-import com.google.firebase.storage.FirebaseStorage
-import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.File
-import java.io.IOException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout
+import android.widget.PopupMenu;
+import android.widget.ScrollView
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.lifecycleScope;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.example.fyp.dao.ChatLineDAO;
+import com.example.fyp.dao.UserDAO;
+import com.example.fyp.data.ChatLine;
+import com.example.fyp.dataAdapter.InnerChatAdapter;
+import com.example.fyp.repository.ChatLineRepository;
+import com.google.firebase.storage.FirebaseStorage;
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference;
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.Dispatchers;
+import kotlinx.coroutines.launch;
+import kotlinx.coroutines.withContext;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 class InnerChat : Fragment() {
 
@@ -49,6 +54,8 @@ class InnerChat : Fragment() {
     private lateinit var btnCamera: ImageView
     private lateinit var imgProfile: ImageView
     private lateinit var tvName: TextView
+    private lateinit var btnBackInnerChat: ImageView
+
     private lateinit var chatLineRepository: ChatLineRepository
     private lateinit var chatLineDAO: ChatLineDAO
     private lateinit var userDAO: UserDAO
@@ -60,6 +67,8 @@ class InnerChat : Fragment() {
     private lateinit var chatID: String
     private lateinit var photoUri: Uri
 
+    private val chatLines = mutableListOf<ChatLine>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
@@ -69,14 +78,12 @@ class InnerChat : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_inner_chat, container, false)
-
-        (activity as MainActivity).setToolbar()
+        (activity as MainActivity).supportActionBar?.hide()
 
         chatLineDAO = ChatLineDAO()
         userDAO = UserDAO()
         chatLineRepository = ChatLineRepository(chatLineDAO)
 
-        // Initialize Views
         recyclerView = view.findViewById(R.id.recyclerViewChatInnerChat)
         txtChat = view.findViewById(R.id.txtChatInnerChat)
         btnSend = view.findViewById(R.id.btnSendInnerChat)
@@ -84,19 +91,19 @@ class InnerChat : Fragment() {
         btnCamera = view.findViewById(R.id.btnCameraInnerChat)
         imgProfile = view.findViewById(R.id.imgProfileInnerChat)
         tvName = view.findViewById(R.id.tvNameInnerChat)
+        btnBackInnerChat = view.findViewById(R.id.btnBackInnerChat)
 
-        // Get user and chat details
         currentUserID = SaveSharedPreference.getUserID(requireContext())
         friendUserID = arguments?.getString("friendUserID") ?: ""
         chatID = arguments?.getString("chatID") ?: ""
 
-        // Setup UI
+        onResume()
         setupRecyclerView()
         fetchFriendProfile()
         fetchChatLines()
         setupTextWatcher()
+        setupKeyboardListener(view)
 
-        // Handle Send Button
         btnSend.setOnClickListener {
             val content = txtChat.text.toString().trim()
             if (content.isNotEmpty()) {
@@ -104,13 +111,49 @@ class InnerChat : Fragment() {
             }
         }
 
-        // Handle Attachment Menu
         btnAttachment.setOnClickListener { openAttachmentMenu() }
+        btnCamera.setOnClickListener { checkCameraPermissionAndOpenCamera() }
+        btnBackInnerChat.setOnClickListener {
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            val fragment = OuterChat()
+            transaction?.replace(R.id.fragmentContainerView, fragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+        }
 
-        // Handle Camera Capture
-        btnCamera.setOnClickListener { openCamera() }
+
 
         return view
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // 确保每次返回时隐藏 Toolbar
+        (activity as MainActivity).supportActionBar?.hide()
+    }
+    private fun setupKeyboardListener(view: View) {
+        val rootView = view.rootView
+        val inputContainerInnerChat = view.findViewById<LinearLayout>(R.id.inputContainerInnerChat)
+        val recyclerViewChatInnerChat = view.findViewById<RecyclerView>(R.id.recyclerViewChatInnerChat)
+
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is visible
+                inputContainerInnerChat.translationY = -keypadHeight.toFloat()
+                recyclerViewChatInnerChat.setPadding(0, 0, 0, keypadHeight)
+            } else {
+                // Keyboard is hidden
+                inputContainerInnerChat.translationY = 0f
+                recyclerViewChatInnerChat.setPadding(0, 0, 0, 0)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -122,14 +165,9 @@ class InnerChat : Fragment() {
     }
 
     private fun fetchFriendProfile() {
-        // Fetch profile image and username using UserDAO
         lifecycleScope.launch {
             val user = userDAO.getUserByID(friendUserID)
-            if (user != null) {
-                tvName.text = user.username
-            } else {
-                tvName.text = "Unknown User"
-            }
+            tvName.text = user?.username ?: "Unknown User"
 
             val profileRef = storageRef.child("imageProfile/$friendUserID.png")
             profileRef.downloadUrl.addOnSuccessListener { uri ->
@@ -141,17 +179,19 @@ class InnerChat : Fragment() {
     }
 
     private fun fetchChatLines() {
-        // Fetch chat lines between the current user and the friend
-        chatLineRepository.getChatLines(chatID) { chatLines ->
-            val filteredChatLines = chatLines.filter { chatLine ->
-                (chatLine.senderID == currentUserID && chatLine.receiverID == friendUserID) ||
-                        (chatLine.senderID == friendUserID && chatLine.receiverID == currentUserID)
+        lifecycleScope.launch {
+            chatLineDAO.getChatLines(chatID) { fetchedChatLines ->
+                chatLines.clear()
+                chatLines.addAll(fetchedChatLines)
+
+                // 标记所有未读消息为已读
+                chatLineDAO.markAllMessagesAsRead(chatID, currentUserID)
+
+                adapter.setChatLines(chatLines)
+                recyclerView.scrollToPosition(chatLines.size - 1)
             }
-            adapter.setChatLines(filteredChatLines)
-            recyclerView.scrollToPosition(filteredChatLines.size - 1)
         }
     }
-
 
     private fun setupTextWatcher() {
         txtChat.addTextChangedListener(object : TextWatcher {
@@ -165,21 +205,25 @@ class InnerChat : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessage(content: String) {
-        val chatLine = ChatLine(
-            chatLineID = "",
-            chatID = chatID,
-            content = content,
-            mediaType = "text",
-            mediaURL = null,
-            dateTime = LocalDateTime.now().format(dateTimeFormatter),
-            senderID = currentUserID,
-            receiverID = friendUserID
-        )
-        CoroutineScope(Dispatchers.IO).launch {
-            chatLineRepository.addChatLine(chatLine)
-            fetchChatLines()
+        lifecycleScope.launch {
+            val chatLine = ChatLine(
+                chatLineID = "CL${System.currentTimeMillis()}",
+                chatID = chatID,
+                content = content,
+                mediaType = "text",
+                mediaURL = null,
+                dateTime = LocalDateTime.now().format(dateTimeFormatter),
+                senderID = currentUserID,
+                receiverID = friendUserID,
+                isSharedPost = false
+            )
+
+            chatLineDAO.addChatLine(chatLine)
+            chatLines.add(chatLine)
+            adapter.setChatLines(chatLines)
+            recyclerView.scrollToPosition(chatLines.size - 1)
+            txtChat.text.clear()
         }
-        txtChat.text.clear()
     }
 
     private fun openAttachmentMenu() {
@@ -206,6 +250,22 @@ class InnerChat : Fragment() {
         startActivityForResult(intent, REQUEST_FILE)
     }
 
+    private fun checkCameraPermissionAndOpenCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (requireContext().checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                requireContext().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_CAMERA_PERMISSION
+                )
+            } else {
+                openCamera()
+            }
+        } else {
+            openCamera()
+        }
+    }
+
     private fun openCamera() {
         val photoFile = try {
             File.createTempFile("IMG_${System.currentTimeMillis()}", ".jpg", requireContext().cacheDir)
@@ -222,7 +282,6 @@ class InnerChat : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleMediaUpload(fileUri: Uri, mediaType: String) {
         val storagePath = when (mediaType) {
             "image" -> "chatImages"
@@ -235,7 +294,7 @@ class InnerChat : Fragment() {
         fileRef.putFile(fileUri).addOnSuccessListener {
             fileRef.downloadUrl.addOnSuccessListener { downloadUri ->
                 val chatLine = ChatLine(
-                    chatLineID = "",
+                    chatLineID = "CL${System.currentTimeMillis()}",
                     chatID = chatID,
                     content = null,
                     mediaType = mediaType,
@@ -244,9 +303,11 @@ class InnerChat : Fragment() {
                     senderID = currentUserID,
                     receiverID = friendUserID
                 )
-                CoroutineScope(Dispatchers.IO).launch {
-                    chatLineRepository.addChatLine(chatLine)
-                    fetchChatLines()
+                lifecycleScope.launch {
+                    chatLineDAO.addChatLine(chatLine)
+                    chatLines.add(chatLine)
+                    adapter.setChatLines(chatLines)
+                    recyclerView.scrollToPosition(chatLines.size - 1)
                 }
             }
         }.addOnFailureListener {
@@ -254,14 +315,17 @@ class InnerChat : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_GALLERY -> {
                     val fileUri = data?.data
-                    val mediaType = if (data?.type?.startsWith("image") == true) "image" else "video"
+                    val mediaType = if (fileUri?.let { context?.contentResolver?.getType(it)?.startsWith("image") } == true) {
+                        "image"
+                    } else {
+                        "video"
+                    }
                     if (fileUri != null) handleMediaUpload(fileUri, mediaType)
                 }
                 REQUEST_FILE -> {
@@ -273,9 +337,21 @@ class InnerChat : Fragment() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera()
+            } else {
+                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     companion object {
         private const val REQUEST_GALLERY = 1
         private const val REQUEST_FILE = 2
         private const val REQUEST_CAMERA = 3
+        private const val REQUEST_CAMERA_PERMISSION = 4
     }
 }

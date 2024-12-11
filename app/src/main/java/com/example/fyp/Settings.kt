@@ -22,6 +22,7 @@ class Settings : Fragment() {
     private lateinit var btnAboutUs: LinearLayout
     private lateinit var btnContactUs: LinearLayout
     private lateinit var btnFeedback: LinearLayout
+    private lateinit var btnChangePassword : LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,7 @@ class Settings : Fragment() {
         btnAboutUs = view.findViewById(R.id.btnAboutUsSettings)
         btnContactUs = view.findViewById(R.id.btnContactUsSettings)
         btnFeedback = view.findViewById(R.id.btnFeedbackSettings)
+        btnChangePassword = view.findViewById(R.id.btnChangePasswordSettings)
 
         val languages = resources.getStringArray(R.array.language_array)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
@@ -73,6 +75,10 @@ class Settings : Fragment() {
 
         btnFeedback.setOnClickListener {
             navigateToFragment(Feedback())
+        }
+
+        btnChangePassword.setOnClickListener {
+            navigateToFragment(SettingNewPassword())
         }
 
         return view

@@ -74,16 +74,25 @@ class InnerChatAdapter(
                 }
                 "image" -> {
                     imgMedia.visibility = View.VISIBLE
-                    Glide.with(imgMedia.context).load(chatLine.mediaURL).into(imgMedia)
+                    Glide.with(imgMedia.context)
+                        .load(chatLine.mediaURL)
+                        .placeholder(R.drawable.tarumt_logo)
+                        .error(R.drawable.no_internet)
+                        .into(imgMedia)
                 }
                 "video" -> {
                     videoContainer.visibility = View.VISIBLE
-                    videoView.setVideoPath(chatLine.mediaURL)
+                    videoView.setVideoPath(chatLine.mediaURL) // 设置视频路径
+                    btnPlayVideo.visibility = View.VISIBLE // 确保播放按钮可见
+
                     btnPlayVideo.setOnClickListener {
-                        videoView.start()
-                        btnPlayVideo.visibility = View.GONE
+                        videoView.start() // 播放视频
+                        btnPlayVideo.visibility = View.GONE // 隐藏播放按钮
                     }
-                    videoView.setOnCompletionListener { btnPlayVideo.visibility = View.VISIBLE }
+
+                    videoView.setOnCompletionListener {
+                        btnPlayVideo.visibility = View.VISIBLE // 播放完成后重新显示按钮
+                    }
                 }
                 "file" -> {
                     tvFile.visibility = View.VISIBLE
@@ -128,16 +137,25 @@ class InnerChatAdapter(
                 }
                 "image" -> {
                     imgMedia.visibility = View.VISIBLE
-                    Glide.with(imgMedia.context).load(chatLine.mediaURL).into(imgMedia)
+                    Glide.with(imgMedia.context)
+                        .load(chatLine.mediaURL)
+                        .placeholder(R.drawable.tarumt_logo)
+                        .error(R.drawable.no_internet)
+                        .into(imgMedia)
                 }
                 "video" -> {
                     videoContainer.visibility = View.VISIBLE
-                    videoView.setVideoPath(chatLine.mediaURL)
+                    videoView.setVideoPath(chatLine.mediaURL) // 设置视频路径
+                    btnPlayVideo.visibility = View.VISIBLE // 确保播放按钮可见
+
                     btnPlayVideo.setOnClickListener {
-                        videoView.start()
-                        btnPlayVideo.visibility = View.GONE
+                        videoView.start() // 播放视频
+                        btnPlayVideo.visibility = View.GONE // 隐藏播放按钮
                     }
-                    videoView.setOnCompletionListener { btnPlayVideo.visibility = View.VISIBLE }
+
+                    videoView.setOnCompletionListener {
+                        btnPlayVideo.visibility = View.VISIBLE // 播放完成后重新显示按钮
+                    }
                 }
                 "file" -> {
                     tvFile.visibility = View.VISIBLE
