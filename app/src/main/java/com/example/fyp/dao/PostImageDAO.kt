@@ -130,7 +130,13 @@ class PostImageDAO(
 
     fun deleteImagesByPostID(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
         dbRef.orderByChild("postID").equalTo(postID).get().addOnSuccessListener { snapshot ->
-            val tasks = snapshot.children.map { it.ref.removeValue() }
+            val tasks = snapshot.children.map {
+                val imageID = it.key
+                if (imageID != null) {
+                    storageRef.child("PostImage/$imageID.jpg").delete()
+                }
+                it.ref.removeValue()
+            }
             Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
                 if (task.isSuccessful) onComplete(true, null)
                 else onComplete(false, task.exception)
@@ -146,11 +152,11 @@ class PostImageDAO(
         dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (child in snapshot.children) {
-                    child.ref.removeValue() // Removes the image metadata
                     val imageID = child.key
                     if (imageID != null) {
-                        storageRef.child("$imageID.jpg").delete() // Deletes the image from storage
+                        storageRef.child("postImage/$imageID.jpg").delete()
                     }
+                    child.ref.removeValue()
                 }
             }
 
@@ -161,12 +167,30 @@ class PostImageDAO(
     }
 
     fun deleteImageByID(imageID: String, onComplete: (Boolean, Exception?) -> Unit) {
-        dbRef.child(imageID).removeValue().addOnSuccessListener {
-            onComplete(true, null)
+        val filePath = "PostImages/$imageID.jpg"
+        storageRef.child(filePath).metadata.addOnSuccessListener {
+            // 文件存在，尝试删除
+            storageRef.child(filePath).delete().addOnSuccessListener {
+                dbRef.child(imageID).removeValue().addOnSuccessListener {
+                    Log.d("DeleteImage", "Image deleted successfully: $filePath")
+                    onComplete(true, null)
+                }.addOnFailureListener { exception ->
+                    Log.e("DeleteImage", "Failed to delete image metadata from database", exception)
+                    onComplete(false, exception)
+                }
+            }.addOnFailureListener { exception ->
+                Log.e("DeleteImage", "Failed to delete image from storage", exception)
+                onComplete(false, exception)
+            }
         }.addOnFailureListener { exception ->
+            // 文件不存在
+            Log.e("DeleteImage", "File does not exist: $filePath")
             onComplete(false, exception)
         }
     }
+
+
+
 
 
 }

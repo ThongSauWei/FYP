@@ -85,7 +85,7 @@ class EditPost : Fragment() {
 
         postID = arguments?.getString("POST_ID")
 
-        val storageRef = FirebaseStorage.getInstance().reference
+        val storageRef = FirebaseStorage.getInstance().getReference("PostImages")
         val databaseRef = FirebaseDatabase.getInstance().getReference("PostImage")
         val postImageRepository = PostImageRepository(PostImageDAO(storageRef, databaseRef))
         val postImageViewModelFactory = PostImageViewModelFactory(postImageRepository)
@@ -231,7 +231,6 @@ class EditPost : Fragment() {
         val title = txtTitle.text.toString().trim()
         val description = txtDescription.text.toString().trim()
 
-        // Validation for title, description, image, and category
         if (title.isEmpty()) {
             Toast.makeText(requireContext(), "Title cannot be empty", Toast.LENGTH_SHORT).show()
             return
@@ -246,79 +245,92 @@ class EditPost : Fragment() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val existingImages = postImageViewModel.getImagesByPostID(postID!!) // Fetch existing images from the database
+            try {
+                val existingImages = postImageViewModel.getImagesByPostID(postID!!)
+                val remainingImagesCount = existingImages.size - imagesToDelete.size
 
-            val remainingImagesCount = existingImages.size - imagesToDelete.size
-            if (remainingImagesCount <= 0 && imageUris.isEmpty()) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Please upload at least one image", Toast.LENGTH_SHORT).show()
-                }
-                return@launch
-            }
-
-            // Handle image deletion
-            imagesToDelete.forEach { imageID ->
-                postImageViewModel.deleteImageByID(imageID) { success, exception ->
-                    if (!success) {
-                        Log.e("EditPost", "Failed to delete image $imageID: ${exception?.message}")
+                // 确保至少有一张图片
+                if (remainingImagesCount <= 0 && imageUris.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Please upload at least one image", Toast.LENGTH_SHORT).show()
                     }
+                    return@launch
                 }
-            }
 
-            // Upload new images using postImageDAO
-            val userId = SaveSharedPreference.getUserID(requireContext())
-            if (imageUris.isNotEmpty()) {
-                postImageViewModel.uploadImages(postID!!, imageUris, userId) { success, uploadException ->
-                    if (!success) {
-                        Log.e("EditPost", "Failed to upload images: ${uploadException?.message}")
+                // 删除图片
+                imagesToDelete.forEach { imageID ->
+                    postImageViewModel.deleteImageByID(imageID) { success, exception ->
                         lifecycleScope.launch(Dispatchers.Main) {
-                            Toast.makeText(requireContext(), "Failed to upload images. Please try again.", Toast.LENGTH_SHORT).show()
-                        }
-                        return@uploadImages
-                    }
-                }
-            }
-
-            val post = postViewModel.getPostByID(postID!!)
-            if (post != null) {
-                post.postTitle = title
-                post.postDescription = description
-                post.postType = selectedPrivacy.toString()
-
-                // Handle categories
-                val userID = SaveSharedPreference.getUserID(requireContext())
-                val existingCategories = postCategoryViewModel.getCategoriesByPostID(postID!!).map { it.category }
-
-                val categoriesToAdd = selectedCategories.filter { !existingCategories.contains(it) }
-                val categoriesToRemove = existingCategories.filter { !selectedCategories.contains(it) }
-
-                categoriesToAdd.forEach { category ->
-                    postCategoryViewModel.addCategory(postID!!, category, userID) { success, _ ->
-                        if (success) Log.d("EditPost", "Category added: $category")
-                    }
-                }
-
-                categoriesToRemove.forEach { category ->
-                    postCategoryViewModel.deleteCategoryByPostAndUser(postID!!, category, userID) { success, _ ->
-                        if (success) Log.d("EditPost", "Category removed: $category")
-                    }
-                }
-
-                // Update the post after images and categories are handled
-                postViewModel.updatePost(post) { success, exception ->
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        if (success) {
-                            // Navigate to Profile
-                            navigateToProfile()
-                            Toast.makeText(requireContext(), "Post updated successfully!", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(requireContext(), "Failed to update post: ${exception?.message}", Toast.LENGTH_SHORT).show()
+                            if (success) {
+                                Log.d("EditPost", "Image $imageID deleted successfully")
+                            } else {
+                                Log.e("EditPost", "Failed to delete image $imageID: ${exception?.message}")
+                                Toast.makeText(requireContext(), "Failed to delete some images. Please try again.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
+                }
+
+                // 上传新图片
+                if (imageUris.isNotEmpty()) {
+                    val userId = SaveSharedPreference.getUserID(requireContext())
+                    postImageViewModel.uploadImages(postID!!, imageUris, userId) { success, uploadException ->
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            if (success) {
+                                Log.d("EditPost", "Images uploaded successfully for post: $postID")
+                            } else {
+                                Log.e("EditPost", "Failed to upload images: ${uploadException?.message}")
+                                Toast.makeText(requireContext(), "Failed to upload images. Please try again.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+
+                // Update post
+                val post = postViewModel.getPostByID(postID!!)
+                if (post != null) {
+                    post.postTitle = title
+                    post.postDescription = description
+                    post.postType = selectedPrivacy.toString()
+
+                    val userID = SaveSharedPreference.getUserID(requireContext())
+                    val existingCategories = postCategoryViewModel.getCategoriesByPostID(postID!!).map { it.category }
+
+                    val categoriesToAdd = selectedCategories.filter { !existingCategories.contains(it) }
+                    val categoriesToRemove = existingCategories.filter { !selectedCategories.contains(it) }
+
+                    categoriesToAdd.forEach { category ->
+                        postCategoryViewModel.addCategory(postID!!, category, userID) { success, _ ->
+                            if (success) Log.d("EditPost", "Category added: $category")
+                        }
+                    }
+
+                    categoriesToRemove.forEach { category ->
+                        postCategoryViewModel.deleteCategoryByPostAndUser(postID!!, category, userID) { success, _ ->
+                            if (success) Log.d("EditPost", "Category removed: $category")
+                        }
+                    }
+
+                    postViewModel.updatePost(post) { success, exception ->
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            if (success) {
+                                navigateToProfile()
+                                Toast.makeText(requireContext(), "Post updated successfully!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to update post: ${exception?.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("EditPost", "Error saving post: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
 
     private fun navigateToProfile() {
         val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -360,7 +372,7 @@ class EditPost : Fragment() {
         val removeButton = ImageView(requireContext()).apply {
             layoutParams = FrameLayout.LayoutParams(60, 60).apply {
                 setMargins(8, 8, 0, 0)
-                gravity = Gravity.END or Gravity.TOP // Position the button at the top-right corner
+                gravity = Gravity.END or Gravity.TOP
             }
             setImageResource(R.drawable.baseline_remove_circle_24)
             setOnClickListener {
