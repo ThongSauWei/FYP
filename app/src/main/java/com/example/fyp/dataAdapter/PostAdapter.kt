@@ -104,7 +104,7 @@ class PostAdapter(
 
         storageRef = FirebaseStorage.getInstance().getReference()
 
-        refreshPosts()
+//        refreshPosts()
 
         return PostViewHolder(view)
     }
@@ -219,6 +219,8 @@ class PostAdapter(
 
             val adapter = holder.viewPagerPostImages.adapter as? ImageSliderAdapter
             if (adapter != null) {
+                // Clear the adapter's data before updating
+                adapter.updateImages(emptyList())
                 adapter.updateImages(imageUrls)
             } else {
                 holder.viewPagerPostImages.adapter = ImageSliderAdapter(imageUrls)
@@ -226,6 +228,7 @@ class PostAdapter(
 
             setupIndicators(holder.indicatorContainer, imageUrls.size, holder.viewPagerPostImages)
         }
+
 
         // Fetch and display like count
         CoroutineScope(Dispatchers.Main).launch {

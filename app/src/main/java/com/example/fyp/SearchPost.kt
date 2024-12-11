@@ -34,6 +34,7 @@ import com.example.fyp.viewModelFactory.PostViewHistoryViewModelFactory
 import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -180,12 +181,44 @@ class SearchPost : Fragment() {
     private fun fetchAndDisplayPosts() {
         lifecycleScope.launch {
             try {
-                val posts = postViewModel.getAllPosts()
-                displayPosts(posts)
+//                val posts = postViewModel.getAllPosts()
+
+                val allPosts = postViewModel.getAllPosts()
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(allPosts, currentUserID)
+
+
+
+                displayPosts(postListFiltered)
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error fetching posts", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private suspend fun filterPostsByVisibility(posts: List<Post>, currentUserID: String): List<Post> {
+        val visiblePosts = mutableListOf<Post>()
+
+        for (post in posts) {
+            when (post.postType) {
+                "Public" -> {
+                    visiblePosts.add(post) // Public posts are always visible
+                }
+                "Private" -> {
+                    if (post.userID == currentUserID) {
+                        visiblePosts.add(post) // Private posts are visible to the user who created them
+                    }
+                }
+                "Restricted" -> {
+                    val hasAccess = postViewModel.checkIfUserHasAccessToPost(currentUserID, post.postID)
+                    if (hasAccess) {
+                        visiblePosts.add(post) // Restricted posts are visible if the user has access
+                    }
+                }
+            }
+        }
+
+        return visiblePosts
     }
 
     private fun fetchAndDisplayPostsByCategory(category: String) {
@@ -193,8 +226,15 @@ class SearchPost : Fragment() {
             try {
                 Log.d("SearchPost", "Fetching posts for category: $category")
                 val posts = postCategoryViewModel.getPostByCategory(category)
+
+
+//                val allPosts = postViewModel.getAllPosts()
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(posts, currentUserID)
+
+
                 Log.d("SearchPost", "Fetched ${posts.size} posts for category: $category")
-                displayPosts(posts)
+                displayPosts(postListFiltered)
             } catch (e: Exception) {
                 Log.e("SearchPost", "Error fetching posts for category: $category", e)
                 Toast.makeText(requireContext(), "Error fetching posts", Toast.LENGTH_SHORT).show()
@@ -234,8 +274,13 @@ class SearchPost : Fragment() {
     private fun fetchPosts() {
         lifecycleScope.launch {
             try {
-                val posts = postViewModel.getAllPosts()
-                displayPosts(posts)
+//                val posts = postViewModel.getAllPosts()
+
+                val allPosts = postViewModel.getAllPosts()
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(allPosts, currentUserID)
+
+                displayPosts(postListFiltered)
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error fetching posts", Toast.LENGTH_SHORT).show()
             }

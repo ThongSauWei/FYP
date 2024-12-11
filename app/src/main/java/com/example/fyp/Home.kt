@@ -155,7 +155,11 @@ class Home : Fragment() {
         lifecycleScope.launch {
             try {
                 val postList = postViewModel.getAllPosts()
-                postAdapter.updatePosts(postList)
+
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(postList, currentUserID)
+
+                postAdapter.updatePosts(postListFiltered)
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
             }
@@ -210,6 +214,9 @@ class Home : Fragment() {
             try {
                 // Fetch all posts
                 val allPosts = postViewModel.getAllPosts()
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(allPosts, currentUserID)
+
 
                 // Define a date format matching your `postDateTime` format
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -218,7 +225,7 @@ class Home : Fragment() {
                 Log.d("Home", "Filtering posts with Date Range: Start = $startDate, End = $endDate")
 
                 // Filter posts based on the date range
-                val filteredPosts = allPosts.filter { post ->
+                val filteredPosts = postListFiltered.filter { post ->
                     try {
                         Log.d("Home", "Processing post with postDateTime: ${post.postDateTime}")
 
@@ -265,11 +272,18 @@ class Home : Fragment() {
                 Log.d("Home", "Categories: $categories, Date Range: $dateRange")
 
                 val allPosts = postViewModel.getAllPosts()
+
+
+//                val allPosts = postViewModel.getAllPosts()
+                val currentUserID = SaveSharedPreference.getUserID(requireContext())
+                val postListFiltered = filterPostsByVisibility(allPosts, currentUserID)
+
+
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
                 val filteredPosts = mutableListOf<Post>()
 
-                for (post in allPosts) {
+                for (post in postListFiltered) {
                     // Fetch categories for the current post
                     val postCategories = postCategoryDAO.getCategoriesByPostID(post.postID)
 
