@@ -198,11 +198,21 @@ class RestrictedUser : Fragment() {
                 val selectedUsers = adapter.getSelectedUsers()
                 Log.d("savePostToFirebase", "Selected users: ${selectedUsers.joinToString { it.name }}")
 
+                val postSharedDAO = PostSharedDAO()
+                // Add the current user to PostShared
+                postSharedDAO.addSharedPost(postID, userId) { success, exception ->
+                    if (success) {
+                        Log.d("savePostToFirebase", "Current user added successfully to PostShared.")
+                    } else {
+                        Log.e("savePostToFirebase", "Failed to add current user to PostShared: ${exception?.message}")
+                    }
+                }
+
                 // Iterate over the selected friends and save each one
                 selectedUsers.forEach { selectedUser ->
                     Log.d("savePostToFirebase", "Saving user: ${selectedUser.name} (ID: ${selectedUser.userID}) to PostShared")
 
-                    val postSharedDAO = PostSharedDAO()
+
                     postSharedDAO.addSharedPost(postID, selectedUser.userID) { success, exception ->
                         if (success) {
                             Log.d("savePostToFirebase", "User ${selectedUser.name} saved successfully to PostShared.")

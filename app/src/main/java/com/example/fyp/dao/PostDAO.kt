@@ -63,7 +63,7 @@ class PostDAO {
         dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val posts = mutableListOf<Post>()
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()) // Match your date format
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
                 if (snapshot.exists()) {
                     for (postSnapshot in snapshot.children) {
@@ -73,12 +73,12 @@ class PostDAO {
                     }
                 }
 
-                // Sort the posts by postDateTime in descending order (latest posts first)
+                // Sort posts by date in descending order
                 val sortedPosts = posts.sortedByDescending { post ->
                     try {
-                        dateFormat.parse(post.postDateTime)?.time ?: 0L // Parse and get the timestamp
+                        dateFormat.parse(post.postDateTime)?.time ?: Long.MIN_VALUE
                     } catch (e: Exception) {
-                        0L // Default to 0 if parsing fails
+                        Long.MIN_VALUE
                     }
                 }
 
@@ -90,6 +90,8 @@ class PostDAO {
             }
         })
     }
+
+
 
 
     suspend fun getPostsForUser(currentUserID: String): List<Post> {

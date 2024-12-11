@@ -104,11 +104,15 @@ class PostAdapter(
 
         storageRef = FirebaseStorage.getInstance().getReference()
 
+//        refreshPosts()
 
         return PostViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+
+
+
         val post = posts[position]
 
         val currentUserID = getCurrentUserID()
@@ -215,6 +219,8 @@ class PostAdapter(
 
             val adapter = holder.viewPagerPostImages.adapter as? ImageSliderAdapter
             if (adapter != null) {
+                // Clear the adapter's data before updating
+                adapter.updateImages(emptyList())
                 adapter.updateImages(imageUrls)
             } else {
                 holder.viewPagerPostImages.adapter = ImageSliderAdapter(imageUrls)
@@ -222,6 +228,7 @@ class PostAdapter(
 
             setupIndicators(holder.indicatorContainer, imageUrls.size, holder.viewPagerPostImages)
         }
+
 
         // Fetch and display like count
         CoroutineScope(Dispatchers.Main).launch {
@@ -469,12 +476,40 @@ class PostAdapter(
     private fun refreshPosts() {
         (context as? FragmentActivity)?.lifecycleScope?.launch {
             try {
+                val currentUserID = getCurrentUserID()
+
                 val updatedPosts = postViewModel.getAllPosts() // Fetch updated posts
-                updatePosts(updatedPosts)
+                val filteredPost = filterPostsByVisibility(updatedPosts, currentUserID)
+                updatePosts(filteredPost)
             } catch (e: Exception) {
                 Toast.makeText(context, "Failed to refresh posts.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private suspend fun filterPostsByVisibility(posts: List<Post>, currentUserID: String): List<Post> {
+        val visiblePosts = mutableListOf<Post>()
+
+        for (post in posts) {
+            when (post.postType) {
+                "Public" -> {
+                    visiblePosts.add(post) // Public posts are always visible
+                }
+                "Private" -> {
+                    if (post.userID == currentUserID) {
+                        visiblePosts.add(post) // Private posts are visible to the user who created them
+                    }
+                }
+                "Restricted" -> {
+                    val hasAccess = postViewModel.checkIfUserHasAccessToPost(currentUserID, post.postID)
+                    if (hasAccess) {
+                        visiblePosts.add(post) // Restricted posts are visible if the user has access
+                    }
+                }
+            }
+        }
+
+        return visiblePosts
     }
 
     private fun getCurrentUserID(): String {
