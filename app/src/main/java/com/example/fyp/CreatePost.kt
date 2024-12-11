@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -77,7 +79,6 @@ class CreatePost : Fragment() {
     private lateinit var postCategoryViewModel: PostCategoryViewModel
     private lateinit var postSharedViewModel: PostSharedViewModel
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -134,7 +135,6 @@ class CreatePost : Fragment() {
         layoutParams?.height = sizeInPixels
         btnSearchToolbarWithAnnouce?.layoutParams = layoutParams
 
-
         val btnNotification = activity?.findViewById<ImageView>(R.id.btnNotification)
         btnNotification?.visibility = View.GONE
 
@@ -185,16 +185,40 @@ class CreatePost : Fragment() {
         if (resizedBitmap != null) {
             // Create a CardView for the image
             val cardView = createCardView()
+
+            val frameLayout = FrameLayout(requireContext()).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            }
+
             val imageView = ImageView(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
                 )
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 setImageBitmap(resizedBitmap) // Set the resized image bitmap
             }
 
-            cardView.addView(imageView) // Add the image to the card
+            val removeButton = ImageView(requireContext()).apply {
+                layoutParams = FrameLayout.LayoutParams(60, 60).apply {
+                    setMargins(8, 8, 0, 0)
+                    gravity = Gravity.END or Gravity.TOP // Position the button at the top-right corner
+                }
+                setImageResource(R.drawable.baseline_remove_circle_24)
+                setOnClickListener {
+                    linearLayoutImages.removeView(cardView) // Remove the image card from the layout
+                    imageUris.remove(uri) // Remove the URI from the list
+                }
+            }
+
+            // Add the ImageView and RemoveButton to the FrameLayout
+            frameLayout.addView(imageView)
+            frameLayout.addView(removeButton)
+
+            cardView.addView(frameLayout) // Add the FrameLayout to the CardView
             linearLayoutImages.addView(cardView, linearLayoutImages.childCount - 1) // Insert before the Add button
         } else {
             Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_SHORT).show()
@@ -258,6 +282,23 @@ class CreatePost : Fragment() {
         resCard.setOnClickListener { selectPrivacy("Restricted", resCard) }
     }
 
+//    private fun selectCategory(category: String, cardView: CardView) {
+//        if (selectedCategories.contains(category)) {
+//            // Deselect the card if it's already selected
+//            cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.box))
+//            selectedCategories.remove(category) // Remove from the set
+//            Log.d("CreatePost", "Deselected Category: $category")
+//        } else {
+//            // Select the new category
+//            cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_yellow))
+//            selectedCategories.add(category) // Add to the set
+//            Log.d("CreatePost", "Selected Category: $category")
+//        }
+//
+//        // Log all currently selected categories
+//        Log.d("CreatePost", "All Selected Categories: $selectedCategories")
+//    }
+
     private fun selectCategory(category: String, cardView: CardView) {
         if (selectedCategories.contains(category)) {
             // Deselect the card if it's already selected
@@ -265,15 +306,21 @@ class CreatePost : Fragment() {
             selectedCategories.remove(category) // Remove from the set
             Log.d("CreatePost", "Deselected Category: $category")
         } else {
-            // Select the new category
-            cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_yellow))
-            selectedCategories.add(category) // Add to the set
-            Log.d("CreatePost", "Selected Category: $category")
+            // Check if the maximum limit of 3 categories is reached
+            if (selectedCategories.size >= 3) {
+                Toast.makeText(requireContext(), "You can select a maximum of 3 categories", Toast.LENGTH_SHORT).show()
+            } else {
+                // Select the new category
+                cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_yellow))
+                selectedCategories.add(category) // Add to the set
+                Log.d("CreatePost", "Selected Category: $category")
+            }
         }
 
         // Log all currently selected categories
         Log.d("CreatePost", "All Selected Categories: $selectedCategories")
     }
+
 
     private fun selectPrivacy(privacy: String, selectedCardView: CardView) {
         // Clear previously selected privacy

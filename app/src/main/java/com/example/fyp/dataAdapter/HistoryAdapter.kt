@@ -42,9 +42,9 @@ import com.example.fyp.data.Post
 import com.example.fyp.data.PostCategory
 import com.example.fyp.data.Save
 import com.example.fyp.viewModel.FriendViewModel
+import com.example.fyp.viewModel.PostViewHistoryViewModel
 import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
-import com.example.fyp.viewmodel.PostViewHistoryViewModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
