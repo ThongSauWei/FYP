@@ -13,12 +13,11 @@ import com.example.fyp.Annoucement
 import com.example.fyp.Home
 import com.example.fyp.R
 import com.example.fyp.dao.AnnoucementDAO
+import com.example.fyp.data.PostComment
 import com.example.fyp.viewModel.FriendViewModel
 import java.lang.IllegalStateException
 
-class DeleteAnnDialog : DialogFragment() {
-    lateinit var announcementDAO: AnnoucementDAO
-    var announcementID: String? = null
+class DeleteCommentDialog(private val comment: PostComment, private val onDeleteConfirmed: (PostComment) -> Unit) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -30,29 +29,9 @@ class DeleteAnnDialog : DialogFragment() {
             val btnNo: Button = view.findViewById(R.id.btnNo)
             val imgClose: ImageView = view.findViewById(R.id.imgCloseDeleteFriendDialog)
 
-            announcementDAO = AnnoucementDAO()
-
             btnYes.setOnClickListener {
-                announcementID?.let { id ->
-                    announcementDAO.deleteAnnouncement(id) { success, exception ->
-                        if (success) {
-                            context?.let {
-                                Toast.makeText(it, "Announcement status updated successfully", Toast.LENGTH_SHORT).show()
-                                val fragment = Annoucement()
-                                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                                transaction?.replace(R.id.fragmentContainerView, fragment)
-                                transaction?.addToBackStack(null)
-                                transaction?.commit()
-                            }
-                            dismiss() // Safely dismiss the dialog
-                        } else {
-                            Log.e("DeleteAnnDialog", "Error updating announcement status: ${exception?.message}")
-                            context?.let {
-                                Toast.makeText(it, "Failed to update announcement status", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                }
+                onDeleteConfirmed(comment)
+                dismiss()
             }
 
             btnNo.setOnClickListener {
@@ -68,3 +47,4 @@ class DeleteAnnDialog : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }
+

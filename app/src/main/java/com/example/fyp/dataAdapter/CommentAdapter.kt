@@ -1,17 +1,25 @@
 package com.example.fyp.dataAdapter
 
+import android.app.Application
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fyp.R
 import com.example.fyp.data.PostComment
+import com.example.fyp.dialog.DeleteCommentDialog
+import com.example.fyp.viewModel.PostViewModel
 import com.example.fyp.viewModel.UserViewModel
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.mainapp.finalyearproject.saveSharedPreference.SaveSharedPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,12 +31,14 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class CommentAdapter(
+    private val context: Context,
     private var comments: List<PostComment>,
     private val coroutineScope: CoroutineScope,
     private val deleteCommentListener: (PostComment) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentHolder>() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var storageRef: StorageReference
+    private lateinit var postViewModel: PostViewModel
 
     class CommentHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvCommentCommentHolder: TextView = itemView.findViewById(R.id.tvCommentCommentHolder)
@@ -52,6 +62,7 @@ class CommentAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.comment_holder, parent, false)
+
         return CommentHolder(itemView)
     }
 
@@ -77,10 +88,45 @@ class CommentAdapter(
                 }
             }
 
-            holder.deleteComment.setOnClickListener {
-                deleteCommentListener(comment)
+//            holder.deleteComment.setOnClickListener {
+//                deleteCommentListener(comment)
+//            }
+
+//            holder.deleteComment.setOnClickListener {
+//                val deleteCommentDialog = DeleteCommentDialog(comment) { confirmedComment ->
+//                    deleteCommentListener(confirmedComment)
+//                }
+//                deleteCommentDialog.show((holder.itemView.context as FragmentActivity).supportFragmentManager, "DeleteCommentDialog")
+//            }
+
+            // Fetch currentUserID
+            val currentUserID = getCurrentUserID()
+
+            val postViewModel = PostViewModel(context.applicationContext as Application)
+
+            // Fetch the post for the current comment
+            val post = postViewModel.getPostByID(comment.postID)
+
+            // Show or hide the delete button based on the user's authorization
+            if (post != null && post.userID == currentUserID) {
+                holder.deleteComment.visibility = View.VISIBLE
+            } else {
+                holder.deleteComment.visibility = View.GONE
             }
+
+            // Handle delete button click
+            holder.deleteComment.setOnClickListener {
+                val deleteCommentDialog = DeleteCommentDialog(comment) { confirmedComment ->
+                    deleteCommentListener(confirmedComment)
+                }
+                deleteCommentDialog.show((holder.itemView.context as FragmentActivity).supportFragmentManager, "DeleteCommentDialog")
+            }
+
         }
+    }
+
+    private fun getCurrentUserID(): String {
+        return SaveSharedPreference.getUserID(context) // Use the passed context
     }
 
     private fun calculateRelativeTime(dateTime: String): String {
