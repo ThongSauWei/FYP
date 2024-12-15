@@ -16,7 +16,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/caveat"
         android:text="Contact Us"
-        android:textColor="@color/white"
+        android:textColor="@color/title_color"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

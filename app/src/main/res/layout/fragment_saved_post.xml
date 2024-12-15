@@ -30,7 +30,7 @@
                 android:layout_marginBottom="11dp"
                 android:fontFamily="@font/abhayalibre_extrabold"
                 android:text="@string/explore"
-                android:textColor="@color/white"
+                android:textColor="@color/title_color"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/separatorAnnHolder"
                 app:layout_constraintEnd_toEndOf="parent"

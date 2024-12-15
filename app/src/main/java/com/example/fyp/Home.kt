@@ -161,7 +161,7 @@ class Home : Fragment() {
 
                 postAdapter.updatePosts(postListFiltered)
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()
+                /*Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show()*/
             }
         }
 

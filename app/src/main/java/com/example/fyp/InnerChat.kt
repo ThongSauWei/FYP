@@ -180,15 +180,25 @@ class InnerChat : Fragment() {
 
     private fun fetchChatLines() {
         lifecycleScope.launch {
+            // Fetch existing chat lines
             chatLineDAO.getChatLines(chatID) { fetchedChatLines ->
                 chatLines.clear()
                 chatLines.addAll(fetchedChatLines)
 
-                // 标记所有未读消息为已读
+                // Mark all unread messages as read
                 chatLineDAO.markAllMessagesAsRead(chatID, currentUserID)
 
                 adapter.setChatLines(chatLines)
                 recyclerView.scrollToPosition(chatLines.size - 1)
+
+                // Add a listener for new chat lines
+                chatLineDAO.listenForNewChatLines(chatID) { newChatLine ->
+                    lifecycleScope.launch {
+                        chatLines.add(newChatLine)
+                        adapter.setChatLines(chatLines)
+                        recyclerView.scrollToPosition(chatLines.size - 1)
+                    }
+                }
             }
         }
     }

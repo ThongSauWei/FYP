@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fyp.R
+import com.example.fyp.dao.ChatDAO
 import com.example.fyp.dao.PostImageDAO
+import com.example.fyp.data.Chat
 import com.example.fyp.data.UserAnnouncement
 import com.example.fyp.dialog.DeleteAnnDialog
 import com.example.fyp.models.ListItem
@@ -117,11 +119,14 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         // If the userAnnouncement exists, get the userID
-                        val userID = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)?.senderUserID
-                        if (userID != null) {
+                        val userAnnouncement = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)
+                        val senderUserID = userAnnouncement?.senderUserID  // The user who sent the request
+                        val receiverUserID = userAnnouncement?.userID
+
+                        if (senderUserID != null) {
                             // Use the userID to fetch the user details
                             GlobalScope.launch(Dispatchers.Main) {
-                                val user = userViewModel.getUserByID(userID)
+                                val user = userViewModel.getUserByID(senderUserID)
 
                                 // Set the user data in the view (username, profile image, etc.)
                                 user?.let {
@@ -131,6 +136,34 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
 
                                         // Hide imagePost for "Friend Request"
                                         imagePost.visibility = View.GONE
+
+                                        // **Add chat creation here**
+                                        if (receiverUserID != null) {
+                                            GlobalScope.launch(Dispatchers.IO) {
+                                                try {
+                                                    val chatDAO = ChatDAO()
+                                                    val existingChat = chatDAO.getChat(receiverUserID, senderUserID)
+
+                                                    if (existingChat == null) {
+                                                        // Create a new chat if not already exists
+                                                        val newChatID = "C${System.currentTimeMillis()}"
+                                                        val newChat = Chat(
+                                                            chatID = newChatID,
+                                                            initiatorUserID = receiverUserID,
+                                                            receiverUserID = senderUserID,
+                                                            initiatorLastSeen = "",
+                                                            receiverLastSeen = ""
+                                                        )
+                                                        chatDAO.addChat(newChat)
+                                                        Log.d("AnnouncementAdapter", "Chat created with ID: $newChatID")
+                                                    } else {
+                                                        Log.d("AnnouncementAdapter", "Chat already exists with ID: ${existingChat.chatID}")
+                                                    }
+                                                } catch (e: Exception) {
+                                                    Log.e("AnnouncementAdapter", "Error creating chat: ${e.message}")
+                                                }
+                                            }
+                                        }
                                     } else {
                                         // Display generic message for other types of announcements
                                         tvTypeTitle.text = "${it.username} ${announcement.announcementType.toLowerCase()} your post"
@@ -158,7 +191,7 @@ class AnnoucementAdapter(private val items: List<ListItem>, private val activity
                             }
 
                             // Get the postID from UserAnnouncement
-                            val postID = snapshot.children.firstOrNull()?.getValue(UserAnnouncement::class.java)?.postID
+                            val postID = userAnnouncement.postID
 
                             if (!postID.isNullOrEmpty()) {
                                 // Fetch images for the given postID using PostImageDAO

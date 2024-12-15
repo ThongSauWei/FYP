@@ -1,9 +1,11 @@
 package com.example.fyp.dao
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.fyp.data.Chat
 import com.example.fyp.data.ChatLine
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -175,5 +177,32 @@ class ChatLineDAO {
             })
     }
 
+    fun listenForNewChatLines(chatID: String, onNewChatLine: (ChatLine) -> Unit) {
+        val chatLinesRef = FirebaseDatabase.getInstance().getReference("chatLines").child(chatID)
+        chatLinesRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatLine = snapshot.getValue(ChatLine::class.java)
+                if (chatLine != null) {
+                    onNewChatLine(chatLine)
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                // No changes needed for now
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                // No changes needed for now
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                // No changes needed for now
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ChatLineDAO", "Error listening to chat lines: ${error.message}")
+            }
+        })
+    }
 
 }

@@ -169,7 +169,7 @@ class PostImageDAO(
     fun deleteImageByID(imageID: String, onComplete: (Boolean, Exception?) -> Unit) {
         val filePath = "PostImages/$imageID.jpg"
         storageRef.child(filePath).metadata.addOnSuccessListener {
-            // 文件存在，尝试删除
+            // exist try delete
             storageRef.child(filePath).delete().addOnSuccessListener {
                 dbRef.child(imageID).removeValue().addOnSuccessListener {
                     Log.d("DeleteImage", "Image deleted successfully: $filePath")
@@ -183,7 +183,7 @@ class PostImageDAO(
                 onComplete(false, exception)
             }
         }.addOnFailureListener { exception ->
-            // 文件不存在
+            // not exist
             Log.e("DeleteImage", "File does not exist: $filePath")
             onComplete(false, exception)
         }

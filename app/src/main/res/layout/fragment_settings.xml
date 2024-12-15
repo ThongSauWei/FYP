@@ -24,7 +24,7 @@
         android:layout_marginTop="54dp"
         android:fontFamily="@font/caveat"
         android:text="@string/settings"
-        android:textColor="@color/white"
+        android:textColor="@color/title_color"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/btnBackSettings"

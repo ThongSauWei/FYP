@@ -227,6 +227,37 @@ class FriendProfile : Fragment() {
                 "Friend" -> {
                     btnUnfriend.visibility = View.VISIBLE
                     btnUnfriend.setOnClickListener { showDeleteFriendDialog(friend) }
+
+                    // Add logs to debug the chat creation process
+                    Log.d("ChatCreation", "Status is Friend. Checking or creating a chat.")
+
+                    lifecycleScope.launch {
+                        val chatDAO = ChatDAO()
+
+                        try {
+                            // Check if the chat exists
+                            val existingChat = chatDAO.getChat(currentUserID, friendUserID)
+                            if (existingChat == null) {
+                                Log.d("ChatCreation", "No chat found. Creating a new chat.")
+
+                                // Create a new chat
+                                val newChatID = "C${System.currentTimeMillis()}"
+                                val newChat = Chat(
+                                    chatID = newChatID,
+                                    initiatorUserID = currentUserID,
+                                    receiverUserID = friendUserID,
+                                    initiatorLastSeen = "",
+                                    receiverLastSeen = ""
+                                )
+                                chatDAO.addChat(newChat)
+                                Log.d("ChatCreation", "New chat created with ID: $newChatID")
+                            } else {
+                                Log.d("ChatCreation", "Chat already exists with ID: ${existingChat.chatID}")
+                            }
+                        } catch (e: Exception) {
+                            Log.e("ChatCreation", "Error during chat creation: ${e.message}")
+                        }
+                    }
                 }
                 "Rejected" -> {
                     btnAdd.visibility = View.VISIBLE

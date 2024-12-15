@@ -28,7 +28,7 @@
         android:layout_marginTop="60dp"
         android:fontFamily="@font/caveat"
         android:text="@string/sign_in"
-        android:textColor="@color/white"
+        android:textColor="@color/title_color"
         android:textSize="28sp"
         android:textStyle="bold" />
 

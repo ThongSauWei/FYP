@@ -1,5 +1,6 @@
 package com.example.fyp.dao
 
+import android.util.Log
 import com.example.fyp.data.Chat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,25 +40,32 @@ class ChatDAO {
             }
     }
 
-    suspend fun getChat(userID_1 : String, userID_2 : String) : Chat? {
-        var chat : Chat? = null
+    suspend fun getChat(userID_1: String, userID_2: String): Chat? {
+        Log.d("ChatDAO", "Checking if chat exists between $userID_1 and $userID_2")
+        var chat: Chat? = null
 
         val snapshot = dbRef.get().await()
-
         if (snapshot.exists()) {
             for (chatSnapshot in snapshot.children) {
                 val initiatorUserID = chatSnapshot.child("initiatorUserID").getValue(String::class.java)
                 val receiverUserID = chatSnapshot.child("receiverUserID").getValue(String::class.java)
                 if ((initiatorUserID == userID_1 && receiverUserID == userID_2) ||
-                    (initiatorUserID == userID_2 && receiverUserID == userID_1)) {
+                    (initiatorUserID == userID_2 && receiverUserID == userID_1)
+                ) {
                     chat = chatSnapshot.getValue(Chat::class.java)
+                    if (chat != null) {
+                        Log.d("ChatDAO", "Chat found: ${chat.chatID}")
+                    }
                     break
                 }
             }
+        } else {
+            Log.d("ChatDAO", "No chat found in the database.")
         }
 
         return chat
     }
+
 
     suspend fun getChatByID(chatID : String) : Chat? = suspendCoroutine { continuation ->
 

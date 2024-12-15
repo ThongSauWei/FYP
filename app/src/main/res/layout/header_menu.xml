@@ -26,7 +26,7 @@
         android:layout_marginStart="10dp"
         android:fontFamily="@font/caveat"
         android:text="TARUMT HUB"
-        android:textColor="@android:color/white"
+        android:textColor="@color/title_color"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/logoImageView"
