@@ -182,7 +182,11 @@ class Detail : Fragment() {
         recyclerViewComment.layoutManager = LinearLayoutManager(activity)
 //        recyclerViewComment.adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope)
 
-        val adapter = CommentAdapter(emptyList(), viewLifecycleOwner.lifecycleScope) { comment ->
+        val adapter = CommentAdapter(
+            context = requireContext(),
+            comments = emptyList<PostComment>(), // Initial empty list
+            coroutineScope = viewLifecycleOwner.lifecycleScope, // Lifecycle-aware scope
+        ) { comment ->
             lifecycleScope.launch {
                 val currentUserID = getCurrentUserID()
                 val post = postViewModel.getPostByID(comment.postID)
