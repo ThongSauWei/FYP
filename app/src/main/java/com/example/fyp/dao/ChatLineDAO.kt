@@ -178,31 +178,66 @@ class ChatLineDAO {
     }
 
     fun listenForNewChatLines(chatID: String, onNewChatLine: (ChatLine) -> Unit) {
-        val chatLinesRef = FirebaseDatabase.getInstance().getReference("chatLines").child(chatID)
+        dbRef.orderByChild("chatID").equalTo(chatID)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val chatLine = snapshot.getValue(ChatLine::class.java)
+                    if (chatLine != null) {
+                        onNewChatLine(chatLine)
+                    }
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("ChatLineDAO", "Error listening to chat lines: ${error.message}")
+                }
+            })
+    }
+
+
+    fun observeChatLines(chatID: String, onChatLineChanged: (List<ChatLine>) -> Unit) {
+        val chatLinesRef = dbRef.orderByChild("chatID").equalTo(chatID)
+        val chatLines = mutableListOf<ChatLine>()
+
         chatLinesRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatLine = snapshot.getValue(ChatLine::class.java)
-                if (chatLine != null) {
-                    onNewChatLine(chatLine)
+                if (chatLine != null && chatLines.none { it.chatLineID == chatLine.chatLineID }) {
+                    chatLines.add(chatLine)
+                    onChatLineChanged(chatLines)
                 }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // No changes needed for now
+                val chatLine = snapshot.getValue(ChatLine::class.java)
+                if (chatLine != null) {
+                    val index = chatLines.indexOfFirst { it.chatLineID == chatLine.chatLineID }
+                    if (index >= 0) {
+                        chatLines[index] = chatLine
+                        onChatLineChanged(chatLines)
+                    }
+                }
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                // No changes needed for now
+                val chatLine = snapshot.getValue(ChatLine::class.java)
+                if (chatLine != null) {
+                    chatLines.removeAll { it.chatLineID == chatLine.chatLineID }
+                    onChatLineChanged(chatLines)
+                }
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // No changes needed for now
+                // Not needed for now
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ChatLineDAO", "Error listening to chat lines: ${error.message}")
+                Log.e("ChatLineDAO", "Error observing chat lines: ${error.message}")
             }
         })
     }
+
 
 }

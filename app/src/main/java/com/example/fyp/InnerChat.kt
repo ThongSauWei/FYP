@@ -103,6 +103,7 @@ class InnerChat : Fragment() {
         fetchChatLines()
         setupTextWatcher()
         setupKeyboardListener(view)
+        observeChatLinesRealtime()
 
         btnSend.setOnClickListener {
             val content = txtChat.text.toString().trim()
@@ -179,29 +180,63 @@ class InnerChat : Fragment() {
     }
 
     private fun fetchChatLines() {
-        lifecycleScope.launch {
-            // Fetch existing chat lines
-            chatLineDAO.getChatLines(chatID) { fetchedChatLines ->
+        // 加载历史消息
+        chatLineDAO.getChatLines(chatID) { fetchedChatLines ->
+            lifecycleScope.launch {
+                // 清除旧数据并添加新数据
                 chatLines.clear()
                 chatLines.addAll(fetchedChatLines)
 
-                // Mark all unread messages as read
-                chatLineDAO.markAllMessagesAsRead(chatID, currentUserID)
-
+                // 更新 RecyclerView
                 adapter.setChatLines(chatLines)
                 recyclerView.scrollToPosition(chatLines.size - 1)
 
-                // Add a listener for new chat lines
-                chatLineDAO.listenForNewChatLines(chatID) { newChatLine ->
-                    lifecycleScope.launch {
-                        chatLines.add(newChatLine)
-                        adapter.setChatLines(chatLines)
-                        recyclerView.scrollToPosition(chatLines.size - 1)
+                // 标记未读消息为已读
+                chatLineDAO.markAllMessagesAsRead(chatID, currentUserID)
+            }
+        }
+
+        // 启动实时监听
+        listenForNewMessages()
+    }
+
+    private fun observeChatLinesRealtime() {
+        chatLineDAO.observeChatLines(chatID) { updatedChatLines ->
+            lifecycleScope.launch {
+                // 更新本地列表和界面
+                chatLines.clear()
+                chatLines.addAll(updatedChatLines)
+
+                // 更新 RecyclerView
+                adapter.setChatLines(chatLines)
+                recyclerView.scrollToPosition(chatLines.size - 1)
+            }
+        }
+    }
+
+
+    private fun listenForNewMessages() {
+        chatLineDAO.listenForNewChatLines(chatID) { newChatLine ->
+            lifecycleScope.launch {
+                // 检查新消息是否已经存在
+                if (chatLines.none { it.chatLineID == newChatLine.chatLineID }) {
+                    chatLines.add(newChatLine)
+
+                    // 更新 RecyclerView
+                    adapter.setChatLines(chatLines)
+                    recyclerView.scrollToPosition(chatLines.size - 1)
+
+                    // 如果新消息是对方发送的，标记为已读
+                    if (newChatLine.senderID != currentUserID) {
+                        chatLineDAO.markAllMessagesAsRead(chatID, currentUserID)
                     }
                 }
             }
         }
     }
+
+
+
 
     private fun setupTextWatcher() {
         txtChat.addTextChangedListener(object : TextWatcher {

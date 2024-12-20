@@ -1,5 +1,7 @@
 package com.example.fyp.dataAdapter
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -79,19 +81,27 @@ class InnerChatAdapter(
                         .placeholder(R.drawable.tarumt_logo)
                         .error(R.drawable.no_internet)
                         .into(imgMedia)
+
+                    imgMedia.setOnClickListener {
+                        showDialog(itemView.context, "image", chatLine.mediaURL!!)
+                    }
                 }
                 "video" -> {
                     videoContainer.visibility = View.VISIBLE
-                    videoView.setVideoPath(chatLine.mediaURL) // 设置视频路径
-                    btnPlayVideo.visibility = View.VISIBLE // 确保播放按钮可见
+                    videoView.setVideoPath(chatLine.mediaURL)
+                    btnPlayVideo.visibility = View.VISIBLE
 
                     btnPlayVideo.setOnClickListener {
-                        videoView.start() // 播放视频
-                        btnPlayVideo.visibility = View.GONE // 隐藏播放按钮
+                        videoView.start()
+                        btnPlayVideo.visibility = View.GONE
                     }
 
                     videoView.setOnCompletionListener {
-                        btnPlayVideo.visibility = View.VISIBLE // 播放完成后重新显示按钮
+                        btnPlayVideo.visibility = View.VISIBLE
+                    }
+
+                    videoContainer.setOnClickListener {
+                        showDialog(itemView.context, "video", chatLine.mediaURL!!)
                     }
                 }
                 "file" -> {
@@ -142,19 +152,27 @@ class InnerChatAdapter(
                         .placeholder(R.drawable.tarumt_logo)
                         .error(R.drawable.no_internet)
                         .into(imgMedia)
+
+                    imgMedia.setOnClickListener {
+                        showDialog(itemView.context, "image", chatLine.mediaURL!!)
+                    }
                 }
                 "video" -> {
                     videoContainer.visibility = View.VISIBLE
-                    videoView.setVideoPath(chatLine.mediaURL) // 设置视频路径
-                    btnPlayVideo.visibility = View.VISIBLE // 确保播放按钮可见
+                    videoView.setVideoPath(chatLine.mediaURL)
+                    btnPlayVideo.visibility = View.VISIBLE
 
                     btnPlayVideo.setOnClickListener {
-                        videoView.start() // 播放视频
-                        btnPlayVideo.visibility = View.GONE // 隐藏播放按钮
+                        videoView.start()
+                        btnPlayVideo.visibility = View.GONE
                     }
 
                     videoView.setOnCompletionListener {
-                        btnPlayVideo.visibility = View.VISIBLE // 播放完成后重新显示按钮
+                        btnPlayVideo.visibility = View.VISIBLE
+                    }
+
+                    videoContainer.setOnClickListener {
+                        showDialog(itemView.context, "video", chatLine.mediaURL!!)
                     }
                 }
                 "file" -> {
@@ -179,6 +197,59 @@ class InnerChatAdapter(
             tvFile.visibility = View.GONE
         }
     }
+    private fun showDialog(context: Context, mediaType: String, mediaURL: String) {
+        val dialog = Dialog(context)
+
+        when (mediaType) {
+            "image" -> {
+                dialog.setContentView(R.layout.dialog_image_view)
+                val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
+                val closeButton = dialog.findViewById<ImageButton>(R.id.closeFullImageButton)
+
+                if (imageView != null && closeButton != null) {
+                    imageView.visibility = View.VISIBLE
+                    Glide.with(context).load(mediaURL).into(imageView)
+                    closeButton.setOnClickListener { dialog.dismiss() }
+                } else {
+                    Toast.makeText(context, "Image dialog components not found!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            "video" -> {
+                dialog.setContentView(R.layout.dialog_video_view)
+                val videoView = dialog.findViewById<VideoView>(R.id.dialogVideoView)
+                val closeButton = dialog.findViewById<ImageButton>(R.id.closeFullVideoButton)
+
+                if (videoView != null && closeButton != null) {
+                    videoView.visibility = View.VISIBLE
+                    videoView.setVideoURI(Uri.parse(mediaURL))
+                    videoView.setOnPreparedListener { mediaPlayer ->
+                        mediaPlayer.start() // Start playback
+                    }
+                    videoView.setOnErrorListener { _, what, extra ->
+                        Toast.makeText(context, "Failed to play video: $what, $extra", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        true
+                    }
+
+                    closeButton.setOnClickListener { dialog.dismiss() }
+                } else {
+                    Toast.makeText(context, "Video dialog components not found!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            else -> {
+                Toast.makeText(context, "Unsupported media type!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+    }
+
+
+
+
 
     // Converts time to 12-hour format with AM/PM
     private fun formatDateTime(dateTime: String): String {
