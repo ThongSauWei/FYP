@@ -52,7 +52,15 @@ class InnerChatAdapter(
     override fun getItemCount(): Int = chatLineList.size
 
     fun setChatLines(chatLines: List<ChatLine>) {
-        this.chatLineList = chatLines
+        this.chatLineList = chatLines.sortedBy { chatLine ->
+            try {
+                // 将日期字符串解析为时间戳进行排序
+                val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                inputFormat.parse(chatLine.dateTime)?.time ?: Long.MAX_VALUE
+            } catch (e: Exception) {
+                Long.MAX_VALUE // 如果解析失败，将放置到最后
+            }
+        }
         notifyDataSetChanged()
     }
 

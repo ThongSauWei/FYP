@@ -185,7 +185,7 @@ class InnerChat : Fragment() {
             lifecycleScope.launch {
                 // 清除旧数据并添加新数据
                 chatLines.clear()
-                chatLines.addAll(fetchedChatLines)
+                chatLines.addAll(fetchedChatLines.sortedBy { it.dateTime })
 
                 // 更新 RecyclerView
                 adapter.setChatLines(chatLines)
@@ -205,7 +205,7 @@ class InnerChat : Fragment() {
             lifecycleScope.launch {
                 // 更新本地列表和界面
                 chatLines.clear()
-                chatLines.addAll(updatedChatLines)
+                chatLines.addAll(updatedChatLines.sortedBy { it.dateTime })
 
                 // 更新 RecyclerView
                 adapter.setChatLines(chatLines)
@@ -223,6 +223,7 @@ class InnerChat : Fragment() {
                     chatLines.add(newChatLine)
 
                     // 更新 RecyclerView
+                    chatLines.sortBy { it.dateTime }
                     adapter.setChatLines(chatLines)
                     recyclerView.scrollToPosition(chatLines.size - 1)
 
