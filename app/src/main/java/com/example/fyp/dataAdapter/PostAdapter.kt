@@ -588,13 +588,11 @@ class PostAdapter(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Delete Post Images
-                val postImages = postImageDAO.getImagesByPostID(postID)
+                val postImages = postImageDAO.getImagesByPostID(postID) // Get all images associated with the post
                 for (image in postImages) {
                     postImageDAO.deleteImage(image.postImageID)
-                    // Optionally delete image file from Firebase Storage
-                    val imageRef = FirebaseStorage.getInstance().reference.child("${image.postImageID}.jpg")
-                    imageRef.delete()
                 }
+
 
                 // Delete Post Categories
                 val categories = postCategoryDAO.getCategoriesByPostID(postID)

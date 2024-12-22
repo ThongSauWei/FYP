@@ -7,6 +7,8 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -129,24 +131,89 @@ class PostImageDAO(
     }
 
     fun deleteImagesByPostID(postID: String, onComplete: (Boolean, Exception?) -> Unit) {
+        // 查询与 postID 相关的所有图片
         dbRef.orderByChild("postID").equalTo(postID).get().addOnSuccessListener { snapshot ->
-            val tasks = snapshot.children.map {
-                val imageID = it.key
-                if (imageID != null) {
-                    storageRef.child("PostImage/$imageID.jpg").delete()
+            if (snapshot.exists()) {
+                val deleteTasks = mutableListOf<Task<Void>>() // 跟踪所有删除任务
+
+                for (child in snapshot.children) {
+                    val imageID = child.key
+                    val filePath = "PostImages/$imageID.jpg" // 存储路径
+
+                    if (imageID != null) {
+                        // 1. 删除 Realtime Database 中的记录
+                        val deleteDatabaseTask = child.ref.removeValue()
+                            .addOnSuccessListener {
+                                Log.d(TAG, "Metadata deleted successfully for imageID: $imageID")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "Failed to delete metadata for imageID: $imageID", e)
+                            }
+
+                        // 2. 删除 Firebase Storage 中的文件
+                        val deleteStorageTask = storageRef.child(filePath).delete()
+                            .addOnSuccessListener {
+                                Log.d(TAG, "File deleted successfully from storage: $filePath")
+                            }
+                            .addOnFailureListener { e ->
+                                if (e is StorageException && e.errorCode == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                                    Log.w(TAG, "File not found in storage (already deleted): $filePath")
+                                } else {
+                                    Log.e(TAG, "Failed to delete file from storage: $filePath", e)
+                                }
+                            }
+
+                        // 将删除任务加入任务列表
+                        deleteTasks.add(deleteDatabaseTask)
+                        deleteTasks.add(deleteStorageTask)
+                    } else {
+                        Log.w(TAG, "Null imageID found for postID: $postID")
+                    }
                 }
-                it.ref.removeValue()
+
+                // 等待所有任务完成
+                Tasks.whenAllComplete(deleteTasks).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Successfully deleted all images for postID: $postID")
+                        onComplete(true, null)
+                    } else {
+                        val exception = task.exception ?: Exception("Some tasks failed during image deletion.")
+                        Log.e(TAG, "Failed to delete some images for postID: $postID", exception)
+                        onComplete(false, exception)
+                    }
+                }
+            } else {
+                Log.e(TAG, "No images found for postID: $postID")
+                onComplete(false, Exception("No images found for postID: $postID"))
             }
-            Tasks.whenAllComplete(tasks).addOnCompleteListener { task ->
-                if (task.isSuccessful) onComplete(true, null)
-                else onComplete(false, task.exception)
-            }
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "Failed to query images for postID: $postID", exception)
+            onComplete(false, exception)
         }
     }
 
+
     fun deleteImage(postImageID: String) {
+        // Step 1: Remove metadata from Realtime Database
         dbRef.child(postImageID).removeValue()
+            .addOnSuccessListener {
+                Log.d("DeleteImage", "Metadata deleted successfully for imageID: $postImageID")
+
+                // Step 2: Delete the image file from Firebase Storage
+                val storagePath = "PostImages/$postImageID.jpg"
+                storageRef.child(storagePath).delete()
+                    .addOnSuccessListener {
+                        Log.d("DeleteImage", "File deleted successfully from storage: $storagePath")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("DeleteImage", "Failed to delete file from storage: $storagePath", e)
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.e("DeleteImage", "Failed to delete metadata for imageID: $postImageID", e)
+            }
     }
+
 
     fun clearImagesForPost(postID: String) {
         dbRef.orderByChild("postID").equalTo(postID).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -167,30 +234,32 @@ class PostImageDAO(
     }
 
     fun deleteImageByID(imageID: String, onComplete: (Boolean, Exception?) -> Unit) {
-        val filePath = "PostImages/$imageID.jpg"
-        storageRef.child(filePath).metadata.addOnSuccessListener {
-            // exist try delete
-            storageRef.child(filePath).delete().addOnSuccessListener {
-                dbRef.child(imageID).removeValue().addOnSuccessListener {
-                    Log.d("DeleteImage", "Image deleted successfully: $filePath")
-                    onComplete(true, null)
-                }.addOnFailureListener { exception ->
-                    Log.e("DeleteImage", "Failed to delete image metadata from database", exception)
-                    onComplete(false, exception)
+        val storagePath = "PostImages/$imageID.jpg"
+        val databasePath = "PostImage/$imageID"
+        val storageReference = FirebaseStorage.getInstance().reference
+        val databaseReference = FirebaseDatabase.getInstance().getReference()
+
+        // Delete metadata from Realtime Database
+        databaseReference.child(databasePath).removeValue().addOnCompleteListener { dbTask ->
+            if (dbTask.isSuccessful) {
+                Log.d("DeleteImage", "Metadata deleted successfully for: $imageID")
+
+                // Delete the file from Firebase Storage
+                storageReference.child(storagePath).delete().addOnCompleteListener { storageTask ->
+                    if (storageTask.isSuccessful) {
+                        Log.d("DeleteImage", "File deleted successfully from storage: $storagePath")
+                        onComplete(true, null)
+                    } else {
+                        Log.e("DeleteImage", "Failed to delete file from storage: $storagePath", storageTask.exception)
+                        onComplete(false, storageTask.exception)
+                    }
                 }
-            }.addOnFailureListener { exception ->
-                Log.e("DeleteImage", "Failed to delete image from storage", exception)
-                onComplete(false, exception)
+            } else {
+                Log.e("DeleteImage", "Failed to delete metadata for: $imageID", dbTask.exception)
+                onComplete(false, dbTask.exception)
             }
-        }.addOnFailureListener { exception ->
-            // not exist
-            Log.e("DeleteImage", "File does not exist: $filePath")
-            onComplete(false, exception)
         }
     }
-
-
-
 
 
 }
