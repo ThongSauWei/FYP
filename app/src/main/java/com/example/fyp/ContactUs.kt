@@ -2,6 +2,7 @@ package com.example.fyp
 
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,8 +94,42 @@ class ContactUs : Fragment() {
         }
     }
 
+    private fun validateInput(): Boolean {
+        val name = txtNameContactUs.text.toString().trim()
+        val email = txtEmailContactUs.text.toString().trim()
+        val description = txtDescriptionContactUs.text.toString().trim()
+
+        if (name.isEmpty()) {
+            Toast.makeText(requireContext(), "Name is required", Toast.LENGTH_SHORT).show()
+            txtNameContactUs.error = "Name is required"
+            return false
+        }
+
+        if (email.isEmpty()) {
+            Toast.makeText(requireContext(), "Email is required", Toast.LENGTH_SHORT).show()
+            txtEmailContactUs.error = "Email is required"
+            return false
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(requireContext(), "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+            txtEmailContactUs.error = "Invalid email format"
+            return false
+        }
+
+        if (description.isEmpty()) {
+            Toast.makeText(requireContext(), "Description is required", Toast.LENGTH_SHORT).show()
+            txtDescriptionContactUs.error = "Description is required"
+            return false
+        }
+
+        return true
+    }
+
 
     private fun handleSubmit() {
+
+        if (!validateInput()) return
         val name = txtNameContactUs.text.toString().trim()
         val email = txtEmailContactUs.text.toString().trim()
         val problemType = ddlProblemTypeContactUs.selectedItem.toString()

@@ -13,7 +13,7 @@
         android:id="@+id/tvContactUs"
         android:layout_width="156dp"
         android:layout_height="48dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:fontFamily="@font/caveat"
         android:text="Contact Us"
         android:textColor="@color/title_color"
@@ -28,7 +28,7 @@
         android:id="@+id/btnCloseContactUs"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/close_white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
         android:id="@+id/contactUsScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         app:layout_constraintTop_toBottomOf="@+id/tvContactUs">
 
         <LinearLayout
@@ -117,7 +117,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/txtPhoneNoContactUs"
@@ -131,7 +132,8 @@
                 android:padding="10dp"
                 android:fontFamily="@font/abhayalibre_semibold"
                 android:textColor="@color/black"
-                android:textColorHint="@color/grey" />
+                android:textColorHint="@color/grey"
+                android:visibility="gone"/>
 
             <!-- Problem Type -->
             <TextView
